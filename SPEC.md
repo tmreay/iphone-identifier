@@ -3,7 +3,7 @@
 **Status:** draft v1.1 · **Last updated:** 2026-08-19
 
 A local web app that walks a repair-shop technician through a short series of
-questions about a phone's *visible* characteristics until it identifies which
+questions about a phone's _visible_ characteristics until it identifies which
 iPhone model is on the bench.
 
 ---
@@ -32,18 +32,18 @@ screen, battery, or back glass.
 
 iPhone 8 through the iPhone 17e — **37 models**:
 
-| Generation | Models |
-|---|---|
-| 2017 | iPhone 8 · iPhone 8 Plus · iPhone X |
-| 2018 | iPhone XR · iPhone XS · iPhone XS Max |
-| 2019 | iPhone 11 · iPhone 11 Pro · iPhone 11 Pro Max |
-| 2020 | iPhone SE (2nd gen) · iPhone 12 mini · iPhone 12 · iPhone 12 Pro · iPhone 12 Pro Max |
-| 2021 | iPhone 13 mini · iPhone 13 · iPhone 13 Pro · iPhone 13 Pro Max |
-| 2022 | iPhone SE (3rd gen) · iPhone 14 · iPhone 14 Plus · iPhone 14 Pro · iPhone 14 Pro Max |
-| 2023 | iPhone 15 · iPhone 15 Plus · iPhone 15 Pro · iPhone 15 Pro Max |
-| 2024 | iPhone 16 · iPhone 16 Plus · iPhone 16 Pro · iPhone 16 Pro Max |
-| 2025 | iPhone 16e · iPhone Air · iPhone 17 · iPhone 17 Pro · iPhone 17 Pro Max |
-| 2026 | iPhone 17e |
+| Generation | Models                                                                               |
+| ---------- | ------------------------------------------------------------------------------------ |
+| 2017       | iPhone 8 · iPhone 8 Plus · iPhone X                                                  |
+| 2018       | iPhone XR · iPhone XS · iPhone XS Max                                                |
+| 2019       | iPhone 11 · iPhone 11 Pro · iPhone 11 Pro Max                                        |
+| 2020       | iPhone SE (2nd gen) · iPhone 12 mini · iPhone 12 · iPhone 12 Pro · iPhone 12 Pro Max |
+| 2021       | iPhone 13 mini · iPhone 13 · iPhone 13 Pro · iPhone 13 Pro Max                       |
+| 2022       | iPhone SE (3rd gen) · iPhone 14 · iPhone 14 Plus · iPhone 14 Pro · iPhone 14 Pro Max |
+| 2023       | iPhone 15 · iPhone 15 Plus · iPhone 15 Pro · iPhone 15 Pro Max                       |
+| 2024       | iPhone 16 · iPhone 16 Plus · iPhone 16 Pro · iPhone 16 Pro Max                       |
+| 2025       | iPhone 16e · iPhone Air · iPhone 17 · iPhone 17 Pro · iPhone 17 Pro Max              |
+| 2026       | iPhone 17e                                                                           |
 
 Both **US (eSIM-only, no SIM tray)** and **international (SIM tray)** body
 variants are in scope where they differ physically.
@@ -68,7 +68,7 @@ variants are in scope where they differ physically.
    eliminated. The app shows a live count of remaining candidates.
 4. Repeat until one model remains, or until coarse-tier questions are exhausted.
 5. **One model left** → result screen (§4.5).
-   **More than one** → group screen with a *Narrow further* action (§4.3).
+   **More than one** → group screen with a _Narrow further_ action (§4.3).
 
 The technician can go **back** one step at any time, and **start over**. The
 answer trail is visible so a wrong answer can be spotted and corrected.
@@ -91,7 +91,7 @@ Deep-tier questions cover micro-details that require close inspection — bottom
 mic-hole patterns, rear logo position and wordmark, camera bump proportions,
 frame finish, flash placement. They are never asked in the main flow. They are
 offered only when the coarse tier leaves more than one candidate, on an explicit
-*Narrow further* tap.
+_Narrow further_ tap.
 
 ### 4.4 Terminal ambiguity
 
@@ -119,7 +119,7 @@ such test is known for 16 vs 17 — both have MagSafe, Camera Control and an Act
 **Model name only.** e.g. "iPhone 13 Pro Max". Plus:
 
 - the answer trail that led there,
-- a *Start over* action,
+- a _Start over_ action,
 - a link into the reverse-lookup entry for that model, so the tech can confirm
   the phone in hand matches every listed characteristic.
 
@@ -174,52 +174,52 @@ src/
 ### 5.4 Data model
 
 ```ts
-type ModelId = string;              // 'iphone-13-pro-max'
-type AttributeId = string;          // 'rear_camera_layout'
-type AttributeValue = string;       // 'dual_diagonal'
+type ModelId = string // 'iphone-13-pro-max'
+type AttributeId = string // 'rear_camera_layout'
+type AttributeValue = string // 'dual_diagonal'
 
 interface ColourOption {
   /** Palette value the engine matches on, and the question option value. */
-  value: AttributeValue;            // 'dark_blue'
+  value: AttributeValue // 'dark_blue'
   /** Apple's marketing name for this model in this colour. Display only. */
-  marketing: string;                // 'Pacific Blue'
+  marketing: string // 'Pacific Blue'
 }
 
 interface IPhoneModel {
-  id: ModelId;
-  name: string;                     // 'iPhone 13 Pro Max'
-  released: number;                 // year
+  id: ModelId
+  name: string // 'iPhone 13 Pro Max'
+  released: number // year
   /**
    * For each attribute, the set of values consistent with this model.
    * Multiple values are legitimate: a model has many colours, may span two
    * adjacent size classes, and may ship in both SIM-tray and eSIM-only bodies.
    * An absent or empty entry means "unknown" and eliminates nothing.
    */
-  attributes: Partial<Record<AttributeId, AttributeValue[]>>;
+  attributes: Partial<Record<AttributeId, AttributeValue[]>>
   /**
    * Colours this model shipped in, carrying both naming layers (§6.5).
    * The set of `value`s must equal attributes.colour — asserted by test.
    */
-  colours: ColourOption[];
+  colours: ColourOption[]
 }
 
 interface QuestionOption {
-  value: AttributeValue;
-  label: string;
-  diagram?: string;                 // diagram component id
-  caveat?: string;                  // shown inline, e.g. rehousing warning
+  value: AttributeValue
+  label: string
+  diagram?: string // diagram component id
+  caveat?: string // shown inline, e.g. rehousing warning
 }
 
 interface Question {
-  id: AttributeId;
-  tier: 'coarse' | 'deep';
-  prompt: string;
-  help?: string;
-  options: QuestionOption[];
+  id: AttributeId
+  tier: 'coarse' | 'deep'
+  prompt: string
+  help?: string
+  options: QuestionOption[]
   /** Higher = prefer asking earlier when information gain is close. */
-  priority: number;
+  priority: number
   /** If false, an answer ranks candidates but never eliminates them. */
-  eliminating: boolean;             // see §6.4
+  eliminating: boolean // see §6.4
 }
 ```
 
@@ -230,22 +230,22 @@ candidate group, never to a wrong answer.
 
 ## 6. Attribute taxonomy
 
-Values below define the *schema*. Which models take which value is recorded per model
+Values below define the _schema_. Which models take which value is recorded per model
 in `reference/models/<id>.md`, which is the source of truth (D-11) — the lists here were
 settled against that research and are no longer provisional.
 
 ### 6.1 Coarse tier — asked in the main flow
 
-| Attribute | Values |
-|---|---|
-| `home_button` | present · absent |
-| `port` | lightning · usb_c |
-| `rear_camera_count` | 1 · 2 · 3 |
+| Attribute            | Values                                                                                                                                                                                                                                                |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `home_button`        | present · absent                                                                                                                                                                                                                                      |
+| `port`               | lightning · usb_c                                                                                                                                                                                                                                     |
+| `rear_camera_count`  | 1 · 2 · 3                                                                                                                                                                                                                                             |
 | `rear_camera_layout` | single_lens_flash_below · single_lens_in_pill · single_lens_no_housing · dual_horizontal_pill · dual_vertical_pill · dual_vertical_square · dual_diagonal_square · dual_vertical_slim_pill · triple_square · plateau_oval_single · plateau_bar_triple |
-| `front_cutout` | bezels_no_cutout · notch_wide · notch_narrow · dynamic_island |
-| `body_size_class` | mini · compact · standard · large · max (§6.3) |
-| `sim_tray` | none · left_side · right_side |
-| `colour` | descriptive palette values, per Phase 1 enumeration (§6.5) |
+| `front_cutout`       | bezels_no_cutout · notch_wide · notch_narrow · dynamic_island                                                                                                                                                                                         |
+| `body_size_class`    | mini · compact · standard · large · max (§6.3)                                                                                                                                                                                                        |
+| `sim_tray`           | none · left_side · right_side                                                                                                                                                                                                                         |
+| `colour`             | descriptive palette values, per Phase 1 enumeration (§6.5)                                                                                                                                                                                            |
 
 `rear_camera_layout` is the strongest single question in the set — eleven values across
 37 models — and it subsumes `rear_camera_count`. Phase 2 should check whether the count
@@ -260,18 +260,18 @@ ruling a model out.
 
 ### 6.2 Deep tier — Narrow further only
 
-| Attribute | Values |
-|---|---|
-| `action_button` | present · absent (replaces the ring/silent switch) |
-| `camera_control_button` | present · absent |
-| `magsafe` | present · absent |
-| `frame_material_finish` | aluminium_glossy · aluminium_matte · aluminium_brushed · stainless_glossy · titanium_brushed · titanium_polished |
-| `back_glass_finish` | glossy · matte · ceramic_shield |
-| `rear_wordmark` | iphone_text_present · logo_only_centred |
-| `bottom_mic_hole_pattern` | symmetric_six_six · asymmetric_three_six · asymmetric_four_seven · asymmetric |
-| `camera_bump_size` | larger · smaller |
-| `flash_position` | below_lens · beside_lens_on_glass · between_lenses · right_of_lenses · in_square_right · outside_bump_right · in_plateau · in_plateau_right |
-| `lidar` | present · absent |
+| Attribute                 | Values                                                                                                                                      |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `action_button`           | present · absent (replaces the ring/silent switch)                                                                                          |
+| `camera_control_button`   | present · absent                                                                                                                            |
+| `magsafe`                 | present · absent                                                                                                                            |
+| `frame_material_finish`   | aluminium_glossy · aluminium_matte · aluminium_brushed · stainless_glossy · titanium_brushed · titanium_polished                            |
+| `back_glass_finish`       | glossy · matte · ceramic_shield                                                                                                             |
+| `rear_wordmark`           | iphone_text_present · logo_only_centred                                                                                                     |
+| `bottom_mic_hole_pattern` | symmetric_six_six · asymmetric_three_six · asymmetric_four_seven · asymmetric                                                               |
+| `camera_bump_size`        | larger · smaller                                                                                                                            |
+| `flash_position`          | below_lens · beside_lens_on_glass · between_lenses · right_of_lenses · in_square_right · outside_bump_right · in_plateau · in_plateau_right |
+| `lidar`                   | present · absent                                                                                                                            |
 
 Notes on the less obvious ones:
 
@@ -293,13 +293,13 @@ Notes on the less obvious ones:
 Judged by **body size**, not screen diagonal — an iPhone 8 Plus has a small
 screen in a large body. Five bands, by overall body height:
 
-| Class | Approx. body height | Character |
-|---|---|---|
-| `mini` | under ~135 mm | noticeably smaller than everything else |
-| `compact` | ~135–142 mm | the 4.7-inch home-button bodies |
-| `standard` | ~142–150 mm | the default modern size |
-| `large` | ~150–156 mm | |
-| `max` | ~156 mm and up | Plus and Pro Max bodies |
+| Class      | Approx. body height | Character                               |
+| ---------- | ------------------- | --------------------------------------- |
+| `mini`     | under ~135 mm       | noticeably smaller than everything else |
+| `compact`  | ~135–142 mm         | the 4.7-inch home-button bodies         |
+| `standard` | ~142–150 mm         | the default modern size                 |
+| `large`    | ~150–156 mm         |                                         |
+| `max`      | ~156 mm and up      | Plus and Pro Max bodies                 |
 
 Generation-to-generation drift means neighbouring classes overlap by a few
 millimetres and a technician cannot reliably tell them apart by eye.
@@ -322,7 +322,7 @@ Therefore:
 ### 6.4 Soft attributes
 
 `colour` is treated as a normal eliminating question, per decision D-08. It is
-the one attribute that can fail *unsafely* — a rehoused phone or replaced back
+the one attribute that can fail _unsafely_ — a rehoused phone or replaced back
 glass can eliminate the correct model. Mitigations:
 
 - the option label reads "colour (original back glass only)";
@@ -342,12 +342,12 @@ Every colour is recorded under **two names** (D-12):
 
 They serve different jobs:
 
-| | Descriptive | Marketing |
-|---|---|---|
-| Used by the engine to match | yes | never |
-| Question option labels | yes | shown as examples beneath the label |
-| Reverse-lookup model entry | yes | yes, listed in full |
-| Talking to a supplier or customer | — | yes |
+|                                   | Descriptive | Marketing                           |
+| --------------------------------- | ----------- | ----------------------------------- |
+| Used by the engine to match       | yes         | never                               |
+| Question option labels            | yes         | shown as examples beneath the label |
+| Reverse-lookup model entry        | yes         | yes, listed in full                 |
+| Talking to a supplier or customer | —           | yes                                 |
 
 **Matching is always on the descriptive value.** A technician holding a phone
 can pick "dark blue" but has no way to know whether it is Pacific Blue or
@@ -379,7 +379,7 @@ The algorithm is deterministic and must be covered by unit tests, including:
 
 - **every model is reachable** — for each model there exists an answer path
   leading to it alone, or to a documented terminal group (§4.4). Phase 1 checked this by
-  brute force over every *concrete device* (one real value per attribute) and found 34 of
+  brute force over every _concrete device_ (one real value per attribute) and found 34 of
   37 models resolve to exactly one; the test must assert the three groups in §9 and no
   others, so that a data change which creates a fourth group fails the build;
 - **colour layers agree** — every model's `attributes.colour` set equals the
@@ -420,23 +420,23 @@ in every concrete configuration it can take, was matched against all 37.
 **Coarse tier alone** leaves seven ambiguous groups. The deep tier closes four of them,
 which is the two-tier split in D-03 earning its place:
 
-| Group | Closed by |
-|---|---|
-| iPhone 8 + SE (2nd) + SE (3rd) | `rear_wordmark` |
-| iPhone 13 + iPhone 14 | `camera_bump_size` |
-| iPhone 15 Pro + iPhone 16 Pro | `camera_control_button` |
-| iPhone 15 Pro Max + iPhone 16 Pro Max | `camera_control_button` |
-| iPhone X + iPhone XS | `bottom_mic_hole_pattern` |
-| iPhone 16 + iPhone 17 | **nothing — terminal** |
-| iPhone 16e + iPhone 17e | nothing visible — `magsafe` settles it off-screen |
+| Group                                 | Closed by                                         |
+| ------------------------------------- | ------------------------------------------------- |
+| iPhone 8 + SE (2nd) + SE (3rd)        | `rear_wordmark`                                   |
+| iPhone 13 + iPhone 14                 | `camera_bump_size`                                |
+| iPhone 15 Pro + iPhone 16 Pro         | `camera_control_button`                           |
+| iPhone 15 Pro Max + iPhone 16 Pro Max | `camera_control_button`                           |
+| iPhone X + iPhone XS                  | `bottom_mic_hole_pattern`                         |
+| iPhone 16 + iPhone 17                 | **nothing — terminal**                            |
+| iPhone 16e + iPhone 17e               | nothing visible — `magsafe` settles it off-screen |
 
 **After both tiers, three groups remain.** 34 of 37 models resolve to exactly one:
 
-| Terminal group | Situation |
-|---|---|
-| SE (2nd) vs SE (3rd) | Externally identical. Expected; documented from the outset. |
-| iPhone 16 vs 17 | Identical on every attribute in this spec when black or white. Height differs by 2 mm and the display by 0.2 inch — both below what §6.3 says a technician can judge. The 48MP Ultra Wide on the 17 was checked as a possible tell against Apple's product shots and the camera pills are the same. Colour separates them only on the non-shared finishes (16: Pink, Teal, Ultramarine · 17: Mist Blue, Sage, Lavender). **No workbench tiebreaker known.** |
-| iPhone 16e vs 17e | Identical bodies, both notched, single lens, USB-C, Action button. Soft Pink is the only finish that separates them by sight. Solved off-screen by `magsafe` (§4.4). |
+| Terminal group       | Situation                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| SE (2nd) vs SE (3rd) | Externally identical. Expected; documented from the outset.                                                                                                                                                                                                                                                                                                                                                                                                 |
+| iPhone 16 vs 17      | Identical on every attribute in this spec when black or white. Height differs by 2 mm and the display by 0.2 inch — both below what §6.3 says a technician can judge. The 48MP Ultra Wide on the 17 was checked as a possible tell against Apple's product shots and the camera pills are the same. Colour separates them only on the non-shared finishes (16: Pink, Teal, Ultramarine · 17: Mist Blue, Sage, Lavender). **No workbench tiebreaker known.** |
+| iPhone 16e vs 17e    | Identical bodies, both notched, single lens, USB-C, Action button. Soft Pink is the only finish that separates them by sight. Solved off-screen by `magsafe` (§4.4).                                                                                                                                                                                                                                                                                        |
 
 There is no iPhone 17 Plus — the iPhone Air took that slot — so the iPhone 16 Plus has no
 equivalent twin at `max` size.
@@ -448,9 +448,9 @@ resolving late but reliably.
 ## 10. Phases
 
 **Phase 0 — environment.** Vite + React + TypeScript project, Vitest, repo
-layout per §5.3, this spec committed. *(done)*
+layout per §5.3, this spec committed. _(done)_
 
-**Phase 1 — data collection.** *Separate session.* Web research to establish
+**Phase 1 — data collection.** _Separate session._ Web research to establish
 verified, sourced specifications and physical characteristics for all 37 models,
 plus reference screenshots for diagram drawing. Output:
 `reference/models/<id>.md`, one per model, each fact carrying a source, and
@@ -468,7 +468,7 @@ images in `reference/images/`. Explicit goals:
   `reference/images/` under the size guidance in §8, plus close-ups of every
   micro-detail named in §6.2 and §9.
 
-*(done)* — 37 model files, 40 images, and the value sets in §6.1/§6.2 above, which were
+_(done)_ — 37 model files, 40 images, and the value sets in §6.1/§6.2 above, which were
 written from that research. What it changed in this spec: the taxonomy gaps are filled,
 §6.3 gained the 3 mm adjacency rule, §9 replaced guesswork with the measured separability
 result, and scope went from 36 models to 37 (D-01).
@@ -496,21 +496,21 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 
 ## 11. Decisions log
 
-| # | Decision |
-|---|---|
-| D-01 | Coverage is iPhone 8 → iPhone 17e, including iPhone Air, 16e, and both SE generations. Extended from 36 to 37 models during Phase 1 when the iPhone 17e shipped. |
-| D-02 | Attribute matrix with dynamic question selection, not a hand-authored decision tree. Adding a model is one data row. |
-| D-03 | Coarse questions by default; micro-detail questions behind an explicit "Narrow further" step. |
-| D-04 | Vite + React + TypeScript, static build, offline-capable. |
-| D-05 | Hand-drawn SVG schematics rather than photographs. |
-| D-06 | Result screen shows the model name only. |
-| D-07 | Both US and international body variants are in scope; SIM-tray presence is a real discriminator. |
-| D-08 | Colour is a normal eliminating question, with rehousing caveats and an escape hatch (§6.4). |
-| D-09 | "Can't tell" on every question; the engine routes around unavailable attributes and never eliminates on missing data. |
-| D-10 | Size is expressed as five body-size classes with permitted overlap, never as measurements. |
+| #    | Decision                                                                                                                                                                                       |
+| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| D-01 | Coverage is iPhone 8 → iPhone 17e, including iPhone Air, 16e, and both SE generations. Extended from 36 to 37 models during Phase 1 when the iPhone 17e shipped.                               |
+| D-02 | Attribute matrix with dynamic question selection, not a hand-authored decision tree. Adding a model is one data row.                                                                           |
+| D-03 | Coarse questions by default; micro-detail questions behind an explicit "Narrow further" step.                                                                                                  |
+| D-04 | Vite + React + TypeScript, static build, offline-capable.                                                                                                                                      |
+| D-05 | Hand-drawn SVG schematics rather than photographs.                                                                                                                                             |
+| D-06 | Result screen shows the model name only.                                                                                                                                                       |
+| D-07 | Both US and international body variants are in scope; SIM-tray presence is a real discriminator.                                                                                               |
+| D-08 | Colour is a normal eliminating question, with rehousing caveats and an escape hatch (§6.4).                                                                                                    |
+| D-09 | "Can't tell" on every question; the engine routes around unavailable attributes and never eliminates on missing data.                                                                          |
+| D-10 | Size is expressed as five body-size classes with permitted overlap, never as measurements.                                                                                                     |
 | D-11 | Data verification (Phase 1) happens before any matrix authoring, in its own session, and everything is sourced. No model attribute may be written from memory — it must trace to `reference/`. |
-| D-12 | Colours carry both an Apple marketing name and a plain descriptive palette value. The engine matches on the descriptive value only (§6.5). |
-| D-13 | Phase 1 reference images are committed to the repo, not kept local. They are never imported into the build. |
+| D-12 | Colours carry both an Apple marketing name and a plain descriptive palette value. The engine matches on the descriptive value only (§6.5).                                                     |
+| D-13 | Phase 1 reference images are committed to the repo, not kept local. They are never imported into the build.                                                                                    |
 
 D-11 has already paid for itself twice, which is worth recording because both failures
 looked like solid data at the time:
@@ -529,12 +529,12 @@ looked like solid data at the time:
 ## 12. Open questions
 
 - Should the reverse-lookup view be editable in-app, or is correcting the data
-  strictly a code change? *Leaning code change.*
+  strictly a code change? _Leaning code change._
 - How the built app is served at the shop — copied to each device, or served
   from one machine on the LAN.
 - Where reference images come from, and under what terms. Press images and
   product shots are the practical source but are not ours to redistribute.
   Since the repo is internal and the images are drawing references that never
   ship in the build, this is low risk — but if the repo ever goes public it
-  needs revisiting. *Record the source URL for each image in
-  `reference/models/<id>.md` so this stays traceable.*
+  needs revisiting. _Record the source URL for each image in
+  `reference/models/<id>.md` so this stays traceable._

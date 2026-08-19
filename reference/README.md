@@ -6,13 +6,13 @@ Nothing here is imported by the build. It is the evidence layer that
 `src/data/models.ts` must trace back to (D-11): no model attribute may be written
 into the matrix from memory.
 
-| File | What it is |
-|---|---|
-| `models/<id>.md` | One file per model. Every attribute row carries a source and a confidence flag. **This is the source of truth.** |
-| `palette.md` | The colour palette (SPEC §6.5) — 14 descriptive values, the marketing names each covers, and the known risks. |
-| `matrix.md` | All 37 models in three tables. A reading aid only — it carries no sources, so do not transcribe from it. |
-| `images/apple/` | 37 clean Apple product shots, one per model — one device, back and front, straight on. The best image for reading a model's outside. See `images/apple/README.md`. |
-| `images/ifixit/` | Three iFixit photographs of the iPhone X, XS and XS Max bottom edges — the direct evidence for `bottom_mic_hole_pattern`. |
+| File             | What it is                                                                                                                                                         |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `models/<id>.md` | One file per model. Every attribute row carries a source and a confidence flag. **This is the source of truth.**                                                   |
+| `palette.md`     | The colour palette (SPEC §6.5) — 14 descriptive values, the marketing names each covers, and the known risks.                                                      |
+| `matrix.md`      | All 37 models in three tables. A reading aid only — it carries no sources, so do not transcribe from it.                                                           |
+| `images/apple/`  | 37 clean Apple product shots, one per model — one device, back and front, straight on. The best image for reading a model's outside. See `images/apple/README.md`. |
+| `images/ifixit/` | Three iFixit photographs of the iPhone X, XS and XS Max bottom edges — the direct evidence for `bottom_mic_hole_pattern`.                                          |
 
 ## Status
 
@@ -33,11 +33,11 @@ into the matrix from memory.
 
 ## Confidence flags
 
-| Flag | Meaning | Safe to transcribe? |
-|---|---|---|
-| ✅ verified | Traced to a cited source | Yes |
-| 🟡 inferred | Read from an adjacent source or generation lineage | Yes, with the caveat recorded |
-| 🔴 unverified | Researcher's reading, no source | **No — leave the value absent** |
+| Flag          | Meaning                                            | Safe to transcribe?             |
+| ------------- | -------------------------------------------------- | ------------------------------- |
+| ✅ verified   | Traced to a cited source                           | Yes                             |
+| 🟡 inferred   | Read from an adjacent source or generation lineage | Yes, with the caveat recorded   |
+| 🔴 unverified | Researcher's reading, no source                    | **No — leave the value absent** |
 
 Leaving an unverified value absent is safe: under the §5.4 matching rule missing
 data eliminates nothing, so the result degrades to a larger candidate group rather

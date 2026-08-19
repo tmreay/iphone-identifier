@@ -24,13 +24,13 @@ pixel size. Every file comes from `store.storeimages.cdn-apple.com`, requested a
 Apple has used three different slug conventions over the range, so the source URLs do not
 follow one shape:
 
-| Convention | Era | Example |
-|---|---|---|
-| `{model}-{colour}-select-{year}` | 2017–2020 | `iphone-x-silver-select-2017` |
-| `{model}-{colour}-hero` | 12 Pro | `iphone-12-pro-graphite-hero` |
-| `{model}-{colour}-select` | 13 Pro | `iphone-13-pro-silver-select` |
+| Convention                                           | Era       | Example                                                    |
+| ---------------------------------------------------- | --------- | ---------------------------------------------------------- |
+| `{model}-{colour}-select-{year}`                     | 2017–2020 | `iphone-x-silver-select-2017`                              |
+| `{model}-{colour}-hero`                              | 12 Pro    | `iphone-12-pro-graphite-hero`                              |
+| `{model}-{colour}-select`                            | 13 Pro    | `iphone-13-pro-silver-select`                              |
 | `{model}-finish-select-{yyyymm}-{size}inch-{colour}` | 2022–2024 | `iphone-16-pro-finish-select-202409-6-3inch-blacktitanium` |
-| `{model}-finish-select-{colour}-{yyyymm}` | 2025+ | `iphone-air-finish-select-spaceblack-202509` |
+| `{model}-finish-select-{colour}-{yyyymm}`            | 2025+     | `iphone-air-finish-select-spaceblack-202509`               |
 
 A dark finish was chosen wherever one exists. Apple shoots all of these on white, so a
 pale body is close to invisible at the edges and defeats both the eye and the automatic

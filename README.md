@@ -25,14 +25,14 @@ tablet on the same network.
 
 ## Scripts
 
-| Command | Purpose |
-|---|---|
-| `npm run dev` | Dev server with hot reload |
-| `npm run build` | Type-check and build to `dist/` |
-| `npm run preview` | Serve the production build locally |
-| `npm test` | Run the Vitest suite once |
-| `npm run test:watch` | Vitest in watch mode |
-| `npm run typecheck` | Type-check without emitting |
+| Command              | Purpose                            |
+| -------------------- | ---------------------------------- |
+| `npm run dev`        | Dev server with hot reload         |
+| `npm run build`      | Type-check and build to `dist/`    |
+| `npm run preview`    | Serve the production build locally |
+| `npm test`           | Run the Vitest suite once          |
+| `npm run test:watch` | Vitest in watch mode               |
+| `npm run typecheck`  | Type-check without emitting        |
 
 The build uses relative asset paths, so `dist/` can be copied to a device and
 opened directly. The app has no backend and no runtime network dependency.

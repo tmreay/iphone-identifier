@@ -1,0 +1,5 @@
+# Normalise to LF in the repo and in the working tree on every platform, so
+# Prettier's endOfLine: "lf" holds locally as well as in CI.
+* text=auto eol=lf
+
+*.jpg binary

@@ -3,11 +3,11 @@
 Three files. They exist for one reason: they are the direct evidence behind
 `bottom_mic_hole_pattern`, the attribute that separates the iPhone X from the iPhone XS.
 
-| File | Holes left of the port | Holes right | Value |
-|---|---|---|---|
-| `iphone-x/bottom-edge-03.jpg` | 6 | 6 | `symmetric_six_six` |
-| `iphone-xs/bottom-edge-01.jpg` | 3 | 6 | `asymmetric_three_six` |
-| `iphone-xs-max/bottom-edge-01.jpg` | 4 | 7 | `asymmetric_four_seven` |
+| File                               | Holes left of the port | Holes right | Value                   |
+| ---------------------------------- | ---------------------- | ----------- | ----------------------- |
+| `iphone-x/bottom-edge-03.jpg`      | 6                      | 6           | `symmetric_six_six`     |
+| `iphone-xs/bottom-edge-01.jpg`     | 3                      | 6           | `asymmetric_three_six`  |
+| `iphone-xs-max/bottom-edge-01.jpg` | 4                      | 7           | `asymmetric_four_seven` |
 
 Each is the hero image of that model's "Pentalobe Screws Replacement" guide, shot square
 on to the bottom edge under the same lighting, so the three are directly comparable.

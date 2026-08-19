@@ -6,12 +6,10 @@ export function App() {
   return (
     <main className="app">
       <h1>iPhone Identifier</h1>
-      <p className="lede">
-        Identify an iPhone model from its visible characteristics.
-      </p>
+      <p className="lede">Identify an iPhone model from its visible characteristics.</p>
       <p className="note">
-        Phase 0 — project scaffolding. The question flow arrives in Phase 3;
-        see <code>SPEC.md</code> for the plan.
+        Phase 0 — project scaffolding. The question flow arrives in Phase 3; see{' '}
+        <code>SPEC.md</code> for the plan.
       </p>
     </main>
   )

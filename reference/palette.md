@@ -10,22 +10,22 @@ text for the reverse-lookup entry and for talking to suppliers.
 
 ## The palette
 
-| Descriptive value | Apple marketing names it covers | Model-colours |
-|---|---|---|
-| `black` | Space Gray, Black, Graphite, Midnight, Space Black, Black Titanium | 35 |
-| `white_silver` | Silver, White, Starlight, White Titanium, Natural Titanium, Cloud White | 39 |
-| `gold` | Gold, Desert Titanium, Light Gold | 15 |
-| `red` | (PRODUCT) RED | 12 |
-| `pink` | Pink, Soft Pink | 7 |
-| `purple` | Purple, Deep Purple, Lavender | 8 |
-| `light_blue` | Blue (XR, 13, 14, 15), Sierra Blue, Sky Blue, Mist Blue | 11 |
-| `dark_blue` | Blue (12), Pacific Blue, Blue Titanium, Ultramarine, Deep Blue | 10 |
-| `light_green` | Green (11, 12, 15), Sage | 6 |
-| `dark_green` | Green (13), Midnight Green, Alpine Green | 6 |
-| `yellow` | Yellow | 6 |
-| `orange` | Cosmic Orange | 2 |
-| `coral` | Coral | 1 |
-| `teal` | Teal | 2 |
+| Descriptive value | Apple marketing names it covers                                         | Model-colours |
+| ----------------- | ----------------------------------------------------------------------- | ------------- |
+| `black`           | Space Gray, Black, Graphite, Midnight, Space Black, Black Titanium      | 35            |
+| `white_silver`    | Silver, White, Starlight, White Titanium, Natural Titanium, Cloud White | 39            |
+| `gold`            | Gold, Desert Titanium, Light Gold                                       | 15            |
+| `red`             | (PRODUCT) RED                                                           | 12            |
+| `pink`            | Pink, Soft Pink                                                         | 7             |
+| `purple`          | Purple, Deep Purple, Lavender                                           | 8             |
+| `light_blue`      | Blue (XR, 13, 14, 15), Sierra Blue, Sky Blue, Mist Blue                 | 11            |
+| `dark_blue`       | Blue (12), Pacific Blue, Blue Titanium, Ultramarine, Deep Blue          | 10            |
+| `light_green`     | Green (11, 12, 15), Sage                                                | 6             |
+| `dark_green`      | Green (13), Midnight Green, Alpine Green                                | 6             |
+| `yellow`          | Yellow                                                                  | 6             |
+| `orange`          | Cosmic Orange                                                           | 2             |
+| `coral`           | Coral                                                                   | 1             |
+| `teal`            | Teal                                                                    | 2             |
 
 Suggested question option labels: "black / dark grey", "white / silver",
 "gold", "red", "pink", "purple", "light blue", "dark blue", "light green",
@@ -57,7 +57,7 @@ than global — see the `SHADE` table in the generator, and the per-model files.
 
 These are the entries most likely to produce a wrong answer, in order:
 
-1. **iPhone 13 / 13 mini Blue is a boundary shade and carries *both* values.**
+1. **iPhone 13 / 13 mini Blue is a boundary shade and carries _both_ values.**
    Compared against the committed images, the iPhone 13 Blue is clearly darker
    than the iPhone 14 and 15 pale blues and clearly lighter than Pacific Blue. It
    is recorded as both `light_blue` and `dark_blue`, so neither answer can
@@ -80,7 +80,7 @@ These are the entries most likely to produce a wrong answer, in order:
 
 ## Standing caveat
 
-Colour is the one attribute that can fail *unsafely* (§6.4). A rehoused phone or
+Colour is the one attribute that can fail _unsafely_ (§6.4). A rehoused phone or
 one with replaced back glass will answer wrongly and eliminate the correct model.
 Every colour question must carry the "original back glass only" label and a
 prominent "can't tell".

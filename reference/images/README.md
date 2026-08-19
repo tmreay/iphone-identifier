@@ -4,14 +4,14 @@
 source for the Phase 4 SVG diagrams and the visual evidence behind the attribute values in
 `reference/models/`.
 
-| Set | Files | What it is |
-|---|---|---|
-| `apple/` | 37 | One per model. Apple's own product shot: a single device, back and front, straight on. **Start here.** |
-| `ifixit/` | 3 | The iPhone X, XS and XS Max bottom edges — the one region Apple never photographs. |
+| Set       | Files | What it is                                                                                             |
+| --------- | ----- | ------------------------------------------------------------------------------------------------------ |
+| `apple/`  | 37    | One per model. Apple's own product shot: a single device, back and front, straight on. **Start here.** |
+| `ifixit/` | 3     | The iPhone X, XS and XS Max bottom edges — the one region Apple never photographs.                     |
 
 ## What replaced what
 
-Phase 1 collected 32 Apple *colour lineup* renders — four to six bodies of one model
+Phase 1 collected 32 Apple _colour lineup_ renders — four to six bodies of one model
 angled and overlapping, several of them tiny (the iPhone 12 Pro's was 419 × 175). They
 were the best thing found at the time, and they were removed on 2026-08-19 once every
 model had a clean single-device shot. Nothing referenced them at the point they were

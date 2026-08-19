@@ -8,51 +8,51 @@
 
 ## Body
 
-| Fact | Value | Source |
-|---|---|---|
-| Height | 150.9 mm | S1 |
-| Width | 75.7 mm | S1 |
-| Depth | 8.3 mm | S1 |
-| Weight | 194 grams | S1 |
-| Display | 6.1-inch (diagonal) all-screen LCD Multi-Touch display with IPS technology | S1 |
+| Fact    | Value                                                                      | Source |
+| ------- | -------------------------------------------------------------------------- | ------ |
+| Height  | 150.9 mm                                                                   | S1     |
+| Width   | 75.7 mm                                                                    | S1     |
+| Depth   | 8.3 mm                                                                     | S1     |
+| Weight  | 194 grams                                                                  | S1     |
+| Display | 6.1-inch (diagonal) all-screen LCD Multi-Touch display with IPS technology | S1     |
 
 ## Coarse-tier attributes (SPEC.md §6.1)
 
-| Attribute | Value(s) | Confidence | Source | Note |
-|---|---|---|---|---|
-| `home_button` | `absent` | ✅ verified | S1 | No home button; Face ID. |
-| `port` | `lightning` | ✅ verified | S1 | Listed under External Buttons and Connectors. |
-| `rear_camera_count` | `1` | ✅ verified | S1 | |
-| `rear_camera_layout` | `single_lens_in_pill` | 🟡 inferred | — | One circular lens with the flash below it, both inside a single vertically-oriented raised pill at the top left. **Arrangement described from the researcher's reading, not a cited source — confirm against a reference image.** |
-| `front_cutout` | `notch_wide` | ✅ verified | S3 | Wide notch (~35 mm) at the top of an all-screen display. |
-| `body_size_class` | `standard` · `large` | ✅ verified | S1 | Derived from body height 150.9 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see SPEC.md §6.3. |
-| `sim_tray` | `right_side` | ✅ verified | S2 | SIM tray on the right side, below the side button. Present in all markets. |
-| `colour` | `red` · `yellow` · `white_silver` · `coral` · `black` · `light_blue` | 🟡 inferred | S1 | Marketing names are Apple's; the descriptive mapping is this project's (see `reference/palette.md`). |
+| Attribute            | Value(s)                                                             | Confidence  | Source | Note                                                                                                                                                                                                                              |
+| -------------------- | -------------------------------------------------------------------- | ----------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `home_button`        | `absent`                                                             | ✅ verified | S1     | No home button; Face ID.                                                                                                                                                                                                          |
+| `port`               | `lightning`                                                          | ✅ verified | S1     | Listed under External Buttons and Connectors.                                                                                                                                                                                     |
+| `rear_camera_count`  | `1`                                                                  | ✅ verified | S1     |                                                                                                                                                                                                                                   |
+| `rear_camera_layout` | `single_lens_in_pill`                                                | 🟡 inferred | —      | One circular lens with the flash below it, both inside a single vertically-oriented raised pill at the top left. **Arrangement described from the researcher's reading, not a cited source — confirm against a reference image.** |
+| `front_cutout`       | `notch_wide`                                                         | ✅ verified | S3     | Wide notch (~35 mm) at the top of an all-screen display.                                                                                                                                                                          |
+| `body_size_class`    | `standard` · `large`                                                 | ✅ verified | S1     | Derived from body height 150.9 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see SPEC.md §6.3.                                                     |
+| `sim_tray`           | `right_side`                                                         | ✅ verified | S2     | SIM tray on the right side, below the side button. Present in all markets.                                                                                                                                                        |
+| `colour`             | `red` · `yellow` · `white_silver` · `coral` · `black` · `light_blue` | 🟡 inferred | S1     | Marketing names are Apple's; the descriptive mapping is this project's (see `reference/palette.md`).                                                                                                                              |
 
 ## Deep-tier attributes (SPEC.md §6.2)
 
-| Attribute | Value | Confidence | Source | Note |
-|---|---|---|---|---|
-| `action_button` | `absent` | ✅ verified | S1 | Ring/Silent switch fitted instead. |
-| `camera_control_button` | `absent` | ✅ verified | S1 |  |
-| `frame_material_finish` | `aluminium_glossy` | 🟡 inferred | S3 | Anodised aluminium, glossy/polished. |
-| `back_glass_finish` | `glossy` | 🟡 inferred | S3 | Glossy glass. |
-| `rear_wordmark` | `iphone_text_present` | ✅ verified | S5 | Apple logo in the upper third with the word "iPhone" below it. Regulatory text below that varies by region. |
-| `bottom_mic_hole_pattern` | `asymmetric` | 🟡 inferred | — | Asymmetric, as on every model after the iPhone X. Only useful for the X/XS pair. |
-| `camera_bump_size` | — (n/a) | 🔴 unverified | — | Not a discriminator for this model. |
-| `flash_position` | `below_lens` | 🔴 unverified | — | Directly below the lens. **Not read off the image yet — confirm against the committed reference image before transcribing.** |
-| `lidar` | `absent` | ✅ verified | S1 |  |
+| Attribute                 | Value                 | Confidence    | Source | Note                                                                                                                         |
+| ------------------------- | --------------------- | ------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| `action_button`           | `absent`              | ✅ verified   | S1     | Ring/Silent switch fitted instead.                                                                                           |
+| `camera_control_button`   | `absent`              | ✅ verified   | S1     |                                                                                                                              |
+| `frame_material_finish`   | `aluminium_glossy`    | 🟡 inferred   | S3     | Anodised aluminium, glossy/polished.                                                                                         |
+| `back_glass_finish`       | `glossy`              | 🟡 inferred   | S3     | Glossy glass.                                                                                                                |
+| `rear_wordmark`           | `iphone_text_present` | ✅ verified   | S5     | Apple logo in the upper third with the word "iPhone" below it. Regulatory text below that varies by region.                  |
+| `bottom_mic_hole_pattern` | `asymmetric`          | 🟡 inferred   | —      | Asymmetric, as on every model after the iPhone X. Only useful for the X/XS pair.                                             |
+| `camera_bump_size`        | — (n/a)               | 🔴 unverified | —      | Not a discriminator for this model.                                                                                          |
+| `flash_position`          | `below_lens`          | 🔴 unverified | —      | Directly below the lens. **Not read off the image yet — confirm against the committed reference image before transcribing.** |
+| `lidar`                   | `absent`              | ✅ verified   | S1     |                                                                                                                              |
 
 ## Colours (SPEC.md §6.5)
 
-| Descriptive value | Apple marketing name | Note |
-|---|---|---|
-| `red` | (PRODUCT) RED |  |
-| `yellow` | Yellow |  |
-| `white_silver` | White |  |
-| `coral` | Coral |  |
-| `black` | Black |  |
-| `light_blue` | Blue | Shade resolved per model — Apple reuses this bare name across generations at different shades. |
+| Descriptive value | Apple marketing name | Note                                                                                           |
+| ----------------- | -------------------- | ---------------------------------------------------------------------------------------------- |
+| `red`             | (PRODUCT) RED        |                                                                                                |
+| `yellow`          | Yellow               |                                                                                                |
+| `white_silver`    | White                |                                                                                                |
+| `coral`           | Coral                |                                                                                                |
+| `black`           | Black                |                                                                                                |
+| `light_blue`      | Blue                 | Shade resolved per model — Apple reuses this bare name across generations at different shades. |
 
 All marketing names from S1. Descriptive values per `reference/palette.md`.
 
