@@ -51,8 +51,15 @@ Roughly where each flag falls:
 - **🟡 inferred** covers the descriptive colour mapping (the marketing names are Apple's,
   the palette is this project's), some `rear_camera_layout` values, and `rear_wordmark`
   on models after 2020, where continuation is assumed rather than sourced.
-- **🔴 unverified** covers `bottom_mic_hole_pattern` outside the iPhone X / XS / XS Max
-  group. **Do not transcribe these into `src/data/models.ts`** — leave them absent.
+- **🔴 unverified** covers `flash_position` on 25 models, `camera_bump_size` on 31,
+  and `bottom_mic_hole_pattern` on the four home-button bodies, which were never
+  researched. **Do not transcribe these into `src/data/models.ts`** — leave them absent.
+
+One flag is worth questioning in Phase 2: the 30 models carrying a bare `asymmetric`
+`bottom_mic_hole_pattern` are marked 🟡, but their Source column is `—`. Nothing was
+consulted; the value is a generalisation from the iPhone X onward. It is harmless because
+the attribute only discriminates within the X / XS / XS Max group, but by the standard set
+out above it is closer to 🔴 than 🟡.
 
 `flash_position` was the one attribute Phase 1 could not fill from text sources at all;
 it is now read off the committed product shots for 12 models and still unread for 25.

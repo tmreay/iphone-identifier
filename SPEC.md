@@ -280,11 +280,14 @@ Notes on the less obvious ones:
 - **`back_glass_finish`** is no longer a Pro/non-Pro split: the standard models went
   matte at the iPhone 15, and the Air and 17 Pro pair have a Ceramic Shield back.
 - **`bottom_mic_hole_pattern`** counts holes either side of the port. It is photographed
-  and verified only for the iPhone X (six/six), XS (three/six) and XS Max (four/seven);
-  the bare `asymmetric` carried by later models is unverified and must not be
-  transcribed into `src/data/models.ts` (§5.4 — an absent value eliminates nothing).
-- **`camera_bump_size`** is the intended iPhone 13 vs 14 tell and remains unphotographed;
-  no committed image shows the two plateaus at a comparable angle.
+  and verified only for the iPhone X (six/six), XS (three/six) and XS Max (four/seven).
+  Thirty later models carry a bare `asymmetric` as a generalisation with no source
+  consulted, and the four home-button bodies were never researched at all. The attribute
+  only ever discriminates inside that group of three, so the weak values cost nothing —
+  but they should not be mistaken for evidence.
+- **`camera_bump_size`** is the intended iPhone 13 vs 14 tell. It remains unphotographed,
+  and its recorded values rest on a comparison of the _Pro Max_ bodies rather than the
+  non-Pro pair they are attached to (§9).
 - **`rear_wordmark`** has only two members in practice. The third value once listed here,
   `logo_only_upper`, has no members and was dropped.
 
@@ -420,15 +423,15 @@ in every concrete configuration it can take, was matched against all 37.
 **Coarse tier alone** leaves seven ambiguous groups. The deep tier closes four of them,
 which is the two-tier split in D-03 earning its place:
 
-| Group                                 | Closed by                                         |
-| ------------------------------------- | ------------------------------------------------- |
-| iPhone 8 + SE (2nd) + SE (3rd)        | `rear_wordmark`                                   |
-| iPhone 13 + iPhone 14                 | `camera_bump_size`                                |
-| iPhone 15 Pro + iPhone 16 Pro         | `camera_control_button`                           |
-| iPhone 15 Pro Max + iPhone 16 Pro Max | `camera_control_button`                           |
-| iPhone X + iPhone XS                  | `bottom_mic_hole_pattern`                         |
-| iPhone 16 + iPhone 17                 | **nothing — terminal**                            |
-| iPhone 16e + iPhone 17e               | nothing visible — `magsafe` settles it off-screen |
+| Group                                 | Closed by                                            |
+| ------------------------------------- | ---------------------------------------------------- |
+| iPhone 8 + SE (2nd) + SE (3rd)        | `rear_wordmark`                                      |
+| iPhone 13 + iPhone 14                 | `camera_bump_size` — **weakly evidenced, see below** |
+| iPhone 15 Pro + iPhone 16 Pro         | `camera_control_button`                              |
+| iPhone 15 Pro Max + iPhone 16 Pro Max | `camera_control_button`                              |
+| iPhone X + iPhone XS                  | `bottom_mic_hole_pattern`                            |
+| iPhone 16 + iPhone 17                 | **nothing — terminal**                               |
+| iPhone 16e + iPhone 17e               | nothing visible — `magsafe` settles it off-screen    |
 
 **After both tiers, three groups remain.** 34 of 37 models resolve to exactly one:
 
@@ -440,6 +443,15 @@ which is the two-tier split in D-03 earning its place:
 
 There is no iPhone 17 Plus — the iPhone Air took that slot — so the iPhone 16 Plus has no
 equivalent twin at `max` size.
+
+**The iPhone 13 vs 14 closure is the weakest link in this table.** `camera_bump_size` is
+recorded as `smaller` on the 13 and `larger` on the 14, but the cited source compares the
+13 Pro Max with the 14 Pro Max — a different camera system from the diagonal-dual used by
+the non-Pro pair. The values are marked 🟡 inferred rather than verified, which is honest,
+but nothing in `reference/` evidences them for the models they are attached to, and no
+committed image shows the two plateaus at a comparable angle. Until that photograph
+exists, treat 13 vs 14 as **provisionally** closed: if the tell does not hold it becomes a
+fourth terminal group and §4.4 needs a fourth entry.
 
 Two pairs that were expected to be hard turned out not to be: iPhone 12 vs 12 Pro separates
 on camera count, and Pro vs Pro Max within a generation separates on size class alone,
