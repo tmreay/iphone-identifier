@@ -1,6 +1,6 @@
 # iPhone Identifier — Specification
 
-**Status:** draft v1 · **Last updated:** 2026-08-19
+**Status:** draft v1.1 · **Last updated:** 2026-08-19
 
 A local web app that walks a repair-shop technician through a short series of
 questions about a phone's *visible* characteristics until it identifies which
@@ -148,8 +148,8 @@ tests independently of the UI.
 
 ```
 SPEC.md
-reference/            Phase 1 research output — sourced facts and images
-  models/<id>.md
+reference/            Phase 1 research output — sourced facts and images.
+  models/<id>.md      Committed to the repo (D-13), not bundled into the build.
   images/
 src/
   data/
@@ -168,6 +168,13 @@ type ModelId = string;              // 'iphone-13-pro-max'
 type AttributeId = string;          // 'rear_camera_layout'
 type AttributeValue = string;       // 'dual_diagonal'
 
+interface ColourOption {
+  /** Palette value the engine matches on, and the question option value. */
+  value: AttributeValue;            // 'dark_blue'
+  /** Apple's marketing name for this model in this colour. Display only. */
+  marketing: string;                // 'Pacific Blue'
+}
+
 interface IPhoneModel {
   id: ModelId;
   name: string;                     // 'iPhone 13 Pro Max'
@@ -179,6 +186,11 @@ interface IPhoneModel {
    * An absent or empty entry means "unknown" and eliminates nothing.
    */
   attributes: Partial<Record<AttributeId, AttributeValue[]>>;
+  /**
+   * Colours this model shipped in, carrying both naming layers (§6.5).
+   * The set of `value`s must equal attributes.colour — asserted by test.
+   */
+  colours: ColourOption[];
 }
 
 interface QuestionOption {
@@ -222,7 +234,7 @@ Values below define the *schema*. Which models take which values is Phase 1 work
 | `front_cutout` | bezels_no_cutout · notch_wide · notch_narrow · dynamic_island |
 | `body_size_class` | mini · compact · standard · large · max (§6.3) |
 | `sim_tray` | none · left_side · right_side |
-| `colour` | per Phase 1 enumeration |
+| `colour` | descriptive palette values, per Phase 1 enumeration (§6.5) |
 
 ### 6.2 Deep tier — Narrow further only
 
@@ -270,6 +282,40 @@ glass can eliminate the correct model. Mitigations:
 - the `eliminating` flag on the question makes reverting this a one-line change
   if it causes wrong answers in practice.
 
+### 6.5 Colour naming
+
+Every colour is recorded under **two names** (D-12):
+
+- a **descriptive value** drawn from a small shared palette — `black`, `white`,
+  `silver`, `gold`, `dark_blue`, `light_blue`, `green`, `red`, `purple`,
+  `pink`, `yellow`, `orange`, and so on. The final palette is Phase 1 work.
+- Apple's **marketing name** for that colour on that model — "Pacific Blue",
+  "Sierra Blue", "Alpine Green", "Desert Titanium".
+
+They serve different jobs:
+
+| | Descriptive | Marketing |
+|---|---|---|
+| Used by the engine to match | yes | never |
+| Question option labels | yes | shown as examples beneath the label |
+| Reverse-lookup model entry | yes | yes, listed in full |
+| Talking to a supplier or customer | — | yes |
+
+**Matching is always on the descriptive value.** A technician holding a phone
+can pick "dark blue" but has no way to know whether it is Pacific Blue or
+Sierra Blue — asking them to choose would invert the problem the app exists to
+solve. Marketing names never narrow the candidate set.
+
+Several models therefore share one descriptive value under different marketing
+names. That is expected, and is exactly why the descriptive layer exists.
+
+Because the palette is deliberately coarse, keep it coarse: if two shades are
+plausibly confusable at a workbench under shop lighting, they are one value.
+Splitting them creates a question a technician will answer wrongly.
+
+The result screen still shows the model name only (D-06); colour names belong
+to the reverse-lookup entry.
+
 ## 7. Question selection
 
 Given the current candidate set:
@@ -281,10 +327,14 @@ Given the current candidate set:
    camera count) win over checks that need close inspection.
 4. Stop when one candidate remains, or no question can further split the set.
 
-The algorithm is deterministic and must be covered by unit tests, including a
-test that asserts **every model is reachable** — that for each model there
-exists an answer path leading to it alone, or to a documented terminal group
-(§4.4).
+The algorithm is deterministic and must be covered by unit tests, including:
+
+- **every model is reachable** — for each model there exists an answer path
+  leading to it alone, or to a documented terminal group (§4.4);
+- **colour layers agree** — every model's `attributes.colour` set equals the
+  set of `colours[].value` (§5.4, §6.5);
+- **palette is closed** — every colour value used by a model exists in the
+  declared palette, and every palette value is used by at least one model.
 
 ## 8. Diagrams
 
@@ -302,7 +352,14 @@ Rules:
 - one component per answer option, ids referenced from `questions.ts`.
 
 Reference screenshots gathered in Phase 1 are the drawing source. They live in
-`reference/images/` and are not shipped in the build.
+`reference/images/` and **are committed to the repo** (D-13), so a future
+session can redraw or correct a diagram without repeating the research. They
+are not imported by any module and so never enter the build — the shipped app
+contains SVG only.
+
+Keep the repo sane: downscale to roughly 1600 px on the long edge, save as
+WebP or JPEG rather than PNG for photographs, and do not commit anything that
+does not directly support drawing a diagram or verifying an attribute.
 
 ## 9. Known hard cases
 
@@ -332,10 +389,13 @@ images in `reference/images/`. Explicit goals:
 - record body dimensions so §6.3 class assignments are evidence-based;
 - confirm which generations and regions ship without a SIM tray, and which side
   the tray sits on;
-- enumerate colours per model;
+- enumerate colours per model under **both** naming layers (§6.5) — Apple's
+  marketing name and a descriptive palette value — and settle the palette;
 - verify the iPhone 16e, iPhone Air and iPhone 17 generation in particular —
   these are recent and must not be written from memory;
-- capture front and rear reference images per model.
+- capture front and rear reference images per model, committed to
+  `reference/images/` under the size guidance in §8, plus close-ups of every
+  micro-detail named in §6.2 and §9.
 
 **Phase 2 — data and engine.** Transcribe `reference/` into `src/data/`; build
 and unit-test the engine, including the reachability test in §7.
@@ -366,13 +426,18 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 | D-09 | "Can't tell" on every question; the engine routes around unavailable attributes and never eliminates on missing data. |
 | D-10 | Size is expressed as five body-size classes with permitted overlap, never as measurements. |
 | D-11 | Data verification (Phase 1) happens before any matrix authoring, in its own session, and everything is sourced. |
+| D-12 | Colours carry both an Apple marketing name and a plain descriptive palette value. The engine matches on the descriptive value only (§6.5). |
+| D-13 | Phase 1 reference images are committed to the repo, not kept local. They are never imported into the build. |
 
 ## 12. Open questions
 
-- Colour naming: Apple's marketing names ("Sierra Blue") or plain descriptive
-  ones ("light blue")? Marketing names are precise but a technician will not know
-  them. *Leaning plain descriptive, grouped into a small palette.*
 - Should the reverse-lookup view be editable in-app, or is correcting the data
   strictly a code change? *Leaning code change.*
 - How the built app is served at the shop — copied to each device, or served
   from one machine on the LAN.
+- Where reference images come from, and under what terms. Press images and
+  product shots are the practical source but are not ours to redistribute.
+  Since the repo is internal and the images are drawing references that never
+  ship in the build, this is low risk — but if the repo ever goes public it
+  needs revisiting. *Record the source URL for each image in
+  `reference/models/<id>.md` so this stays traceable.*
