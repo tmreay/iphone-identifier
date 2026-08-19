@@ -260,27 +260,26 @@ ruling a model out.
 
 ### 6.2 Deep tier — Narrow further only
 
-| Attribute                 | Values                                                                                                                                      |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| `action_button`           | present · absent (replaces the ring/silent switch)                                                                                          |
-| `camera_control_button`   | present · absent                                                                                                                            |
-| `magsafe`                 | present · absent                                                                                                                            |
-| `frame_material_finish`   | aluminium_glossy · aluminium_matte · aluminium_brushed · stainless_glossy · titanium_brushed · titanium_polished                            |
-| `back_glass_finish`       | glossy · matte · ceramic_shield                                                                                                             |
-| `rear_wordmark`           | iphone_text_present · logo_only_centred                                                                                                     |
-| `bottom_mic_hole_pattern` | symmetric_six_six · asymmetric_three_six · asymmetric_four_seven · asymmetric                                                               |
-| `camera_bump_size`        | larger · smaller                                                                                                                            |
-| `flash_position`          | below_lens · beside_lens_on_glass · between_lenses · right_of_lenses · in_square_right · outside_bump_right · in_plateau · in_plateau_right |
-| `lidar`                   | present · absent                                                                                                                            |
+| Attribute                 | Values                                                                                                                    |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `action_button`           | present · absent (replaces the ring/silent switch)                                                                        |
+| `camera_control_button`   | present · absent                                                                                                          |
+| `magsafe`                 | present · absent                                                                                                          |
+| `frame_material_finish`   | aluminium_glossy · aluminium_matte · aluminium_brushed · stainless_glossy · titanium_brushed · titanium_polished          |
+| `back_glass_finish`       | glossy · matte · ceramic_shield                                                                                           |
+| `rear_wordmark`           | iphone_text_present · logo_only_centred                                                                                   |
+| `bottom_mic_hole_pattern` | symmetric_six_six · asymmetric_three_six · asymmetric_four_seven · asymmetric                                             |
+| `camera_bump_size`        | larger · smaller                                                                                                          |
+| `flash_position`          | below_lens · beside_lens_on_glass · between_lenses · in_square_right · outside_bump_right · in_plateau · in_plateau_right |
+| `lidar`                   | present · absent                                                                                                          |
 
 Notes on the less obvious ones:
 
 - **`magsafe`** is the only thing that separates an iPhone 16e from a 17e, and unlike a
-  Settings check it works on a phone that will not power on (§4.4). **It is declared here
-  but not yet populated:** no `reference/models/<id>.md` records a value for it, so the
-  16e/17e resolution in §4.4 and §9 currently rests on spec prose rather than on sourced
-  data. Filling it is outstanding Phase 1 work (§10) and must be sourced per model, not
-  written from memory (D-11).
+  Settings check it works on a phone that will not power on (§4.4). Recorded for all 37
+  models from Apple's tech specs: absent on everything before the iPhone 12 and on the
+  16e, present on everything else. Apple lists the 16e with Qi wireless charging only,
+  and the 17e with a magnet array and alignment magnet.
 - **`back_glass_finish`** is no longer a Pro/non-Pro split: the standard models went
   matte at the iPhone 15, and the Air and 17 Pro pair have a Ceramic Shield back.
 - **`bottom_mic_hole_pattern`** counts holes either side of the port. It is photographed
@@ -289,9 +288,10 @@ Notes on the less obvious ones:
   consulted, and the four home-button bodies were never researched at all. The attribute
   only ever discriminates inside that group of three, so the weak values cost nothing —
   but they should not be mistaken for evidence.
-- **`camera_bump_size`** is the intended iPhone 13 vs 14 tell. It remains unphotographed,
-  and its recorded values rest on a comparison of the _Pro Max_ bodies rather than the
-  non-Pro pair they are attached to (§9).
+- **`camera_bump_size`** separates the iPhone 13 generation from the 14 and 15 within the
+  diagonal-dual family. Measured off the committed product shots with each body normalised
+  to the same width, so the plateau footprint is compared like for like. It does not apply
+  outside that family.
 - **`rear_wordmark`** has only two members in practice. The third value once listed here,
   `logo_only_upper`, has no members and was dropped.
 
@@ -427,15 +427,15 @@ in every concrete configuration it can take, was matched against all 37.
 **Coarse tier alone** leaves seven ambiguous groups. The deep tier closes four of them,
 which is the two-tier split in D-03 earning its place:
 
-| Group                                 | Closed by                                            |
-| ------------------------------------- | ---------------------------------------------------- |
-| iPhone 8 + SE (2nd) + SE (3rd)        | `rear_wordmark`                                      |
-| iPhone 13 + iPhone 14                 | `camera_bump_size` — **weakly evidenced, see below** |
-| iPhone 15 Pro + iPhone 16 Pro         | `camera_control_button`                              |
-| iPhone 15 Pro Max + iPhone 16 Pro Max | `camera_control_button`                              |
-| iPhone X + iPhone XS                  | `bottom_mic_hole_pattern`                            |
-| iPhone 16 + iPhone 17                 | **nothing — terminal**                               |
-| iPhone 16e + iPhone 17e               | nothing visible — `magsafe` settles it off-screen    |
+| Group                                 | Closed by                                         |
+| ------------------------------------- | ------------------------------------------------- |
+| iPhone 8 + SE (2nd) + SE (3rd)        | `rear_wordmark`                                   |
+| iPhone 13 + iPhone 14                 | `camera_bump_size`                                |
+| iPhone 15 Pro + iPhone 16 Pro         | `camera_control_button`                           |
+| iPhone 15 Pro Max + iPhone 16 Pro Max | `camera_control_button`                           |
+| iPhone X + iPhone XS                  | `bottom_mic_hole_pattern`                         |
+| iPhone 16 + iPhone 17                 | **nothing — terminal**                            |
+| iPhone 16e + iPhone 17e               | nothing visible — `magsafe` settles it off-screen |
 
 **After both tiers, three groups remain.** 34 of 37 models resolve to exactly one:
 
@@ -448,14 +448,11 @@ which is the two-tier split in D-03 earning its place:
 There is no iPhone 17 Plus — the iPhone Air took that slot — so the iPhone 16 Plus has no
 equivalent twin at `max` size.
 
-**The iPhone 13 vs 14 closure is the weakest link in this table.** `camera_bump_size` is
-recorded as `smaller` on the 13 and `larger` on the 14, but the cited source compares the
-13 Pro Max with the 14 Pro Max — a different camera system from the diagonal-dual used by
-the non-Pro pair. The values are marked 🟡 inferred rather than verified, which is honest,
-but nothing in `reference/` evidences them for the models they are attached to, and no
-committed image shows the two plateaus at a comparable angle. Until that photograph
-exists, treat 13 vs 14 as **provisionally** closed: if the tell does not hold it becomes a
-fourth terminal group and §4.4 needs a fourth entry.
+`camera_bump_size`, which closes the 13 vs 14 group, was re-evidenced after an audit found
+its values citing a comparison of the _Pro Max_ bodies rather than the non-Pro pair they
+were attached to. Both plateaus are now measured off Apple's own product shots with each
+body normalised to the same width: the 14 generation plateau is visibly wider and its lens
+elements larger than the 13 generation. The group is closed on direct evidence.
 
 Two pairs that were expected to be hard turned out not to be: iPhone 12 vs 12 Pro separates
 on camera count, and Pro vs Pro Max within a generation separates on size class alone,
@@ -489,30 +486,33 @@ written from that research. What it changed in this spec: the taxonomy gaps are 
 §6.3 gained the 3 mm adjacency rule, §9 replaced guesswork with the measured separability
 result, and scope went from 36 models to 37 (D-01).
 
-**Phase 1 is substantially done but not closed.** What is finished: all 37 models
-researched and written up, body dimensions and size classes evidence-based, SIM-tray
-position verified for every model, colours enumerated under both naming layers with a
-closed 14-value palette, and the recent models (16e, Air, 17 generation, 17e) verified
-against shipped Apple documentation rather than pre-release reporting.
+**Phase 1 is done, with one attribute outstanding.** All 37 models researched and written
+up; dimensions and size classes evidence-based; SIM-tray position and `magsafe` verified
+for every model from Apple's own tech specs; colours enumerated under both naming layers
+with a closed 14-value palette; the recent models verified against shipped Apple
+documentation rather than pre-release reporting.
 
-What remains, in the order it matters:
+Across 666 attribute rows: **497 verified, 133 inferred, 36 unverified.** Of the 36, thirty-one
+are `camera_bump_size` on models where the attribute does not apply — it only ever
+compares within the diagonal-dual family — so the genuinely unknown values number **five**:
 
-1. **`magsafe` has no data.** The attribute is declared in §6.2 and both §4.4 and §9 use
-   it to resolve the 16e/17e group, but no model file records a value. Until it is sourced
-   per model that group is unresolved in the data, whatever the prose says.
-2. **The iPhone 13 vs 14 photograph.** `camera_bump_size` is the pair's only separator
-   and its values cite the wrong models (§9). Needs one shot of a 13 and a 14 plateau at a
-   comparable angle. Without it, 13 vs 14 may be a fourth terminal group.
-3. **`flash_position` on 25 models.** Read off the committed product shots for 12; the
-   images for the other 25 are committed and unread, so this is desk work rather than
-   research.
-4. **Close-ups of the remaining §6.2 micro-details.** The Phase 1 goal above asks for
-   these; what exists is three bottom-edge photographs covering the X, XS and XS Max.
+1. **`bottom_mic_hole_pattern` on the four home-button bodies** (8, 8 Plus, SE 2nd, SE 3rd).
+   Never researched. The attribute only discriminates inside the X / XS / XS Max group, so
+   this costs nothing.
+2. **`flash_position` on the iPhone Air.** Its plateau is black-on-black in Apple's render
+   and partly occluded by the front handset, so the flash cannot be read off it. The other
+   36 models are read and verified.
 
-None of this blocks Phase 2 under §5.4 — an absent value eliminates nothing, so an
-incomplete matrix degrades to a larger candidate group rather than a wrong answer. Item 1
-is the exception worth watching, because the spec currently claims a resolution the data
-does not support.
+Two evidence gaps remain that are not flag problems:
+
+- **Bottom edges are unphotographed for 34 of 37 models.** Apple never shoots that edge.
+  Only the iPhone X, XS and XS Max are covered, which is enough because that is the only
+  group the attribute separates.
+- **The 30 models carrying a bare `asymmetric`** for `bottom_mic_hole_pattern` are marked
+  inferred but cite no source. See `reference/README.md`.
+
+None of this blocks Phase 2. Under §5.4 an absent value eliminates nothing, so an
+incomplete matrix degrades to a larger candidate group rather than a wrong answer.
 
 **Phase 2 — data and engine.** Transcribe `reference/` into `src/data/`; build
 and unit-test the engine, including the reachability test in §7.

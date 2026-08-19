@@ -19,9 +19,16 @@ into the matrix from memory.
 - **37 / 37 models** researched and written up (the iPhone 17e was added to scope during this phase — see SPEC.md §11).
 - Coarse-tier attributes, dimensions, SIM-tray position and colour marketing names
   are verified against Apple's own tech-spec pages and support documentation.
-- `flash_position` is read off the committed images for 12 models and still
-  unread for the other 25 — the images exist, they just have not all been
-  reviewed. `bottom_mic_hole_pattern` is photographed and verified for the iPhone X,
+- `flash_position` is read off the committed product shots at enlargement and verified
+  for 36 of 37 models; only the iPhone Air is unread, its plateau being black-on-black
+  and partly occluded in Apple's render. That pass corrected four values: the iPhone 8,
+  8 Plus, SE (2nd) and SE (3rd) place the flash _beside_ the camera on the bare glass,
+  not below the lens as first recorded.
+- `camera_bump_size` was re-evidenced after an audit found it citing a comparison of the
+  iPhone 13 Pro Max and 14 Pro Max, a different camera system from the non-Pro pair it
+  was attached to. All six diagonal-dual models are now measured off the product shots
+  with each body normalised to the same width.
+- `bottom_mic_hole_pattern` is photographed and verified for the iPhone X,
   XS and XS Max — see `images/ifixit/` — and carries no value on the other 34 models.
   The XS Max value was **corrected** from the photograph: Phase 1 had copied the XS's
   three/six across, and the Max is actually four/seven (SPEC.md §11).
@@ -51,9 +58,11 @@ Roughly where each flag falls:
 - **🟡 inferred** covers the descriptive colour mapping (the marketing names are Apple's,
   the palette is this project's), some `rear_camera_layout` values, and `rear_wordmark`
   on models after 2020, where continuation is assumed rather than sourced.
-- **🔴 unverified** covers `flash_position` on 25 models, `camera_bump_size` on 31,
-  and `bottom_mic_hole_pattern` on the four home-button bodies, which were never
-  researched. **Do not transcribe these into `src/data/models.ts`** — leave them absent.
+- **🔴 unverified** covers 36 rows, but 31 of those are `camera_bump_size` on models where
+  the attribute does not apply. The genuinely unknown values are five:
+  `bottom_mic_hole_pattern` on the four home-button bodies, and `flash_position` on the
+  iPhone Air, whose plateau cannot be read off Apple's render. **Do not transcribe these
+  into `src/data/models.ts`** — leave them absent.
 
 One flag is worth questioning in Phase 2: the 30 models carrying a bare `asymmetric`
 `bottom_mic_hole_pattern` are marked 🟡, but their Source column is `—`. Nothing was
@@ -61,5 +70,4 @@ consulted; the value is a generalisation from the iPhone X onward. It is harmles
 the attribute only discriminates within the X / XS / XS Max group, but by the standard set
 out above it is closer to 🔴 than 🟡.
 
-`flash_position` was the one attribute Phase 1 could not fill from text sources at all;
-it is now read off the committed product shots for 12 models and still unread for 25.
+Row totals across the 37 models: **497 verified, 133 inferred, 36 unverified.**

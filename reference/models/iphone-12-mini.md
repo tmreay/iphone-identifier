@@ -32,17 +32,18 @@
 
 ## Deep-tier attributes (SPEC.md §6.2)
 
-| Attribute                 | Value               | Confidence    | Source | Note                                                                                                                                         |
-| ------------------------- | ------------------- | ------------- | ------ | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `action_button`           | `absent`            | ✅ verified   | S1     | Ring/Silent switch fitted instead.                                                                                                           |
-| `camera_control_button`   | `absent`            | ✅ verified   | S1     |                                                                                                                                              |
-| `frame_material_finish`   | `aluminium_matte`   | ✅ verified   | S1     | Anodised aluminium, matte.                                                                                                                   |
-| `back_glass_finish`       | `glossy`            | ✅ verified   | S1     | Glossy glass.                                                                                                                                |
-| `rear_wordmark`           | `logo_only_centred` | ✅ verified   | S5     | Apple logo centred, no "iPhone" wordmark.                                                                                                    |
-| `bottom_mic_hole_pattern` | `asymmetric`        | 🟡 inferred   | —      | Asymmetric, as on every model after the iPhone X. Only useful for the X/XS pair.                                                             |
-| `camera_bump_size`        | — (n/a)             | 🔴 unverified | —      | Not a discriminator for this model.                                                                                                          |
-| `flash_position`          | `in_square_right`   | 🔴 unverified | —      | Inside the square housing, on the right. **Not read off the image yet — confirm against the committed reference image before transcribing.** |
-| `lidar`                   | `absent`            | ✅ verified   | S1     |                                                                                                                                              |
+| Attribute                 | Value               | Confidence    | Source | Note                                                                                         |
+| ------------------------- | ------------------- | ------------- | ------ | -------------------------------------------------------------------------------------------- |
+| `action_button`           | `absent`            | ✅ verified   | S1     | Ring/Silent switch fitted instead.                                                           |
+| `camera_control_button`   | `absent`            | ✅ verified   | S1     |                                                                                              |
+| `magsafe`                 | `present`           | ✅ verified   | S1     | Apple's tech specs state MagSafe wireless charging explicitly.                               |
+| `frame_material_finish`   | `aluminium_matte`   | ✅ verified   | S1     | Anodised aluminium, matte.                                                                   |
+| `back_glass_finish`       | `glossy`            | ✅ verified   | S1     | Glossy glass.                                                                                |
+| `rear_wordmark`           | `logo_only_centred` | ✅ verified   | S5     | Apple logo centred, no "iPhone" wordmark.                                                    |
+| `bottom_mic_hole_pattern` | `asymmetric`        | 🟡 inferred   | —      | Asymmetric, as on every model after the iPhone X. Only useful for the X/XS pair.             |
+| `camera_bump_size`        | — (n/a)             | 🔴 unverified | —      | Not a discriminator for this model.                                                          |
+| `flash_position`          | `in_square_right`   | ✅ verified   | —      | Inside the square housing, on the right. Read off the committed product shot at enlargement. |
+| `lidar`                   | `absent`            | ✅ verified   | S1     |                                                                                              |
 
 ## Colours (SPEC.md §6.5)
 

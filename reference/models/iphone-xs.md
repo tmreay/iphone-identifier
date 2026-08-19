@@ -35,12 +35,13 @@
 | ------------------------- | ---------------------- | ------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `action_button`           | `absent`               | ✅ verified   | S1     | Ring/Silent switch fitted instead.                                                                                                                     |
 | `camera_control_button`   | `absent`               | ✅ verified   | S1     |                                                                                                                                                        |
+| `magsafe`                 | `absent`               | ✅ verified   | S1     | No MagSafe. Apple's tech specs list Qi wireless charging with no magnet array; MagSafe did not exist before the iPhone 12.                             |
 | `frame_material_finish`   | `stainless_glossy`     | 🟡 inferred   | S3     | Polished stainless steel.                                                                                                                              |
 | `back_glass_finish`       | `glossy`               | 🟡 inferred   | S3     | Glossy glass.                                                                                                                                          |
 | `rear_wordmark`           | `iphone_text_present`  | ✅ verified   | S5     | Apple logo in the upper third with the word "iPhone" below it. Regulatory text below that varies by region.                                            |
 | `bottom_mic_hole_pattern` | `asymmetric_three_six` | ✅ verified   | S6, S7 | Three holes on the left (microphone), six on the right (speaker) — the iPhone XS tell versus the X. Photographed: see the committed bottom-edge image. |
 | `camera_bump_size`        | — (n/a)                | 🔴 unverified | —      | Not a discriminator for this model.                                                                                                                    |
-| `flash_position`          | `between_lenses`       | 🔴 unverified | —      | Between the two lenses, offset right. **Not read off the image yet — confirm against the committed reference image before transcribing.**              |
+| `flash_position`          | `between_lenses`       | ✅ verified   | —      | Between the two lenses inside the pill. Read off the committed product shot at enlargement.                                                            |
 | `lidar`                   | `absent`               | ✅ verified   | S1     |                                                                                                                                                        |
 
 ## Colours (SPEC.md §6.5)

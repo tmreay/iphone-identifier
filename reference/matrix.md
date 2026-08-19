@@ -48,45 +48,45 @@ the confidence flags live there. Do not transcribe from this page.
 
 ## Deep tier
 
-| Model                      | H × W × D (mm)      | Action btn | Camera Control | LiDAR | Frame               | Back             | Wordmark              |
-| -------------------------- | ------------------- | ---------- | -------------- | ----- | ------------------- | ---------------- | --------------------- |
-| iPhone 8                   | 138.4 × 67.3 × 7.3  | —          | —              | —     | `aluminium_matte`   | `glossy`         | `iphone_text_present` |
-| iPhone 8 Plus              | 158.4 × 78.1 × 7.5  | —          | —              | —     | `aluminium_matte`   | `glossy`         | `iphone_text_present` |
-| iPhone X                   | 143.6 × 70.9 × 7.7  | —          | —              | —     | `stainless_glossy`  | `glossy`         | `iphone_text_present` |
-| iPhone XR                  | 150.9 × 75.7 × 8.3  | —          | —              | —     | `aluminium_glossy`  | `glossy`         | `iphone_text_present` |
-| iPhone XS                  | 143.6 × 70.9 × 7.7  | —          | —              | —     | `stainless_glossy`  | `glossy`         | `iphone_text_present` |
-| iPhone XS Max              | 157.5 × 77.4 × 7.7  | —          | —              | —     | `stainless_glossy`  | `glossy`         | `iphone_text_present` |
-| iPhone 11                  | 150.9 × 75.7 × 8.3  | —          | —              | —     | `aluminium_glossy`  | `glossy`         | `logo_only_centred`   |
-| iPhone 11 Pro              | 144 × 71.4 × 8.1    | —          | —              | —     | `stainless_glossy`  | `matte`          | `logo_only_centred`   |
-| iPhone 11 Pro Max          | 158 × 77.8 × 8.1    | —          | —              | —     | `stainless_glossy`  | `matte`          | `logo_only_centred`   |
-| iPhone SE (2nd generation) | 138.4 × 67.3 × 7.3  | —          | —              | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
-| iPhone 12 mini             | 131.5 × 64.2 × 7.4  | —          | —              | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
-| iPhone 12                  | 146.7 × 71.5 × 7.4  | —          | —              | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
-| iPhone 12 Pro              | 146.7 × 71.5 × 7.4  | —          | —              | yes   | `stainless_glossy`  | `matte`          | `logo_only_centred`   |
-| iPhone 12 Pro Max          | 160.8 × 78.1 × 7.4  | —          | —              | yes   | `stainless_glossy`  | `matte`          | `logo_only_centred`   |
-| iPhone 13 mini             | 131.5 × 64.2 × 7.65 | —          | —              | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
-| iPhone 13                  | 146.7 × 71.5 × 7.65 | —          | —              | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
-| iPhone 13 Pro              | 146.7 × 71.5 × 7.65 | —          | —              | yes   | `stainless_glossy`  | `matte`          | `logo_only_centred`   |
-| iPhone 13 Pro Max          | 160.8 × 78.1 × 7.65 | —          | —              | yes   | `stainless_glossy`  | `matte`          | `logo_only_centred`   |
-| iPhone SE (3rd generation) | 138.4 × 67.3 × 7.3  | —          | —              | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
-| iPhone 14                  | 146.7 × 71.5 × 7.8  | —          | —              | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
-| iPhone 14 Plus             | 160.8 × 78.1 × 7.8  | —          | —              | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
-| iPhone 14 Pro              | 147.5 × 71.5 × 7.85 | —          | —              | yes   | `stainless_glossy`  | `matte`          | `logo_only_centred`   |
-| iPhone 14 Pro Max          | 160.7 × 77.6 × 7.85 | —          | —              | yes   | `stainless_glossy`  | `matte`          | `logo_only_centred`   |
-| iPhone 15                  | 147.6 × 71.6 × 7.8  | —          | —              | —     | `aluminium_matte`   | `matte`          | `logo_only_centred`   |
-| iPhone 15 Plus             | 160.9 × 77.8 × 7.8  | —          | —              | —     | `aluminium_matte`   | `matte`          | `logo_only_centred`   |
-| iPhone 15 Pro              | 146.6 × 70.6 × 8.25 | yes        | —              | yes   | `titanium_brushed`  | `matte`          | `logo_only_centred`   |
-| iPhone 15 Pro Max          | 159.9 × 76.7 × 8.25 | yes        | —              | yes   | `titanium_brushed`  | `matte`          | `logo_only_centred`   |
-| iPhone 16                  | 147.6 × 71.6 × 7.8  | yes        | yes            | —     | `aluminium_matte`   | `matte`          | `logo_only_centred`   |
-| iPhone 16 Plus             | 160.9 × 77.8 × 7.8  | yes        | yes            | —     | `aluminium_matte`   | `matte`          | `logo_only_centred`   |
-| iPhone 16 Pro              | 149.6 × 71.5 × 8.25 | yes        | yes            | yes   | `titanium_brushed`  | `matte`          | `logo_only_centred`   |
-| iPhone 16 Pro Max          | 163 × 77.6 × 8.25   | yes        | yes            | yes   | `titanium_brushed`  | `matte`          | `logo_only_centred`   |
-| iPhone 16e                 | 146.7 × 71.5 × 7.8  | yes        | —              | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
-| iPhone Air                 | 156.2 × 74.7 × 5.64 | yes        | yes            | —     | `titanium_polished` | `ceramic_shield` | `logo_only_centred`   |
-| iPhone 17                  | 149.6 × 71.5 × 7.95 | yes        | yes            | —     | `aluminium_matte`   | `matte`          | `logo_only_centred`   |
-| iPhone 17 Pro              | 150 × 71.9 × 8.75   | yes        | yes            | yes   | `aluminium_brushed` | `ceramic_shield` | `logo_only_centred`   |
-| iPhone 17 Pro Max          | 163.4 × 78 × 8.75   | yes        | yes            | yes   | `aluminium_brushed` | `ceramic_shield` | `logo_only_centred`   |
-| iPhone 17e                 | 146.7 × 71.5 × 7.8  | yes        | —              | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
+| Model                      | H × W × D (mm)      | Action btn | Camera Control | MagSafe | LiDAR | Frame               | Back             | Wordmark              |
+| -------------------------- | ------------------- | ---------- | -------------- | ------- | ----- | ------------------- | ---------------- | --------------------- |
+| iPhone 8                   | 138.4 × 67.3 × 7.3  | —          | —              | absent  | —     | `aluminium_matte`   | `glossy`         | `iphone_text_present` |
+| iPhone 8 Plus              | 158.4 × 78.1 × 7.5  | —          | —              | absent  | —     | `aluminium_matte`   | `glossy`         | `iphone_text_present` |
+| iPhone X                   | 143.6 × 70.9 × 7.7  | —          | —              | absent  | —     | `stainless_glossy`  | `glossy`         | `iphone_text_present` |
+| iPhone XR                  | 150.9 × 75.7 × 8.3  | —          | —              | absent  | —     | `aluminium_glossy`  | `glossy`         | `iphone_text_present` |
+| iPhone XS                  | 143.6 × 70.9 × 7.7  | —          | —              | absent  | —     | `stainless_glossy`  | `glossy`         | `iphone_text_present` |
+| iPhone XS Max              | 157.5 × 77.4 × 7.7  | —          | —              | absent  | —     | `stainless_glossy`  | `glossy`         | `iphone_text_present` |
+| iPhone 11                  | 150.9 × 75.7 × 8.3  | —          | —              | absent  | —     | `aluminium_glossy`  | `glossy`         | `logo_only_centred`   |
+| iPhone 11 Pro              | 144 × 71.4 × 8.1    | —          | —              | absent  | —     | `stainless_glossy`  | `matte`          | `logo_only_centred`   |
+| iPhone 11 Pro Max          | 158 × 77.8 × 8.1    | —          | —              | absent  | —     | `stainless_glossy`  | `matte`          | `logo_only_centred`   |
+| iPhone SE (2nd generation) | 138.4 × 67.3 × 7.3  | —          | —              | absent  | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
+| iPhone 12 mini             | 131.5 × 64.2 × 7.4  | —          | —              | present | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
+| iPhone 12                  | 146.7 × 71.5 × 7.4  | —          | —              | present | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
+| iPhone 12 Pro              | 146.7 × 71.5 × 7.4  | —          | —              | present | yes   | `stainless_glossy`  | `matte`          | `logo_only_centred`   |
+| iPhone 12 Pro Max          | 160.8 × 78.1 × 7.4  | —          | —              | present | yes   | `stainless_glossy`  | `matte`          | `logo_only_centred`   |
+| iPhone 13 mini             | 131.5 × 64.2 × 7.65 | —          | —              | present | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
+| iPhone 13                  | 146.7 × 71.5 × 7.65 | —          | —              | present | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
+| iPhone 13 Pro              | 146.7 × 71.5 × 7.65 | —          | —              | present | yes   | `stainless_glossy`  | `matte`          | `logo_only_centred`   |
+| iPhone 13 Pro Max          | 160.8 × 78.1 × 7.65 | —          | —              | present | yes   | `stainless_glossy`  | `matte`          | `logo_only_centred`   |
+| iPhone SE (3rd generation) | 138.4 × 67.3 × 7.3  | —          | —              | absent  | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
+| iPhone 14                  | 146.7 × 71.5 × 7.8  | —          | —              | present | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
+| iPhone 14 Plus             | 160.8 × 78.1 × 7.8  | —          | —              | present | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
+| iPhone 14 Pro              | 147.5 × 71.5 × 7.85 | —          | —              | present | yes   | `stainless_glossy`  | `matte`          | `logo_only_centred`   |
+| iPhone 14 Pro Max          | 160.7 × 77.6 × 7.85 | —          | —              | present | yes   | `stainless_glossy`  | `matte`          | `logo_only_centred`   |
+| iPhone 15                  | 147.6 × 71.6 × 7.8  | —          | —              | present | —     | `aluminium_matte`   | `matte`          | `logo_only_centred`   |
+| iPhone 15 Plus             | 160.9 × 77.8 × 7.8  | —          | —              | present | —     | `aluminium_matte`   | `matte`          | `logo_only_centred`   |
+| iPhone 15 Pro              | 146.6 × 70.6 × 8.25 | yes        | —              | present | yes   | `titanium_brushed`  | `matte`          | `logo_only_centred`   |
+| iPhone 15 Pro Max          | 159.9 × 76.7 × 8.25 | yes        | —              | present | yes   | `titanium_brushed`  | `matte`          | `logo_only_centred`   |
+| iPhone 16                  | 147.6 × 71.6 × 7.8  | yes        | yes            | present | —     | `aluminium_matte`   | `matte`          | `logo_only_centred`   |
+| iPhone 16 Plus             | 160.9 × 77.8 × 7.8  | yes        | yes            | present | —     | `aluminium_matte`   | `matte`          | `logo_only_centred`   |
+| iPhone 16 Pro              | 149.6 × 71.5 × 8.25 | yes        | yes            | present | yes   | `titanium_brushed`  | `matte`          | `logo_only_centred`   |
+| iPhone 16 Pro Max          | 163 × 77.6 × 8.25   | yes        | yes            | present | yes   | `titanium_brushed`  | `matte`          | `logo_only_centred`   |
+| iPhone 16e                 | 146.7 × 71.5 × 7.8  | yes        | —              | absent  | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
+| iPhone Air                 | 156.2 × 74.7 × 5.64 | yes        | yes            | present | —     | `titanium_polished` | `ceramic_shield` | `logo_only_centred`   |
+| iPhone 17                  | 149.6 × 71.5 × 7.95 | yes        | yes            | present | —     | `aluminium_matte`   | `matte`          | `logo_only_centred`   |
+| iPhone 17 Pro              | 150 × 71.9 × 8.75   | yes        | yes            | present | yes   | `aluminium_brushed` | `ceramic_shield` | `logo_only_centred`   |
+| iPhone 17 Pro Max          | 163.4 × 78 × 8.75   | yes        | yes            | present | yes   | `aluminium_brushed` | `ceramic_shield` | `logo_only_centred`   |
+| iPhone 17e                 | 146.7 × 71.5 × 7.8  | yes        | —              | present | —     | `aluminium_matte`   | `glossy`         | `logo_only_centred`   |
 
 ## Colours (descriptive values)
 

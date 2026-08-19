@@ -35,6 +35,7 @@
 | ------------------------- | --------------------- | ------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------- |
 | `action_button`           | `absent`              | ✅ verified   | S1     | Ring/Silent switch fitted instead.                                                                                           |
 | `camera_control_button`   | `absent`              | ✅ verified   | S1     |                                                                                                                              |
+| `magsafe`                 | `absent`              | ✅ verified   | S1     | No MagSafe. Apple's tech specs list Qi wireless charging with no magnet array; MagSafe did not exist before the iPhone 12.   |
 | `frame_material_finish`   | `stainless_glossy`    | 🟡 inferred   | S3     | Polished stainless steel.                                                                                                    |
 | `back_glass_finish`       | `glossy`              | 🟡 inferred   | S3     | Glossy glass.                                                                                                                |
 | `rear_wordmark`           | `iphone_text_present` | ✅ verified   | S5     | Apple logo in the upper third with the word "iPhone" below it. Regulatory text below that varies by region.                  |
