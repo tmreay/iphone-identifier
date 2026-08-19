@@ -19,9 +19,10 @@ into the matrix from memory.
 - **37 / 37 models** researched and written up (the iPhone 17e was added to scope during this phase — see SPEC.md §11).
 - Coarse-tier attributes, dimensions, SIM-tray position and colour marketing names
   are verified against Apple's own tech-spec pages and support documentation.
-- `flash_position` is read off the committed product shots at enlargement and verified
-  for 36 of 37 models; only the iPhone Air is unread, its plateau being black-on-black
-  and partly occluded in Apple's render. That pass corrected four values: the iPhone 8,
+- `flash_position` is read off the committed product shots at enlargement and verified for
+  all 37 models. The iPhone Air needed its image reshot in Sky Blue plus a straight-on rear
+  detail — on the Space Black body the plateau is black-on-black, and both back-and-front
+  shots hide the flash behind the front handset. That pass corrected four values: the iPhone 8,
   8 Plus, SE (2nd) and SE (3rd) place the flash _beside_ the camera on the bare glass,
   not below the lens as first recorded.
 - `camera_bump_size` was re-evidenced after an audit found it citing a comparison of the
@@ -70,4 +71,4 @@ consulted; the value is a generalisation from the iPhone X onward. It is harmles
 the attribute only discriminates within the X / XS / XS Max group, but by the standard set
 out above it is closer to 🔴 than 🟡.
 
-Row totals across the 37 models: **497 verified, 133 inferred, 36 unverified.**
+Row totals across the 37 models: **498 verified, 133 inferred, 35 unverified.**
