@@ -26,7 +26,7 @@
 | `rear_camera_count` | `1` | ✅ verified | S1 | |
 | `rear_camera_layout` | `plateau_oval_single` | ✅ verified | S3 | A single lens in an elevated **oval plateau** across the top of the back. |
 | `front_cutout` | `dynamic_island` | ✅ verified | S1 | Pill-shaped Dynamic Island cutout, detached from the top edge. |
-| `body_size_class` | `max` | ✅ verified | S1 | Derived from body height 156.2 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see reference/findings.md §5. |
+| `body_size_class` | `max` | ✅ verified | S1 | Derived from body height 156.2 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see SPEC.md §6.3. |
 | `sim_tray` | `none` | ✅ verified | S2 | eSIM only worldwide. iPhone Air appears on neither of Apple's SIM-tray lists, and Apple states it is sold without physical SIM support in every market. |
 | `colour` | `black` · `white_silver` · `gold` · `light_blue` | 🟡 inferred | S1 | Marketing names are Apple's; the descriptive mapping is this project's (see `reference/palette.md`). |
 
@@ -57,7 +57,7 @@ All marketing names from S1. Descriptive values per `reference/palette.md`.
 
 ## Cautions
 
-- This model uses values not present in the SPEC.md §6.2 taxonomy (`ceramic_shield` back, `aluminium_brushed` frame). The taxonomy needs extending in Phase 2 — see `reference/findings.md`.
+- This model introduced `ceramic_shield` back to the SPEC.md §6.2 taxonomy, which was extended to cover them.
 - Colour can be wrong on a rehoused phone or one with replaced back glass (SPEC.md §6.4). Treat a colour answer as evidence, not proof.
 
 ## Sources
@@ -65,13 +65,16 @@ All marketing names from S1. Descriptive values per `reference/palette.md`.
 - **S1** — Apple — iPhone Air Tech Specs — <https://support.apple.com/en-us/125092> (fetched 2026-08-19)
 - **S2** — Apple — Remove or switch the SIM card in your iPhone — <https://support.apple.com/en-us/109357> (fetched 2026-08-19)
 - **S3** — Wikipedia — iPhone Air — <https://en.wikipedia.org/wiki/IPhone_Air> (fetched 2026-08-19)
-- **S4** — Apple product image, committed as reference/images/iphone-air.png — <https://cdsassets.apple.com/live/7WUAS350/images/tech-specs/iphone-air-hero.png> (fetched 2026-08-19)
+- **S4** — Apple product image, committed as reference/images/apple/iphone-air.jpg — <https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-air-finish-select-spaceblack-202509?wid=1800&hei=1800&fmt=jpeg&qlt=95> (fetched 2026-08-19)
 - **S5** — 9to5Mac — Cases show iPhone 11 design, including new position of Apple logo — <https://9to5mac.com/2019/09/08/purported-iphone-11-cases-show-new-position-for-apple-logo-on-iphone-11-back/> (fetched 2026-08-19)
 
 ## Reference images
 
-![iPhone Air](../images/iphone-air.png)
+![iPhone Air](../images/apple/iphone-air.jpg)
 
-`reference/images/iphone-air.png` — official Apple product image, from <https://cdsassets.apple.com/live/7WUAS350/images/tech-specs/iphone-air-hero.png> (downloaded 2026-08-19). Shows the rear in every finish plus the front.
+`reference/images/apple/iphone-air.jpg` — Apple's own product shot: one device, back and
+front, straight on and unobstructed at 876x1484. From <https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-air-finish-select-spaceblack-202509?wid=1800&hei=1800&fmt=jpeg&qlt=95>
+(downloaded 2026-08-19).
 
-Not yet captured for this model: bottom edge (port and mic/speaker hole pattern) and the side edges. See `reference/images/README.md`.
+Not captured for this model: the bottom edge (port and mic/speaker hole pattern)
+and the side edges. See `reference/images/README.md`.

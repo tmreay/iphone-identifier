@@ -26,7 +26,7 @@
 | `rear_camera_count` | `1` | ✅ verified | S1 | |
 | `rear_camera_layout` | `single_lens_no_housing` | ✅ verified | S4 | One circular lens protruding directly from the back glass at the top left. No raised plateau or housing around it. |
 | `front_cutout` | `notch_narrow` | ✅ verified | S4 | Narrow notch (~28 mm, 20% narrower than the iPhone 12 generation). |
-| `body_size_class` | `standard` | ✅ verified | S1 | Derived from body height 146.7 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see reference/findings.md §5. |
+| `body_size_class` | `standard` | ✅ verified | S1 | Derived from body height 146.7 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see SPEC.md §6.3. |
 | `sim_tray` | `left_side` · `none` | ✅ verified | S2 | SIM tray on the left side on units sold outside the United States. US-purchased units have **no SIM tray at all** (eSIM only). Both bodies are in circulation, so tray presence narrows region, not model. |
 | `colour` | `black` · `white_silver` · `pink` | 🟡 inferred | S1 | Marketing names are Apple's; the descriptive mapping is this project's (see `reference/palette.md`). |
 
@@ -57,21 +57,24 @@ All marketing names from S1. Descriptive values per `reference/palette.md`.
 ## Cautions
 
 - US and non-US bodies differ: a missing SIM tray does **not** rule this model out, and a present tray does not rule out a US-market sibling generation.
-- Externally near-identical to the iPhone 16e: same 146.7 x 71.5 x 7.80 mm body, same notch, same single rear lens, same Action button and no Camera Control. Only the 17e Soft Pink finish separates them by sight. Workbench tiebreaker that does not need the phone to power on: the 17e supports MagSafe and the 16e does not, so a MagSafe puck or magnetic accessory snaps to a 17e and will not hold on a 16e. See reference/findings.md section 2.
+- Externally near-identical to the iPhone 16e: same 146.7 x 71.5 x 7.80 mm body, same notch, same single rear lens, same Action button and no Camera Control. Only the 17e Soft Pink finish separates them by sight. Workbench tiebreaker that does not need the phone to power on: the 17e supports MagSafe and the 16e does not, so a MagSafe puck or magnetic accessory snaps to a 17e and will not hold on a 16e. See SPEC.md §9.
 - Colour can be wrong on a rehoused phone or one with replaced back glass (SPEC.md §6.4). Treat a colour answer as evidence, not proof.
 
 ## Sources
 
 - **S1** — Apple — iPhone 17e Tech Specs — <https://support.apple.com/en-us/126470> (fetched 2026-08-19)
 - **S2** — Apple — Remove or switch the SIM card in your iPhone — <https://support.apple.com/en-us/109357> (fetched 2026-08-19)
-- **S3** — Apple product image, committed as reference/images/iphone-17e.png — <https://cdsassets.apple.com/live/7WUAS350/images/tech-specs/iphone-17e.png> (fetched 2026-08-19)
+- **S3** — Apple product image, committed as reference/images/apple/iphone-17e.jpg — <https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-17e-finish-select-black-202603?wid=1800&hei=1800&fmt=jpeg&qlt=95> (fetched 2026-08-19)
 - **S4** — Daring Fireball — The iPhone 17e (states the 17e has a notch, not a Dynamic Island, and adds MagSafe which the 16e lacked) — <https://daringfireball.net/2026/03/the_iphone_17e> (fetched 2026-08-19)
 - **S5** — 9to5Mac — Cases show iPhone 11 design, including new position of Apple logo — <https://9to5mac.com/2019/09/08/purported-iphone-11-cases-show-new-position-for-apple-logo-on-iphone-11-back/> (fetched 2026-08-19)
 
 ## Reference images
 
-![iPhone 17e](../images/iphone-17e.png)
+![iPhone 17e](../images/apple/iphone-17e.jpg)
 
-`reference/images/iphone-17e.png` — official Apple product image, from <https://cdsassets.apple.com/live/7WUAS350/images/tech-specs/iphone-17e.png> (downloaded 2026-08-19). Shows the rear in every finish plus the front.
+`reference/images/apple/iphone-17e.jpg` — Apple's own product shot: one device, back and
+front, straight on and unobstructed at 1286x1558. From <https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-17e-finish-select-black-202603?wid=1800&hei=1800&fmt=jpeg&qlt=95>
+(downloaded 2026-08-19).
 
-Not yet captured for this model: bottom edge (port and mic/speaker hole pattern) and the side edges. See `reference/images/README.md`.
+Not captured for this model: the bottom edge (port and mic/speaker hole pattern)
+and the side edges. See `reference/images/README.md`.

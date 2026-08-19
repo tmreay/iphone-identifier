@@ -25,7 +25,7 @@
 | `rear_camera_count` | `2` | ✅ verified | S1 | |
 | `rear_camera_layout` | `dual_horizontal_pill` | 🟡 inferred | — | Two lenses side by side **horizontally**, in one raised pill across the top left of the back. **Arrangement described from the researcher's reading, not a cited source — confirm against a reference image.** |
 | `front_cutout` | `bezels_no_cutout` | ✅ verified | S3 | Top and bottom bezels, round Home button, no display cutout. |
-| `body_size_class` | `max` | ✅ verified | S1 | Derived from body height 158.4 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see reference/findings.md §5. |
+| `body_size_class` | `max` | ✅ verified | S1 | Derived from body height 158.4 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see SPEC.md §6.3. |
 | `sim_tray` | `right_side` | ✅ verified | S2 | SIM tray on the right side, below the side button. Present in all markets. |
 | `colour` | `gold` · `white_silver` · `black` · `red` | 🟡 inferred | S1 | Marketing names are Apple's; the descriptive mapping is this project's (see `reference/palette.md`). |
 
@@ -63,13 +63,16 @@ All marketing names from S1. Descriptive values per `reference/palette.md`.
 - **S1** — Apple — iPhone 8 Plus Tech Specs — <https://support.apple.com/en-us/111950> (fetched 2026-08-19)
 - **S2** — Apple — Remove or switch the SIM card in your iPhone — <https://support.apple.com/en-us/109357> (fetched 2026-08-19)
 - **S3** — Wikipedia — iPhone 8 Plus — <https://en.wikipedia.org/wiki/IPhone_8> (fetched 2026-08-19)
-- **S4** — Apple product image, committed as reference/images/iphone-8-plus.png — <https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111950_iphone8plus-2018.png> (fetched 2026-08-19)
+- **S4** — Apple product image, committed as reference/images/apple/iphone-8-plus.jpg — <https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone8-plus-gold-select-2017?wid=1800&hei=1800&fmt=jpeg&qlt=95> (fetched 2026-08-19)
 - **S5** — The Apple Post — Apple to remove the word "iPhone" from the back of the 2019 models — <https://www.theapplepost.com/2019/08/16/34120/apple-to-remove-word-iphone-from-back-of-the-2019-models-according-to-so-called-factory-worker/> (fetched 2026-08-19)
 
 ## Reference images
 
-![iPhone 8 Plus](../images/iphone-8-plus.png)
+![iPhone 8 Plus](../images/apple/iphone-8-plus.jpg)
 
-`reference/images/iphone-8-plus.png` — official Apple product image, from <https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111950_iphone8plus-2018.png> (downloaded 2026-08-19). Shows the rear in every finish plus the front.
+`reference/images/apple/iphone-8-plus.jpg` — Apple's own product shot: one device, back and
+front, straight on and unobstructed at 1012x1170. From <https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone8-plus-gold-select-2017?wid=1800&hei=1800&fmt=jpeg&qlt=95>
+(downloaded 2026-08-19).
 
-Not yet captured for this model: bottom edge (port and mic/speaker hole pattern) and the side edges. See `reference/images/README.md`.
+Not captured for this model: the bottom edge (port and mic/speaker hole pattern)
+and the side edges. See `reference/images/README.md`.

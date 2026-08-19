@@ -101,9 +101,18 @@ rather than guess or ask pointless questions:
 > **iPhone SE (2nd gen) or iPhone SE (3rd gen)** — these are externally
 > identical. No visible characteristic distinguishes them.
 
+There are **three** such groups, not one (§9): SE (2nd)/SE (3rd), iPhone 16/17 in black or
+white, and iPhone 16e/17e in black or white.
+
 Where a non-visual tiebreaker exists and the device might power on, the app may
 suggest it (Settings → General → About → Model Name) — always as a hint, never
 as a required step.
+
+Prefer a tiebreaker that works on a **dead** phone where one exists. For 16e vs 17e a
+magnetic accessory settles it: the 17e supports MagSafe and the 16e does not, so a puck
+snaps to one and slides off the other. That is modelled as the `magsafe` deep-tier
+attribute (§6.2) rather than as prose on the result screen, so the engine can use it. No
+such test is known for 16 vs 17 — both have MagSafe, Camera Control and an Action button.
 
 ### 4.5 Result screen
 
@@ -221,8 +230,9 @@ candidate group, never to a wrong answer.
 
 ## 6. Attribute taxonomy
 
-Values below define the *schema*. Which models take which values is Phase 1 work
-(§10) and is not asserted here.
+Values below define the *schema*. Which models take which value is recorded per model
+in `reference/models/<id>.md`, which is the source of truth (D-11) — the lists here were
+settled against that research and are no longer provisional.
 
 ### 6.1 Coarse tier — asked in the main flow
 
@@ -231,11 +241,22 @@ Values below define the *schema*. Which models take which values is Phase 1 work
 | `home_button` | present · absent |
 | `port` | lightning · usb_c |
 | `rear_camera_count` | 1 · 2 · 3 |
-| `rear_camera_layout` | single · dual_horizontal · dual_vertical · dual_diagonal · triple_square · plateau_bar · *(refine in Phase 1)* |
+| `rear_camera_layout` | single_lens_flash_below · single_lens_in_pill · single_lens_no_housing · dual_horizontal_pill · dual_vertical_pill · dual_vertical_square · dual_diagonal_square · dual_vertical_slim_pill · triple_square · plateau_oval_single · plateau_bar_triple |
 | `front_cutout` | bezels_no_cutout · notch_wide · notch_narrow · dynamic_island |
 | `body_size_class` | mini · compact · standard · large · max (§6.3) |
 | `sim_tray` | none · left_side · right_side |
 | `colour` | descriptive palette values, per Phase 1 enumeration (§6.5) |
+
+`rear_camera_layout` is the strongest single question in the set — eleven values across
+37 models — and it subsumes `rear_camera_count`. Phase 2 should check whether the count
+question still earns its place or is pure redundancy.
+
+**`sim_tray` identifies the market, not the model.** The tray moved from the right side
+to the left at the iPhone 12, and from the iPhone 14 onward a unit sold in the United
+States has no tray at all while the same model sold elsewhere does. Those models therefore
+carry **both** `left_side` and `none` as consistent values, and the iPhone Air has no
+tray in any market. Word the question so a technician does not read "no SIM tray" as
+ruling a model out.
 
 ### 6.2 Deep tier — Narrow further only
 
@@ -243,13 +264,29 @@ Values below define the *schema*. Which models take which values is Phase 1 work
 |---|---|
 | `action_button` | present · absent (replaces the ring/silent switch) |
 | `camera_control_button` | present · absent |
-| `frame_material_finish` | aluminium_glossy · stainless_glossy · aluminium_matte · titanium_brushed · titanium_polished |
-| `back_glass_finish` | glossy · matte |
-| `rear_wordmark` | iphone_text_present · logo_only_centred · logo_only_upper |
-| `bottom_mic_hole_pattern` | *(Phase 1 — the iPhone X vs XS tell)* |
-| `camera_bump_size` | *(Phase 1 — the iPhone 13 vs 14 tell)* |
-| `flash_position` | *(Phase 1)* |
+| `magsafe` | present · absent |
+| `frame_material_finish` | aluminium_glossy · aluminium_matte · aluminium_brushed · stainless_glossy · titanium_brushed · titanium_polished |
+| `back_glass_finish` | glossy · matte · ceramic_shield |
+| `rear_wordmark` | iphone_text_present · logo_only_centred |
+| `bottom_mic_hole_pattern` | symmetric_six_six · asymmetric_three_six · asymmetric_four_seven · asymmetric |
+| `camera_bump_size` | larger · smaller |
+| `flash_position` | below_lens · beside_lens_on_glass · between_lenses · right_of_lenses · in_square_right · outside_bump_right · in_plateau · in_plateau_right |
 | `lidar` | present · absent |
+
+Notes on the less obvious ones:
+
+- **`magsafe`** is the only thing that separates an iPhone 16e from a 17e, and unlike a
+  Settings check it works on a phone that will not power on (§4.4).
+- **`back_glass_finish`** is no longer a Pro/non-Pro split: the standard models went
+  matte at the iPhone 15, and the Air and 17 Pro pair have a Ceramic Shield back.
+- **`bottom_mic_hole_pattern`** counts holes either side of the port. It is photographed
+  and verified only for the iPhone X (six/six), XS (three/six) and XS Max (four/seven);
+  the bare `asymmetric` carried by later models is unverified and must not be
+  transcribed into `src/data/models.ts` (§5.4 — an absent value eliminates nothing).
+- **`camera_bump_size`** is the intended iPhone 13 vs 14 tell and remains unphotographed;
+  no committed image shows the two plateaus at a comparable angle.
+- **`rear_wordmark`** has only two members in practice. The third value once listed here,
+  `logo_only_upper`, has no members and was dropped.
 
 ### 6.3 Size classes
 
@@ -265,7 +302,17 @@ screen in a large body. Five bands, by overall body height:
 | `max` | ~156 mm and up | Plus and Pro Max bodies |
 
 Generation-to-generation drift means neighbouring classes overlap by a few
-millimetres and a technician cannot reliably tell them apart by eye. Therefore:
+millimetres and a technician cannot reliably tell them apart by eye.
+
+A model lists an adjacent class only when a model **actually in that class** sits within
+**3 mm** of it. Proximity to a band boundary alone is not enough: the boundary is an
+abstraction, and it is the neighbouring handset that gets confused. On the 37-model set
+that rule gives eight models two classes — XR, 11, 14 Pro, 15, 16, 16 Pro, 17, 17 Pro, all
+`standard` + `large` — and one class to everything else. The iPhone X at 143.6 mm does
+not overlap into `compact`, because the nearest compact model (iPhone 8, 138.4 mm) is
+5.2 mm away.
+
+Therefore:
 
 - a model may list **two adjacent classes** as consistent values;
 - size is a coarse narrowing signal, expected to reduce the candidate set, not
@@ -331,7 +378,10 @@ Given the current candidate set:
 The algorithm is deterministic and must be covered by unit tests, including:
 
 - **every model is reachable** — for each model there exists an answer path
-  leading to it alone, or to a documented terminal group (§4.4);
+  leading to it alone, or to a documented terminal group (§4.4). Phase 1 checked this by
+  brute force over every *concrete device* (one real value per attribute) and found 34 of
+  37 models resolve to exactly one; the test must assert the three groups in §9 and no
+  others, so that a data change which creates a fourth group fails the build;
 - **colour layers agree** — every model's `attributes.colour` set equals the
   set of `colours[].value` (§5.4, §6.5);
 - **palette is closed** — every colour value used by a model exists in the
@@ -364,23 +414,41 @@ does not directly support drawing a diagram or verifying an attribute.
 
 ## 9. Known hard cases
 
-To be validated and, where possible, solved during Phase 1 and the engine tests:
+Settled by the Phase 1 research and the brute-force separability check (§7). Every model,
+in every concrete configuration it can take, was matched against all 37.
 
-| Pair | Situation |
+**Coarse tier alone** leaves seven ambiguous groups. The deep tier closes four of them,
+which is the two-tier split in D-03 earning its place:
+
+| Group | Closed by |
 |---|---|
-| SE (2nd) vs SE (3rd) | Externally identical. Documented terminal group. |
-| 16 vs 17 | *(Phase 1)* Black and white units are identical on every attribute in this spec. Unsolved — see `reference/findings.md` §2. |
-| 16e vs 17e | *(Phase 1)* Identical bodies; only the 17e Soft Pink finish separates them by sight. A MagSafe accessory sticks to a 17e and not a 16e — works on a dead phone. |
-| iPhone X vs XS | Near-identical; bottom mic-hole pattern and colour availability are the reported tells. |
-| iPhone 13 vs 14 | Same size and camera arrangement; camera bump proportions and US SIM-tray absence are the tells. |
-| iPhone 8 vs SE (2nd/3rd) | Same body; rear "iPhone" wordmark and logo position differ. |
-| iPhone 12 vs 12 Pro, and similar | Separated by camera count; confirm no other trap. |
-| Pro vs Pro Max within a generation | Size class only — expect these to resolve late. |
+| iPhone 8 + SE (2nd) + SE (3rd) | `rear_wordmark` |
+| iPhone 13 + iPhone 14 | `camera_bump_size` |
+| iPhone 15 Pro + iPhone 16 Pro | `camera_control_button` |
+| iPhone 15 Pro Max + iPhone 16 Pro Max | `camera_control_button` |
+| iPhone X + iPhone XS | `bottom_mic_hole_pattern` |
+| iPhone 16 + iPhone 17 | **nothing — terminal** |
+| iPhone 16e + iPhone 17e | nothing visible — `magsafe` settles it off-screen |
+
+**After both tiers, three groups remain.** 34 of 37 models resolve to exactly one:
+
+| Terminal group | Situation |
+|---|---|
+| SE (2nd) vs SE (3rd) | Externally identical. Expected; documented from the outset. |
+| iPhone 16 vs 17 | Identical on every attribute in this spec when black or white. Height differs by 2 mm and the display by 0.2 inch — both below what §6.3 says a technician can judge. The 48MP Ultra Wide on the 17 was checked as a possible tell against Apple's product shots and the camera pills are the same. Colour separates them only on the non-shared finishes (16: Pink, Teal, Ultramarine · 17: Mist Blue, Sage, Lavender). **No workbench tiebreaker known.** |
+| iPhone 16e vs 17e | Identical bodies, both notched, single lens, USB-C, Action button. Soft Pink is the only finish that separates them by sight. Solved off-screen by `magsafe` (§4.4). |
+
+There is no iPhone 17 Plus — the iPhone Air took that slot — so the iPhone 16 Plus has no
+equivalent twin at `max` size.
+
+Two pairs that were expected to be hard turned out not to be: iPhone 12 vs 12 Pro separates
+on camera count, and Pro vs Pro Max within a generation separates on size class alone,
+resolving late but reliably.
 
 ## 10. Phases
 
 **Phase 0 — environment.** Vite + React + TypeScript project, Vitest, repo
-layout per §5.3, this spec committed. *(current)*
+layout per §5.3, this spec committed. *(done)*
 
 **Phase 1 — data collection.** *Separate session.* Web research to establish
 verified, sourced specifications and physical characteristics for all 37 models,
@@ -399,6 +467,18 @@ images in `reference/images/`. Explicit goals:
 - capture front and rear reference images per model, committed to
   `reference/images/` under the size guidance in §8, plus close-ups of every
   micro-detail named in §6.2 and §9.
+
+*(done)* — 37 model files, 40 images, and the value sets in §6.1/§6.2 above, which were
+written from that research. What it changed in this spec: the taxonomy gaps are filled,
+§6.3 gained the 3 mm adjacency rule, §9 replaced guesswork with the measured separability
+result, and scope went from 36 models to 37 (D-01).
+
+Two attributes were **not** filled and are deliberately left absent rather than guessed:
+`bottom_mic_hole_pattern` outside the iPhone X / XS / XS Max group, and
+`camera_bump_size`, which needs a photograph of the iPhone 13 and 14 plateaus at a
+comparable angle. Under §5.4 an absent value eliminates nothing, so an incomplete matrix
+degrades to a larger candidate group rather than a wrong answer — but the 13 vs 14 pair
+stays unresolved until that shot exists.
 
 **Phase 2 — data and engine.** Transcribe `reference/` into `src/data/`; build
 and unit-test the engine, including the reachability test in §7.
@@ -428,9 +508,23 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 | D-08 | Colour is a normal eliminating question, with rehousing caveats and an escape hatch (§6.4). |
 | D-09 | "Can't tell" on every question; the engine routes around unavailable attributes and never eliminates on missing data. |
 | D-10 | Size is expressed as five body-size classes with permitted overlap, never as measurements. |
-| D-11 | Data verification (Phase 1) happens before any matrix authoring, in its own session, and everything is sourced. |
+| D-11 | Data verification (Phase 1) happens before any matrix authoring, in its own session, and everything is sourced. No model attribute may be written from memory — it must trace to `reference/`. |
 | D-12 | Colours carry both an Apple marketing name and a plain descriptive palette value. The engine matches on the descriptive value only (§6.5). |
 | D-13 | Phase 1 reference images are committed to the repo, not kept local. They are never imported into the build. |
+
+D-11 has already paid for itself twice, which is worth recording because both failures
+looked like solid data at the time:
+
+- **iPhone 17e Dynamic Island.** Pre-release reporting said the 17e would move to a
+  Dynamic Island. It did not — Apple's shipped tech specs list the same 2532 × 1170 notched
+  panel as the 16e. Writing that from memory would have put a wrong value on a current
+  model. The 16e and 17e are the only two in the set with a notch and no Dynamic Island.
+- **iPhone XS Max hole count.** `bottom_mic_hole_pattern` was recorded as three/six for
+  both the XS and the XS Max, marked verified, citing a forum answer that discusses only
+  the X and the XS. The Max is actually four/seven. A source that does not mention the
+  model is not verification, whatever the flag says — the lineage was doing the work and
+  was not recorded as such. Nothing downstream broke only because `body_size_class`
+  separates that pair anyway.
 
 ## 12. Open questions
 

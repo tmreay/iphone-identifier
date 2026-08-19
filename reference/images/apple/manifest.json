@@ -1,0 +1,304 @@
+{
+  "generated": "2026-08-19",
+  "note": "Apple buy-flow product shots: one device, back and front, on white. Requested at wid=1800&hei=1800 then auto-trimmed of the canvas padding Apple's image service adds.",
+  "missing": [],
+  "count": 37,
+  "images": [
+    {
+      "model": "iphone-11",
+      "file": "iphone-11.jpg",
+      "slug": "iphone11-black-select-2019",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone11-black-select-2019?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "1118x1512",
+      "bytes": 97150
+    },
+    {
+      "model": "iphone-11-pro",
+      "file": "iphone-11-pro.jpg",
+      "slug": "iphone-11-pro-gold-select-2019",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-11-pro-gold-select-2019?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "1104x1464",
+      "bytes": 180564
+    },
+    {
+      "model": "iphone-11-pro-max",
+      "file": "iphone-11-pro-max.jpg",
+      "slug": "iphone-11-pro-max-gold-select-2019",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-11-pro-max-gold-select-2019?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "1170x1594",
+      "bytes": 196766
+    },
+    {
+      "model": "iphone-12",
+      "file": "iphone-12.jpg",
+      "slug": "iphone-12-black-select-2020",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-black-select-2020?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "644x864",
+      "bytes": 34218
+    },
+    {
+      "model": "iphone-12-mini",
+      "file": "iphone-12-mini.jpg",
+      "slug": "iphone-12-mini-black-select-2020",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-mini-black-select-2020?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "584x778",
+      "bytes": 30796
+    },
+    {
+      "model": "iphone-12-pro",
+      "file": "iphone-12-pro.jpg",
+      "slug": "iphone-12-pro-graphite-hero",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-pro-graphite-hero?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "644x866",
+      "bytes": 40769
+    },
+    {
+      "model": "iphone-12-pro-max",
+      "file": "iphone-12-pro-max.jpg",
+      "slug": "iphone-12-pro-max-graphite-hero",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-pro-max-graphite-hero?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "702x944",
+      "bytes": 44535
+    },
+    {
+      "model": "iphone-13",
+      "file": "iphone-13.jpg",
+      "slug": "iphone-13-midnight-select-2021",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-midnight-select-2021?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "540x720",
+      "bytes": 26506
+    },
+    {
+      "model": "iphone-13-mini",
+      "file": "iphone-13-mini.jpg",
+      "slug": "iphone-13-mini-midnight-select-2021",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-mini-midnight-select-2021?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "492x652",
+      "bytes": 22351
+    },
+    {
+      "model": "iphone-13-pro",
+      "file": "iphone-13-pro.jpg",
+      "slug": "iphone-13-pro-graphite-select",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-pro-graphite-select?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "574x720",
+      "bytes": 32635
+    },
+    {
+      "model": "iphone-13-pro-max",
+      "file": "iphone-13-pro-max.jpg",
+      "slug": "iphone-13-pro-max-graphite-select",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-pro-max-graphite-select?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "616x784",
+      "bytes": 36982
+    },
+    {
+      "model": "iphone-14",
+      "file": "iphone-14.jpg",
+      "slug": "iphone-14-midnight-select-202209",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-midnight-select-202209?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "1090x1428",
+      "bytes": 94028
+    },
+    {
+      "model": "iphone-14-plus",
+      "file": "iphone-14-plus.jpg",
+      "slug": "iphone-14-plus-midnight-select-202209",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-plus-midnight-select-202209?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "1156x1560",
+      "bytes": 105509
+    },
+    {
+      "model": "iphone-14-pro",
+      "file": "iphone-14-pro.jpg",
+      "slug": "iphone-14-pro-finish-select-202209-6-1inch-spaceblack",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-finish-select-202209-6-1inch-spaceblack?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "508x616",
+      "bytes": 28624
+    },
+    {
+      "model": "iphone-14-pro-max",
+      "file": "iphone-14-pro-max.jpg",
+      "slug": "iphone-14-pro-finish-select-202209-6-7inch-spaceblack",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-pro-finish-select-202209-6-7inch-spaceblack?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "542x668",
+      "bytes": 30334
+    },
+    {
+      "model": "iphone-15",
+      "file": "iphone-15.jpg",
+      "slug": "iphone-15-black-select-202309",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-black-select-202309?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "1098x1426",
+      "bytes": 133727
+    },
+    {
+      "model": "iphone-15-plus",
+      "file": "iphone-15-plus.jpg",
+      "slug": "iphone-15-plus-black-select-202309",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-plus-black-select-202309?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "1176x1556",
+      "bytes": 154642
+    },
+    {
+      "model": "iphone-15-pro",
+      "file": "iphone-15-pro.jpg",
+      "slug": "iphone-15-pro-finish-select-202309-6-1inch-blacktitanium",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-1inch-blacktitanium?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "508x616",
+      "bytes": 41826
+    },
+    {
+      "model": "iphone-15-pro-max",
+      "file": "iphone-15-pro-max.jpg",
+      "slug": "iphone-15-pro-finish-select-202309-6-7inch-blacktitanium",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-7inch-blacktitanium?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "540x662",
+      "bytes": 48191
+    },
+    {
+      "model": "iphone-16",
+      "file": "iphone-16.jpg",
+      "slug": "iphone-16-black-select-202409",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16-black-select-202409?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "1178x1436",
+      "bytes": 101520
+    },
+    {
+      "model": "iphone-16-plus",
+      "file": "iphone-16-plus.jpg",
+      "slug": "iphone-16-plus-black-select-202409",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16-plus-black-select-202409?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "1264x1558",
+      "bytes": 118374
+    },
+    {
+      "model": "iphone-16-pro",
+      "file": "iphone-16-pro.jpg",
+      "slug": "iphone-16-pro-finish-select-202409-6-3inch-blacktitanium",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16-pro-finish-select-202409-6-3inch-blacktitanium?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "504x616",
+      "bytes": 29844
+    },
+    {
+      "model": "iphone-16-pro-max",
+      "file": "iphone-16-pro-max.jpg",
+      "slug": "iphone-16-pro-finish-select-202409-6-9inch-blacktitanium",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16-pro-finish-select-202409-6-9inch-blacktitanium?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "536x664",
+      "bytes": 31711
+    },
+    {
+      "model": "iphone-16e",
+      "file": "iphone-16e.jpg",
+      "slug": "iphone-16e-black-select-202502",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-16e-black-select-202502?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "1184x1436",
+      "bytes": 115254
+    },
+    {
+      "model": "iphone-17",
+      "file": "iphone-17.jpg",
+      "slug": "iphone-17-finish-select-black-202509",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-17-finish-select-black-202509?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "836x1418",
+      "bytes": 103386
+    },
+    {
+      "model": "iphone-17-pro",
+      "file": "iphone-17-pro.jpg",
+      "slug": "iphone-17-pro-finish-select-202509-6-3inch-deepblue",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-17-pro-finish-select-202509-6-3inch-deepblue?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "508x620",
+      "bytes": 36259
+    },
+    {
+      "model": "iphone-17-pro-max",
+      "file": "iphone-17-pro-max.jpg",
+      "slug": "iphone-17-pro-max-finish-select-deepblue-202509",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-17-pro-max-finish-select-deepblue-202509?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "1218x1552",
+      "bytes": 163133
+    },
+    {
+      "model": "iphone-17e",
+      "file": "iphone-17e.jpg",
+      "slug": "iphone-17e-finish-select-black-202603",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-17e-finish-select-black-202603?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "1286x1558",
+      "bytes": 120729
+    },
+    {
+      "model": "iphone-8",
+      "file": "iphone-8.jpg",
+      "slug": "iphone8-gold-select-2017",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone8-gold-select-2017?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "888x1034",
+      "bytes": 76002
+    },
+    {
+      "model": "iphone-8-plus",
+      "file": "iphone-8-plus.jpg",
+      "slug": "iphone8-plus-gold-select-2017",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone8-plus-gold-select-2017?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "1012x1170",
+      "bytes": 91432
+    },
+    {
+      "model": "iphone-air",
+      "file": "iphone-air.jpg",
+      "slug": "iphone-air-finish-select-spaceblack-202509",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-air-finish-select-spaceblack-202509?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "876x1484",
+      "bytes": 73691
+    },
+    {
+      "model": "iphone-se-2",
+      "file": "iphone-se-2.jpg",
+      "slug": "iphone-se-black-select-2020",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-se-black-select-2020?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "1044x1266",
+      "bytes": 133631
+    },
+    {
+      "model": "iphone-se-3",
+      "file": "iphone-se-3.jpg",
+      "slug": "iphone-se-midnight-select-202203",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-se-midnight-select-202203?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "556x796",
+      "bytes": 39253
+    },
+    {
+      "model": "iphone-x",
+      "file": "iphone-x.jpg",
+      "slug": "iphone-x-silver-select-2017",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-x-silver-select-2017?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "516x720",
+      "bytes": 27721
+    },
+    {
+      "model": "iphone-xr",
+      "file": "iphone-xr.jpg",
+      "slug": "iphone-xr-black-select-201809",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-xr-black-select-201809?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "616x966",
+      "bytes": 58876
+    },
+    {
+      "model": "iphone-xs",
+      "file": "iphone-xs.jpg",
+      "slug": "iphone-xs-gold-select-2018",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-xs-gold-select-2018?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "564x906",
+      "bytes": 128769
+    },
+    {
+      "model": "iphone-xs-max",
+      "file": "iphone-xs-max.jpg",
+      "slug": "iphone-xs-max-gold-select-2018",
+      "source": "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-xs-max-gold-select-2018?wid=1800&hei=1800&fmt=jpeg&qlt=95",
+      "size": "608x1000",
+      "bytes": 172748
+    }
+  ]
+}

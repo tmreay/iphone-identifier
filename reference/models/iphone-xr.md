@@ -25,7 +25,7 @@
 | `rear_camera_count` | `1` | ✅ verified | S1 | |
 | `rear_camera_layout` | `single_lens_in_pill` | 🟡 inferred | — | One circular lens with the flash below it, both inside a single vertically-oriented raised pill at the top left. **Arrangement described from the researcher's reading, not a cited source — confirm against a reference image.** |
 | `front_cutout` | `notch_wide` | ✅ verified | S3 | Wide notch (~35 mm) at the top of an all-screen display. |
-| `body_size_class` | `standard` · `large` | ✅ verified | S1 | Derived from body height 150.9 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see reference/findings.md §5. |
+| `body_size_class` | `standard` · `large` | ✅ verified | S1 | Derived from body height 150.9 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see SPEC.md §6.3. |
 | `sim_tray` | `right_side` | ✅ verified | S2 | SIM tray on the right side, below the side button. Present in all markets. |
 | `colour` | `red` · `yellow` · `white_silver` · `coral` · `black` · `light_blue` | 🟡 inferred | S1 | Marketing names are Apple's; the descriptive mapping is this project's (see `reference/palette.md`). |
 
@@ -65,13 +65,16 @@ All marketing names from S1. Descriptive values per `reference/palette.md`.
 - **S1** — Apple — iPhone XR Tech Specs — <https://support.apple.com/en-us/111868> (fetched 2026-08-19)
 - **S2** — Apple — Remove or switch the SIM card in your iPhone — <https://support.apple.com/en-us/109357> (fetched 2026-08-19)
 - **S3** — Wikipedia — iPhone XR — <https://en.wikipedia.org/wiki/IPhone_XR> (fetched 2026-08-19)
-- **S4** — Apple product image, committed as reference/images/iphone-xr.jpg — <https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111868_SP781-iPhone-xr.jpg> (fetched 2026-08-19)
+- **S4** — Apple product image, committed as reference/images/apple/iphone-xr.jpg — <https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-xr-black-select-201809?wid=1800&hei=1800&fmt=jpeg&qlt=95> (fetched 2026-08-19)
 - **S5** — The Apple Post — Apple to remove the word "iPhone" from the back of the 2019 models — <https://www.theapplepost.com/2019/08/16/34120/apple-to-remove-word-iphone-from-back-of-the-2019-models-according-to-so-called-factory-worker/> (fetched 2026-08-19)
 
 ## Reference images
 
-![iPhone XR](../images/iphone-xr.jpg)
+![iPhone XR](../images/apple/iphone-xr.jpg)
 
-`reference/images/iphone-xr.jpg` — official Apple product image, from <https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111868_SP781-iPhone-xr.jpg> (downloaded 2026-08-19). Shows the rear in every finish plus the front.
+`reference/images/apple/iphone-xr.jpg` — Apple's own product shot: one device, back and
+front, straight on and unobstructed at 616x966. From <https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-xr-black-select-201809?wid=1800&hei=1800&fmt=jpeg&qlt=95>
+(downloaded 2026-08-19).
 
-Not yet captured for this model: bottom edge (port and mic/speaker hole pattern) and the side edges. See `reference/images/README.md`.
+Not captured for this model: the bottom edge (port and mic/speaker hole pattern)
+and the side edges. See `reference/images/README.md`.

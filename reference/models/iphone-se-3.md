@@ -25,7 +25,7 @@
 | `rear_camera_count` | `1` | ✅ verified | S1 | |
 | `rear_camera_layout` | `single_lens_flash_below` | 🟡 inferred | — | One circular lens in a small raised ring at the top left, with the flash as a separate circle directly **below** it. No square housing. **Arrangement described from the researcher's reading, not a cited source — confirm against a reference image.** |
 | `front_cutout` | `bezels_no_cutout` | ✅ verified | S3 | Top and bottom bezels, round Home button, no display cutout. |
-| `body_size_class` | `compact` | ✅ verified | S1 | Derived from body height 138.4 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see reference/findings.md §5. |
+| `body_size_class` | `compact` | ✅ verified | S1 | Derived from body height 138.4 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see SPEC.md §6.3. |
 | `sim_tray` | `right_side` | ✅ verified | S2 | SIM tray on the right side, below the side button. Present in all markets. |
 | `colour` | `red` · `white_silver` · `black` | 🟡 inferred | S1 | Marketing names are Apple's; the descriptive mapping is this project's (see `reference/palette.md`). |
 
@@ -63,12 +63,15 @@ All marketing names from S1. Descriptive values per `reference/palette.md`.
 - **S1** — Apple — iPhone SE (3rd generation) Tech Specs — <https://support.apple.com/en-us/111866> (fetched 2026-08-19)
 - **S2** — Apple — Remove or switch the SIM card in your iPhone — <https://support.apple.com/en-us/109357> (fetched 2026-08-19)
 - **S3** — Wikipedia — iPhone SE (3rd generation) — <https://en.wikipedia.org/wiki/IPhone_SE_(3rd_generation)> (fetched 2026-08-19)
-- **S4** — Apple product image, committed as reference/images/iphone-se-3.png — <https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111866_sp867-iphone-se-3gen.png> (fetched 2026-08-19)
+- **S4** — Apple product image, committed as reference/images/apple/iphone-se-3.jpg — <https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-se-midnight-select-202203?wid=1800&hei=1800&fmt=jpeg&qlt=95> (fetched 2026-08-19)
 
 ## Reference images
 
-![iPhone SE (3rd generation)](../images/iphone-se-3.png)
+![iPhone SE (3rd generation)](../images/apple/iphone-se-3.jpg)
 
-`reference/images/iphone-se-3.png` — official Apple product image, from <https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111866_sp867-iphone-se-3gen.png> (downloaded 2026-08-19). Shows the rear in every finish plus the front.
+`reference/images/apple/iphone-se-3.jpg` — Apple's own product shot: one device, back and
+front, straight on and unobstructed at 556x796. From <https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-se-midnight-select-202203?wid=1800&hei=1800&fmt=jpeg&qlt=95>
+(downloaded 2026-08-19).
 
-Not yet captured for this model: bottom edge (port and mic/speaker hole pattern) and the side edges. See `reference/images/README.md`.
+Not captured for this model: the bottom edge (port and mic/speaker hole pattern)
+and the side edges. See `reference/images/README.md`.

@@ -26,7 +26,7 @@
 | `rear_camera_count` | `3` | ✅ verified | S1 | |
 | `rear_camera_layout` | `triple_square` | 🟡 inferred | — | Three lenses in a triangle inside a large rounded-square raised housing, with the flash (and LiDAR where fitted) on the right. **Arrangement described from the researcher's reading, not a cited source — confirm against a reference image.** |
 | `front_cutout` | `dynamic_island` | ✅ verified | S1 | Pill-shaped Dynamic Island cutout, detached from the top edge. |
-| `body_size_class` | `standard` | ✅ verified | S1 | Derived from body height 146.6 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see reference/findings.md §5. |
+| `body_size_class` | `standard` | ✅ verified | S1 | Derived from body height 146.6 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see SPEC.md §6.3. |
 | `sim_tray` | `left_side` · `none` | ✅ verified | S2 | SIM tray on the left side on units sold outside the United States. US-purchased units have **no SIM tray at all** (eSIM only). Both bodies are in circulation, so tray presence narrows region, not model. |
 | `colour` | `black` · `white_silver` · `dark_blue` | 🟡 inferred | S1 | Marketing names are Apple's; the descriptive mapping is this project's (see `reference/palette.md`). |
 
@@ -64,13 +64,16 @@ All marketing names from S1. Descriptive values per `reference/palette.md`.
 
 - **S1** — Apple — iPhone 15 Pro Tech Specs — <https://support.apple.com/en-us/111829> (fetched 2026-08-19)
 - **S2** — Apple — Remove or switch the SIM card in your iPhone — <https://support.apple.com/en-us/109357> (fetched 2026-08-19)
-- **S3** — Apple product image, committed as reference/images/iphone-15-pro.png — <https://cdsassets.apple.com/live/7WUAS350/images/tech-specs/iphone_15_pro.png> (fetched 2026-08-19)
+- **S3** — Apple product image, committed as reference/images/apple/iphone-15-pro.jpg — <https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-1inch-blacktitanium?wid=1800&hei=1800&fmt=jpeg&qlt=95> (fetched 2026-08-19)
 - **S4** — 9to5Mac — Cases show iPhone 11 design, including new position of Apple logo — <https://9to5mac.com/2019/09/08/purported-iphone-11-cases-show-new-position-for-apple-logo-on-iphone-11-back/> (fetched 2026-08-19)
 
 ## Reference images
 
-![iPhone 15 Pro](../images/iphone-15-pro.png)
+![iPhone 15 Pro](../images/apple/iphone-15-pro.jpg)
 
-`reference/images/iphone-15-pro.png` — official Apple product image, from <https://cdsassets.apple.com/live/7WUAS350/images/tech-specs/iphone_15_pro.png> (downloaded 2026-08-19). Shows the rear in every finish plus the front.
+`reference/images/apple/iphone-15-pro.jpg` — Apple's own product shot: one device, back and
+front, straight on and unobstructed at 508x616. From <https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-15-pro-finish-select-202309-6-1inch-blacktitanium?wid=1800&hei=1800&fmt=jpeg&qlt=95>
+(downloaded 2026-08-19).
 
-Not yet captured for this model: bottom edge (port and mic/speaker hole pattern) and the side edges. See `reference/images/README.md`.
+Not captured for this model: the bottom edge (port and mic/speaker hole pattern)
+and the side edges. See `reference/images/README.md`.

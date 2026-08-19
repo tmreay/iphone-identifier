@@ -26,7 +26,7 @@
 | `rear_camera_count` | `3` | ✅ verified | S1 | |
 | `rear_camera_layout` | `triple_square` | 🟡 inferred | — | Three lenses in a triangle inside a large rounded-square raised housing, with the flash (and LiDAR where fitted) on the right. **Arrangement described from the researcher's reading, not a cited source — confirm against a reference image.** |
 | `front_cutout` | `notch_narrow` | ✅ verified | S4 | Narrow notch (~28 mm, 20% narrower than the iPhone 12 generation). |
-| `body_size_class` | `max` | ✅ verified | S1 | Derived from body height 160.8 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see reference/findings.md §5. |
+| `body_size_class` | `max` | ✅ verified | S1 | Derived from body height 160.8 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see SPEC.md §6.3. |
 | `sim_tray` | `left_side` | ✅ verified | S2 | SIM tray on the left side, below the volume buttons. Present in all markets — the tray moved from right to left with the iPhone 12 generation. |
 | `colour` | `black` · `gold` · `white_silver` · `light_blue` · `dark_green` | 🟡 inferred | S1 | Marketing names are Apple's; the descriptive mapping is this project's (see `reference/palette.md`). |
 
@@ -64,14 +64,17 @@ All marketing names from S1. Descriptive values per `reference/palette.md`.
 
 - **S1** — Apple — iPhone 13 Pro Max Tech Specs — <https://support.apple.com/en-us/111870> (fetched 2026-08-19)
 - **S2** — Apple — Remove or switch the SIM card in your iPhone — <https://support.apple.com/en-us/109357> (fetched 2026-08-19)
-- **S3** — Apple product image, committed as reference/images/iphone-13-pro-max.png — <https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111870_iphone13-pro-max-colors-480.png> (fetched 2026-08-19)
+- **S3** — Apple product image, committed as reference/images/apple/iphone-13-pro-max.jpg — <https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-pro-max-graphite-select?wid=1800&hei=1800&fmt=jpeg&qlt=95> (fetched 2026-08-19)
 - **S4** — MacRumors — iPhone 13 Models Feature 20% Smaller Notch — <https://www.macrumors.com/2021/09/14/iphone-13-models-notch-taller/> (fetched 2026-08-19)
 - **S5** — 9to5Mac — Cases show iPhone 11 design, including new position of Apple logo — <https://9to5mac.com/2019/09/08/purported-iphone-11-cases-show-new-position-for-apple-logo-on-iphone-11-back/> (fetched 2026-08-19)
 
 ## Reference images
 
-![iPhone 13 Pro Max](../images/iphone-13-pro-max.png)
+![iPhone 13 Pro Max](../images/apple/iphone-13-pro-max.jpg)
 
-`reference/images/iphone-13-pro-max.png` — official Apple product image, from <https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111870_iphone13-pro-max-colors-480.png> (downloaded 2026-08-19). Shows the rear in every finish plus the front.
+`reference/images/apple/iphone-13-pro-max.jpg` — Apple's own product shot: one device, back and
+front, straight on and unobstructed at 616x784. From <https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-13-pro-max-graphite-select?wid=1800&hei=1800&fmt=jpeg&qlt=95>
+(downloaded 2026-08-19).
 
-Not yet captured for this model: bottom edge (port and mic/speaker hole pattern) and the side edges. See `reference/images/README.md`.
+Not captured for this model: the bottom edge (port and mic/speaker hole pattern)
+and the side edges. See `reference/images/README.md`.

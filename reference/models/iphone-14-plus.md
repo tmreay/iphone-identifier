@@ -26,7 +26,7 @@
 | `rear_camera_count` | `2` | ✅ verified | S1 | |
 | `rear_camera_layout` | `dual_diagonal_square` | ✅ verified | S4 | Two lenses arranged **diagonally** (top-left and bottom-right) inside a large rounded-square raised housing. |
 | `front_cutout` | `notch_narrow` | ✅ verified | S5 | Narrow notch (~28 mm, 20% narrower than the iPhone 12 generation). |
-| `body_size_class` | `max` | ✅ verified | S1 | Derived from body height 160.8 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see reference/findings.md §5. |
+| `body_size_class` | `max` | ✅ verified | S1 | Derived from body height 160.8 mm against the bands in SPEC.md §6.3. An adjacent class is added only when a model actually in that class sits within 3 mm — see SPEC.md §6.3. |
 | `sim_tray` | `left_side` · `none` | ✅ verified | S2 | SIM tray on the left side on units sold outside the United States. US-purchased units have **no SIM tray at all** (eSIM only). Both bodies are in circulation, so tray presence narrows region, not model. |
 | `colour` | `black` · `purple` · `white_silver` · `red` · `light_blue` · `yellow` | 🟡 inferred | S1 | Marketing names are Apple's; the descriptive mapping is this project's (see `reference/palette.md`). |
 
@@ -41,7 +41,7 @@
 | `rear_wordmark` | `logo_only_centred` | 🟡 inferred | S6 | Apple logo centred, no "iPhone" wordmark. Cited source covers the 2019 change; continuation to this model is assumed — confirm against a reference image. |
 | `bottom_mic_hole_pattern` | `asymmetric` | 🟡 inferred | — | Asymmetric, as on every model after the iPhone X. Only useful for the X/XS pair. |
 | `camera_bump_size` | `larger` | 🟡 inferred | S7 | Compared within the diagonal-dual family only. The iPhone 14 plateau grew in both footprint and height over the iPhone 13 — cases are not interchangeable. |
-| `flash_position` | `in_square_right` | ✅ verified | S3 | Inside the square housing, on the right. Read off the committed reference image during Phase 1. |
+| `flash_position` | `in_square_right` | ✅ verified | S3 | Inside the square housing, on the right. Read off the committed reference image, and re-checked against the clean product shot. |
 | `lidar` | `absent` | ✅ verified | S1 |  |
 
 ## Colours (SPEC.md §6.5)
@@ -67,7 +67,7 @@ All marketing names from S1. Descriptive values per `reference/palette.md`.
 
 - **S1** — Apple — iPhone 14 Plus Tech Specs — <https://support.apple.com/en-us/111854> (fetched 2026-08-19)
 - **S2** — Apple — Remove or switch the SIM card in your iPhone — <https://support.apple.com/en-us/109357> (fetched 2026-08-19)
-- **S3** — Apple product image, committed as reference/images/iphone-14-and-14-plus.png — <https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111850_iphone-14_1.png> (fetched 2026-08-19)
+- **S3** — Apple product image, committed as reference/images/apple/iphone-14-plus.jpg — <https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-plus-midnight-select-202209?wid=1800&hei=1800&fmt=jpeg&qlt=95> (fetched 2026-08-19)
 - **S4** — The Next Web — Why did Apple change the camera position on the iPhone 13? — <https://thenextweb.com/news/why-did-apple-change-camera-position-on-iphone-13-analysis> (fetched 2026-08-19)
 - **S5** — MacRumors — iPhone 13 Models Feature 20% Smaller Notch — <https://www.macrumors.com/2021/09/14/iphone-13-models-notch-taller/> (fetched 2026-08-19)
 - **S6** — 9to5Mac — Cases show iPhone 11 design, including new position of Apple logo — <https://9to5mac.com/2019/09/08/purported-iphone-11-cases-show-new-position-for-apple-logo-on-iphone-11-back/> (fetched 2026-08-19)
@@ -75,8 +75,11 @@ All marketing names from S1. Descriptive values per `reference/palette.md`.
 
 ## Reference images
 
-![iPhone 14 Plus](../images/iphone-14-and-14-plus.png)
+![iPhone 14 Plus](../images/apple/iphone-14-plus.jpg)
 
-`reference/images/iphone-14-and-14-plus.png` — official Apple product image, from <https://cdsassets.apple.com/live/SZLF0YNV/images/sp/111850_iphone-14_1.png> (downloaded 2026-08-19). Shows the rear in every finish plus the front.
+`reference/images/apple/iphone-14-plus.jpg` — Apple's own product shot: one device, back and
+front, straight on and unobstructed at 1156x1560. From <https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-14-plus-midnight-select-202209?wid=1800&hei=1800&fmt=jpeg&qlt=95>
+(downloaded 2026-08-19).
 
-Not yet captured for this model: bottom edge (port and mic/speaker hole pattern) and the side edges. See `reference/images/README.md`.
+Not captured for this model: the bottom edge (port and mic/speaker hole pattern)
+and the side edges. See `reference/images/README.md`.
