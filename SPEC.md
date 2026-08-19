@@ -276,7 +276,11 @@ ruling a model out.
 Notes on the less obvious ones:
 
 - **`magsafe`** is the only thing that separates an iPhone 16e from a 17e, and unlike a
-  Settings check it works on a phone that will not power on (§4.4).
+  Settings check it works on a phone that will not power on (§4.4). **It is declared here
+  but not yet populated:** no `reference/models/<id>.md` records a value for it, so the
+  16e/17e resolution in §4.4 and §9 currently rests on spec prose rather than on sourced
+  data. Filling it is outstanding Phase 1 work (§10) and must be sourced per model, not
+  written from memory (D-11).
 - **`back_glass_finish`** is no longer a Pro/non-Pro split: the standard models went
   matte at the iPhone 15, and the Air and 17 Pro pair have a Ceramic Shield back.
 - **`bottom_mic_hole_pattern`** counts holes either side of the port. It is photographed
@@ -485,12 +489,30 @@ written from that research. What it changed in this spec: the taxonomy gaps are 
 §6.3 gained the 3 mm adjacency rule, §9 replaced guesswork with the measured separability
 result, and scope went from 36 models to 37 (D-01).
 
-Two attributes were **not** filled and are deliberately left absent rather than guessed:
-`bottom_mic_hole_pattern` outside the iPhone X / XS / XS Max group, and
-`camera_bump_size`, which needs a photograph of the iPhone 13 and 14 plateaus at a
-comparable angle. Under §5.4 an absent value eliminates nothing, so an incomplete matrix
-degrades to a larger candidate group rather than a wrong answer — but the 13 vs 14 pair
-stays unresolved until that shot exists.
+**Phase 1 is substantially done but not closed.** What is finished: all 37 models
+researched and written up, body dimensions and size classes evidence-based, SIM-tray
+position verified for every model, colours enumerated under both naming layers with a
+closed 14-value palette, and the recent models (16e, Air, 17 generation, 17e) verified
+against shipped Apple documentation rather than pre-release reporting.
+
+What remains, in the order it matters:
+
+1. **`magsafe` has no data.** The attribute is declared in §6.2 and both §4.4 and §9 use
+   it to resolve the 16e/17e group, but no model file records a value. Until it is sourced
+   per model that group is unresolved in the data, whatever the prose says.
+2. **The iPhone 13 vs 14 photograph.** `camera_bump_size` is the pair's only separator
+   and its values cite the wrong models (§9). Needs one shot of a 13 and a 14 plateau at a
+   comparable angle. Without it, 13 vs 14 may be a fourth terminal group.
+3. **`flash_position` on 25 models.** Read off the committed product shots for 12; the
+   images for the other 25 are committed and unread, so this is desk work rather than
+   research.
+4. **Close-ups of the remaining §6.2 micro-details.** The Phase 1 goal above asks for
+   these; what exists is three bottom-edge photographs covering the X, XS and XS Max.
+
+None of this blocks Phase 2 under §5.4 — an absent value eliminates nothing, so an
+incomplete matrix degrades to a larger candidate group rather than a wrong answer. Item 1
+is the exception worth watching, because the spec currently claims a resolution the data
+does not support.
 
 **Phase 2 — data and engine.** Transcribe `reference/` into `src/data/`; build
 and unit-test the engine, including the reachability test in §7.
