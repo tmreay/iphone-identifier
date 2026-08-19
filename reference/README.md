@@ -59,11 +59,15 @@ Roughly where each flag falls:
 - **🟡 inferred** covers the descriptive colour mapping (the marketing names are Apple's,
   the palette is this project's), some `rear_camera_layout` values, and `rear_wordmark`
   on models after 2020, where continuation is assumed rather than sourced.
-- **🔴 unverified** covers 36 rows, but 31 of those are `camera_bump_size` on models where
-  the attribute does not apply. The genuinely unknown values are five:
-  `bottom_mic_hole_pattern` on the four home-button bodies, and `flash_position` on the
-  iPhone Air, whose plateau cannot be read off Apple's render. **Do not transcribe these
-  into `src/data/models.ts`** — leave them absent.
+- **🔴 unverified** covers 35 rows, every one a value that was **deliberately not
+  researched** rather than one attempted and failed: `camera_bump_size` outside the
+  `dual_diagonal_square` family (31), and `bottom_mic_hole_pattern` on the home-button
+  bodies (4). Neither was needed to separate anything. **Do not transcribe these into
+  `src/data/models.ts`** — leave them absent.
+
+  The flag is doing double duty: it means both "could not be sourced" and "was not
+  researched", and everything left is the second kind. Phase 2 should consider splitting
+  them, since the current reading makes the data look worse than it is.
 
 One flag is worth questioning in Phase 2: the 30 models carrying a bare `asymmetric`
 `bottom_mic_hole_pattern` are marked 🟡, but their Source column is `—`. Nothing was

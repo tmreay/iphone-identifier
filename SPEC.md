@@ -288,10 +288,19 @@ Notes on the less obvious ones:
   consulted, and the four home-button bodies were never researched at all. The attribute
   only ever discriminates inside that group of three, so the weak values cost nothing —
   but they should not be mistaken for evidence.
-- **`camera_bump_size`** separates the iPhone 13 generation from the 14 and 15 within the
-  diagonal-dual family. Measured off the committed product shots with each body normalised
-  to the same width, so the plateau footprint is compared like for like. It does not apply
-  outside that family.
+- **`camera_bump_size`** is **relative, not absolute**: `larger` and `smaller` mean larger
+  or smaller _than the other models sharing that `rear_camera_layout`_. There is no global
+  scale, so a value only means something inside one layout family, and the question is only
+  answerable when the two options are drawn side by side to relative scale (§8).
+
+  It is recorded for the six `dual_diagonal_square` models, because that is where it breaks
+  a tie: the 13 generation against the 14 and 15. Measured off the committed product shots
+  with each body normalised to the same width, so plateau footprint is compared like for
+  like. It is **empty on the other 31 models — not because the concept fails there, but
+  because nothing needed it.** Several families do differ in bump size across generations;
+  they are separated by cheaper attributes, so it was never measured. If a future model
+  makes one of those families ambiguous, this is the attribute to extend.
+
 - **`rear_wordmark`** has only two members in practice. The third value once listed here,
   `logo_only_upper`, has no members and was dropped.
 
@@ -492,12 +501,21 @@ tech specs; `flash_position` and `camera_bump_size` read off the committed produ
 colours enumerated under both naming layers with a closed 14-value palette; the recent
 models verified against shipped Apple documentation rather than pre-release reporting.
 
-Across 666 attribute rows: **498 verified, 133 inferred, 35 unverified.** Thirty-one of the
-35 are `camera_bump_size` on models where the attribute does not apply — it only ever
-compares within the diagonal-dual family. The genuinely unknown values number **four**:
-`bottom_mic_hole_pattern` on the home-button bodies (8, 8 Plus, SE 2nd, SE 3rd), which was
-never researched and which costs nothing because the attribute only discriminates inside
-the X / XS / XS Max group.
+Across 666 attribute rows: **498 verified, 133 inferred, 35 unverified.** All 35 unverified
+rows are values that were **deliberately not researched**, rather than values that were
+attempted and failed:
+
+- **31 × `camera_bump_size`**, on every model outside the `dual_diagonal_square` family.
+  The attribute is relative to a layout family (§6.2), and it was only ever needed to break
+  the 13-vs-14 tie. Most of those models do have a measurable bump; nothing required it.
+- **4 × `bottom_mic_hole_pattern`**, on the home-button bodies (8, 8 Plus, SE 2nd, SE 3rd).
+  The attribute only discriminates inside the X / XS / XS Max group, all three of which are
+  photographed.
+
+Worth fixing in Phase 2: the 🔴 flag is carrying two different meanings — "we tried and
+could not source this" and "we chose not to research this". Every remaining 🔴 is the
+second kind, which reads as worse data than it is. A separate not-applicable or
+not-researched state would say what is actually true.
 
 Two evidence gaps remain that are not flag problems:
 
