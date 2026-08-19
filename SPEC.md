@@ -30,7 +30,7 @@ screen, battery, or back glass.
 
 ### 3.1 Models covered
 
-iPhone 8 through the iPhone 17 generation — **36 models**:
+iPhone 8 through the iPhone 17e — **37 models**:
 
 | Generation | Models |
 |---|---|
@@ -43,6 +43,7 @@ iPhone 8 through the iPhone 17 generation — **36 models**:
 | 2023 | iPhone 15 · iPhone 15 Plus · iPhone 15 Pro · iPhone 15 Pro Max |
 | 2024 | iPhone 16 · iPhone 16 Plus · iPhone 16 Pro · iPhone 16 Pro Max |
 | 2025 | iPhone 16e · iPhone Air · iPhone 17 · iPhone 17 Pro · iPhone 17 Pro Max |
+| 2026 | iPhone 17e |
 
 Both **US (eSIM-only, no SIM tray)** and **international (SIM tray)** body
 variants are in scope where they differ physically.
@@ -60,7 +61,7 @@ variants are in scope where they differ physically.
 
 ### 4.1 Identify flow
 
-1. The app holds a candidate set, initially all 36 models.
+1. The app holds a candidate set, initially all 37 models.
 2. It asks the single most useful **coarse-tier** question for the current
    candidate set (see §7).
 3. The technician picks an answer; candidates inconsistent with it are
@@ -117,7 +118,7 @@ No A-numbers, specs, or repair notes — deliberately out of scope (§3.2).
 
 ### 4.6 Reverse lookup
 
-A browsable list of all 36 models. Selecting one shows every characteristic the
+A browsable list of all 37 models. Selecting one shows every characteristic the
 matrix records for it, with the same SVG diagrams used in the questions. Used
 for training new technicians, for confirming a result, and as the practical way
 to review and correct the underlying data.
@@ -368,6 +369,8 @@ To be validated and, where possible, solved during Phase 1 and the engine tests:
 | Pair | Situation |
 |---|---|
 | SE (2nd) vs SE (3rd) | Externally identical. Documented terminal group. |
+| 16 vs 17 | *(Phase 1)* Black and white units are identical on every attribute in this spec. Unsolved — see `reference/findings.md` §2. |
+| 16e vs 17e | *(Phase 1)* Identical bodies; only the 17e Soft Pink finish separates them by sight. A MagSafe accessory sticks to a 17e and not a 16e — works on a dead phone. |
 | iPhone X vs XS | Near-identical; bottom mic-hole pattern and colour availability are the reported tells. |
 | iPhone 13 vs 14 | Same size and camera arrangement; camera bump proportions and US SIM-tray absence are the tells. |
 | iPhone 8 vs SE (2nd/3rd) | Same body; rear "iPhone" wordmark and logo position differ. |
@@ -380,7 +383,7 @@ To be validated and, where possible, solved during Phase 1 and the engine tests:
 layout per §5.3, this spec committed. *(current)*
 
 **Phase 1 — data collection.** *Separate session.* Web research to establish
-verified, sourced specifications and physical characteristics for all 36 models,
+verified, sourced specifications and physical characteristics for all 37 models,
 plus reference screenshots for diagram drawing. Output:
 `reference/models/<id>.md`, one per model, each fact carrying a source, and
 images in `reference/images/`. Explicit goals:
@@ -415,7 +418,7 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 
 | # | Decision |
 |---|---|
-| D-01 | Coverage is iPhone 8 → iPhone 17 generation, including iPhone Air, 16e, and both SE generations. |
+| D-01 | Coverage is iPhone 8 → iPhone 17e, including iPhone Air, 16e, and both SE generations. Extended from 36 to 37 models during Phase 1 when the iPhone 17e shipped. |
 | D-02 | Attribute matrix with dynamic question selection, not a hand-authored decision tree. Adding a model is one data row. |
 | D-03 | Coarse questions by default; micro-detail questions behind an explicit "Narrow further" step. |
 | D-04 | Vite + React + TypeScript, static build, offline-capable. |
