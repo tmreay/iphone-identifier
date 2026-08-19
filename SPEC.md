@@ -501,21 +501,19 @@ tech specs; `flash_position` and `camera_bump_size` read off the committed produ
 colours enumerated under both naming layers with a closed 14-value palette; the recent
 models verified against shipped Apple documentation rather than pre-release reporting.
 
-Across 666 attribute rows: **498 verified, 133 inferred, 35 unverified.** All 35 unverified
-rows are values that were **deliberately not researched**, rather than values that were
-attempted and failed:
+Across 666 attribute rows: **498 verified, 133 inferred, 31 not applicable, 4 unverified.**
 
-- **31 × `camera_bump_size`**, on every model outside the `dual_diagonal_square` family.
-  The attribute is relative to a layout family (§6.2), and it was only ever needed to break
-  the 13-vs-14 tie. Most of those models do have a measurable bump; nothing required it.
-- **4 × `bottom_mic_hole_pattern`**, on the home-button bodies (8, 8 Plus, SE 2nd, SE 3rd).
-  The attribute only discriminates inside the X / XS / XS Max group, all three of which are
-  photographed.
+`reference/` carries a fourth flag, ⚪ not applicable, for attributes that have no meaning
+on a given model rather than a value nobody found. It exists because the 🔴 count was
+misleading: it mixed "could not be sourced" with "there is nothing here to source".
 
-Worth fixing in Phase 2: the 🔴 flag is carrying two different meanings — "we tried and
-could not source this" and "we chose not to research this". Every remaining 🔴 is the
-second kind, which reads as worse data than it is. A separate not-applicable or
-not-researched state would say what is actually true.
+- **31 × ⚪** are `camera_bump_size` outside the `dual_diagonal_square` family. The value
+  is relative to a layout family (§6.2), so elsewhere there is nothing to compare against.
+  No amount of research fills these.
+- **4 × 🔴** are `bottom_mic_hole_pattern` on the home-button bodies (8, 8 Plus, SE 2nd,
+  SE 3rd). Those phones do have a hole pattern; it was never researched, because the
+  attribute only discriminates inside the X / XS / XS Max group, all three of which are
+  photographed. These are the only genuinely unknown values in the set.
 
 Two evidence gaps remain that are not flag problems:
 

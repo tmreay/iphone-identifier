@@ -41,15 +41,17 @@ into the matrix from memory.
 
 ## Confidence flags
 
-| Flag          | Meaning                                            | Safe to transcribe?             |
-| ------------- | -------------------------------------------------- | ------------------------------- |
-| ✅ verified   | Traced to a cited source                           | Yes                             |
-| 🟡 inferred   | Read from an adjacent source or generation lineage | Yes, with the caveat recorded   |
-| 🔴 unverified | Researcher's reading, no source                    | **No — leave the value absent** |
+| Flag              | Meaning                                            | Safe to transcribe?              |
+| ----------------- | -------------------------------------------------- | -------------------------------- |
+| ✅ verified       | Traced to a cited source                           | Yes                              |
+| 🟡 inferred       | Read from an adjacent source or generation lineage | Yes, with the caveat recorded    |
+| 🔴 unverified     | Researcher's reading, no source                    | **No — leave the value absent**  |
+| ⚪ not applicable | The attribute has no meaning for this model        | n/a — there is no value to carry |
 
-Leaving an unverified value absent is safe: under the §5.4 matching rule missing
-data eliminates nothing, so the result degrades to a larger candidate group rather
-than a wrong answer.
+Leaving an unverified value absent is safe: under the §5.4 matching rule missing data
+eliminates nothing, so the result degrades to a larger candidate group rather than a
+wrong answer. ⚪ is different in kind from 🔴 — it does not mean "unknown", it means the
+question has no answer for this model, so no amount of research would fill it.
 
 Roughly where each flag falls:
 
@@ -59,15 +61,13 @@ Roughly where each flag falls:
 - **🟡 inferred** covers the descriptive colour mapping (the marketing names are Apple's,
   the palette is this project's), some `rear_camera_layout` values, and `rear_wordmark`
   on models after 2020, where continuation is assumed rather than sourced.
-- **🔴 unverified** covers 35 rows, every one a value that was **deliberately not
-  researched** rather than one attempted and failed: `camera_bump_size` outside the
-  `dual_diagonal_square` family (31), and `bottom_mic_hole_pattern` on the home-button
-  bodies (4). Neither was needed to separate anything. **Do not transcribe these into
-  `src/data/models.ts`** — leave them absent.
-
-  The flag is doing double duty: it means both "could not be sourced" and "was not
-  researched", and everything left is the second kind. Phase 2 should consider splitting
-  them, since the current reading makes the data look worse than it is.
+- **⚪ not applicable** covers 31 rows, all `camera_bump_size` outside the
+  `dual_diagonal_square` family. The value is relative to a layout family (SPEC.md §6.2),
+  so outside that family there is nothing to compare against and no value to find.
+- **🔴 unverified** covers 4 rows: `bottom_mic_hole_pattern` on the home-button bodies
+  (8, 8 Plus, SE 2nd, SE 3rd). Those phones do have a hole pattern; it was simply never
+  researched, because the attribute only discriminates inside the X / XS / XS Max group.
+  **Do not transcribe these into `src/data/models.ts`** — leave them absent.
 
 One flag is worth questioning in Phase 2: the 30 models carrying a bare `asymmetric`
 `bottom_mic_hole_pattern` are marked 🟡, but their Source column is `—`. Nothing was
@@ -75,4 +75,4 @@ consulted; the value is a generalisation from the iPhone X onward. It is harmles
 the attribute only discriminates within the X / XS / XS Max group, but by the standard set
 out above it is closer to 🔴 than 🟡.
 
-Row totals across the 37 models: **498 verified, 133 inferred, 35 unverified.**
+Row totals across the 37 models: **498 verified, 133 inferred, 31 not applicable, 4 unverified.**

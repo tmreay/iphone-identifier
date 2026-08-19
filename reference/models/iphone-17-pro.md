@@ -32,18 +32,18 @@
 
 ## Deep-tier attributes (SPEC.md §6.2)
 
-| Attribute                 | Value               | Confidence    | Source | Note                                                                                                                                                      |
-| ------------------------- | ------------------- | ------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `action_button`           | `present`           | ✅ verified   | S1     | Replaces the ring/silent switch.                                                                                                                          |
-| `camera_control_button`   | `present`           | ✅ verified   | S1     | Capacitive button on the lower right edge.                                                                                                                |
-| `magsafe`                 | `present`           | ✅ verified   | S1     | Apple's tech specs state MagSafe wireless charging explicitly.                                                                                            |
-| `frame_material_finish`   | `aluminium_brushed` | ✅ verified   | S1     | Brushed aluminium unibody.                                                                                                                                |
-| `back_glass_finish`       | `ceramic_shield`    | ✅ verified   | S1     | Ceramic Shield (not conventional glass).                                                                                                                  |
-| `rear_wordmark`           | `logo_only_centred` | 🟡 inferred   | S6     | Apple logo centred, no "iPhone" wordmark. Cited source covers the 2019 change; continuation to this model is assumed — confirm against a reference image. |
-| `bottom_mic_hole_pattern` | `asymmetric`        | 🟡 inferred   | —      | Asymmetric, as on every model after the iPhone X. Only useful for the X/XS pair.                                                                          |
-| `camera_bump_size`        | — (n/a)             | 🔴 unverified | —      | Not a discriminator for this model.                                                                                                                       |
-| `flash_position`          | `in_plateau_right`  | ✅ verified   | S4     | Inside the plateau, to the right of the lenses. Read off the committed reference image, and re-checked against the clean product shot.                    |
-| `lidar`                   | `present`           | ✅ verified   | S1     | Listed under External Buttons and Connectors.                                                                                                             |
+| Attribute                 | Value               | Confidence        | Source | Note                                                                                                                                                                                 |
+| ------------------------- | ------------------- | ----------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `action_button`           | `present`           | ✅ verified       | S1     | Replaces the ring/silent switch.                                                                                                                                                     |
+| `camera_control_button`   | `present`           | ✅ verified       | S1     | Capacitive button on the lower right edge.                                                                                                                                           |
+| `magsafe`                 | `present`           | ✅ verified       | S1     | Apple's tech specs state MagSafe wireless charging explicitly.                                                                                                                       |
+| `frame_material_finish`   | `aluminium_brushed` | ✅ verified       | S1     | Brushed aluminium unibody.                                                                                                                                                           |
+| `back_glass_finish`       | `ceramic_shield`    | ✅ verified       | S1     | Ceramic Shield (not conventional glass).                                                                                                                                             |
+| `rear_wordmark`           | `logo_only_centred` | 🟡 inferred       | S6     | Apple logo centred, no "iPhone" wordmark. Cited source covers the 2019 change; continuation to this model is assumed — confirm against a reference image.                            |
+| `bottom_mic_hole_pattern` | `asymmetric`        | 🟡 inferred       | —      | Asymmetric, as on every model after the iPhone X. Only useful for the X/XS pair.                                                                                                     |
+| `camera_bump_size`        | —                   | ⚪ not applicable | —      | Not applicable. The value is relative to a `rear_camera_layout` family (SPEC.md §6.2) and this model is outside the diagonal-dual family, so there is nothing to compare it against. |
+| `flash_position`          | `in_plateau_right`  | ✅ verified       | S4     | Inside the plateau, to the right of the lenses. Read off the committed reference image, and re-checked against the clean product shot.                                               |
+| `lidar`                   | `present`           | ✅ verified       | S1     | Listed under External Buttons and Connectors.                                                                                                                                        |
 
 ## Colours (SPEC.md §6.5)
 

@@ -31,18 +31,18 @@
 
 ## Deep-tier attributes (SPEC.md §6.2)
 
-| Attribute                 | Value                 | Confidence    | Source | Note                                                                                                                         |
-| ------------------------- | --------------------- | ------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| `action_button`           | `absent`              | ✅ verified   | S1     | Ring/Silent switch fitted instead.                                                                                           |
-| `camera_control_button`   | `absent`              | ✅ verified   | S1     |                                                                                                                              |
-| `magsafe`                 | `absent`              | ✅ verified   | S1     | No MagSafe. Apple's tech specs list Qi wireless charging with no magnet array; MagSafe did not exist before the iPhone 12.   |
-| `frame_material_finish`   | `stainless_glossy`    | 🟡 inferred   | S3     | Polished stainless steel.                                                                                                    |
-| `back_glass_finish`       | `glossy`              | 🟡 inferred   | S3     | Glossy glass.                                                                                                                |
-| `rear_wordmark`           | `iphone_text_present` | ✅ verified   | S5     | Apple logo in the upper third with the word "iPhone" below it. Regulatory text below that varies by region.                  |
-| `bottom_mic_hole_pattern` | `symmetric_six_six`   | ✅ verified   | S6, S7 | Equal hole counts either side of the port — the iPhone X tell. Photographed: see the committed bottom-edge image.            |
-| `camera_bump_size`        | — (n/a)               | 🔴 unverified | —      | Not a discriminator for this model.                                                                                          |
-| `flash_position`          | `between_lenses`      | ✅ verified   | S4     | Between the two lenses, offset right. Read off the committed reference image, and re-checked against the clean product shot. |
-| `lidar`                   | `absent`              | ✅ verified   | S1     |                                                                                                                              |
+| Attribute                 | Value                 | Confidence        | Source | Note                                                                                                                                                                                 |
+| ------------------------- | --------------------- | ----------------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `action_button`           | `absent`              | ✅ verified       | S1     | Ring/Silent switch fitted instead.                                                                                                                                                   |
+| `camera_control_button`   | `absent`              | ✅ verified       | S1     |                                                                                                                                                                                      |
+| `magsafe`                 | `absent`              | ✅ verified       | S1     | No MagSafe. Apple's tech specs list Qi wireless charging with no magnet array; MagSafe did not exist before the iPhone 12.                                                           |
+| `frame_material_finish`   | `stainless_glossy`    | 🟡 inferred       | S3     | Polished stainless steel.                                                                                                                                                            |
+| `back_glass_finish`       | `glossy`              | 🟡 inferred       | S3     | Glossy glass.                                                                                                                                                                        |
+| `rear_wordmark`           | `iphone_text_present` | ✅ verified       | S5     | Apple logo in the upper third with the word "iPhone" below it. Regulatory text below that varies by region.                                                                          |
+| `bottom_mic_hole_pattern` | `symmetric_six_six`   | ✅ verified       | S6, S7 | Equal hole counts either side of the port — the iPhone X tell. Photographed: see the committed bottom-edge image.                                                                    |
+| `camera_bump_size`        | —                     | ⚪ not applicable | —      | Not applicable. The value is relative to a `rear_camera_layout` family (SPEC.md §6.2) and this model is outside the diagonal-dual family, so there is nothing to compare it against. |
+| `flash_position`          | `between_lenses`      | ✅ verified       | S4     | Between the two lenses, offset right. Read off the committed reference image, and re-checked against the clean product shot.                                                         |
+| `lidar`                   | `absent`              | ✅ verified       | S1     |                                                                                                                                                                                      |
 
 ## Colours (SPEC.md §6.5)
 
