@@ -667,7 +667,43 @@ One thing the transcription surfaced that is worth a later look, not blocking:
   fallbacks and as the reverse-lookup entry's content (§4.6), so none was removed.
 
 **Phase 3 — identify UI.** Question flow, can't-tell, back/start-over, answer
-trail, result and group screens.
+trail, result and group screens. _(done)_
+
+**Phase 3 is done.** Five screens over one piece of React state — the engine's
+`IdentifyState` — with every screen a pure function of it, because `resolve()`
+already derives what each one needs. Nothing about the flow is decided in the UI;
+`App.tsx` routes on `status` and wires the engine's own actions to buttons.
+
+_The wording is the part that can be wrong._ The components are thin enough to
+read, but a sentence naming what separates two candidates cannot be checked by
+the technician it misleads. So the sentences live in `ui/presenters.ts` as pure
+functions and are tested against the real matrix under the existing `node` test
+environment — no DOM harness, no new dependencies.
+
+What Phase 3 changed in this spec, from walking the built app rather than from
+re-reading §4:
+
+- **§4.4's plain statement and §4.2's revisit offer can contradict each other,
+  and did.** Answering down to iPhone 16 vs 17 with colour skipped reaches
+  `ambiguous` — nothing left to _ask_ — and the screen printed "no characteristic
+  recorded here distinguishes them" directly above an offer to revisit colour,
+  which §9 says separates that pair on the finishes they do not share. Nothing
+  left to ask is not the same as nothing left to know. The terminal statement is
+  now suppressed while any skip could still split the group, and the two are
+  pinned as mutually exclusive by test (D-19).
+- **Hiding dead options makes `contradictory` unreachable.** Offering only values
+  some candidate records means an answer always keeps that candidate, so the set
+  cannot empty by tapping. The status stays in the engine and the screen stays in
+  the UI as the floor under that property, not as a screen the flow visits.
+
+Two things Phase 3 deliberately did not build, both belonging to later phases:
+
+- **Diagrams.** `QuestionScreen` carries the slot and the `option.diagram` id;
+  Phase 4 fills it. One deep question already asks for a picture in its own help
+  text — `camera_bump_size` says to answer it "only with the two outlines drawn
+  side by side" — so it is answerable but not yet properly askable.
+- **The reverse-lookup link** §4.5 asks for. Phase 5 builds the entry; the result
+  screen names the model it will open rather than carrying a dead link.
 
 **Phase 4 — diagrams.** Draw the SVG set; wire into questions and reverse
 lookup.
@@ -699,6 +735,7 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 | D-16 | No attribute may carry a catch-all value covering models that a specific value also covers. §5.4 matches values as mutually exclusive, so a catch-all is a rival to the specific values, not a weaker form of them: a truthful specific answer eliminates every model filed under the generic one. A model that cannot be pinned to a specific value is recorded **absent**. Enforced by test across the whole schema.                                                                                                            |
 | D-17 | The deep tier is **additive**: it adds deep questions rather than hiding coarse ones. §4.3 constrains deep questions only, so `tier` records how far the technician has agreed to go, not which questions can be reached. Keeping it out of reachability is what lets `unskip` revive a coarse question without rewinding the tier — and `back()` would flip a rewound tier straight back, stranding the question again.                                                                                                          |
 | D-18 | The §4.2 revisit offer names only skips the flow can honour: the question must still split the candidates **and** be one the current tier would offer. `revisitableSkips` decides the second half by running `unskip` and reading the resulting pool, rather than re-testing the tier itself, so the offer and the flow cannot drift apart. Unreachable through play — a UI can only skip what it was asked — and one call away for a caller that assembles its own `IdentifyState`, which Phase 3 will when restoring a session. |
+| D-19 | §4.4's "no visible characteristic distinguishes them" is claimed only when **nothing** can split the group, not merely when nothing is left to ask. A run that skipped an attribute reaches the same `ambiguous` status with that attribute still able to separate the candidates, and stating it there contradicts the §4.2 offer to revisit printed underneath. The statement is suppressed whenever a skip is revisitable; the offer speaks instead. The two are mutually exclusive by test.                                   |
 
 D-11 has already paid for itself twice, which is worth recording because both failures
 looked like solid data at the time:
@@ -726,3 +763,39 @@ looked like solid data at the time:
   ship in the build, this is low risk — but if the repo ever goes public it
   needs revisiting. _Record the source URL for each image in
   `reference/models/<id>.md` so this stays traceable._
+- **A candidate strip along the top of the identify flow**, showing all 37
+  models and dimming each as it is eliminated. Raised after Phase 3; deferred
+  rather than declined, and worth splitting in two because the halves cost very
+  different things.
+
+  The **narrowing** half is cheap and already sanctioned: §4.1 step 3 asks for a
+  live count, and a row of model names that dims is that count made legible. It
+  needs no new assets and could land any time.
+
+  The **pictures** half is the one to think about, for three reasons:
+
+  - **It would ship the reference images.** The 37 shots in
+    `reference/images/apple/` are Apple's product shots, and the bullet above
+    calls redistribution low risk _because_ D-13 and §8 keep them out of the
+    build. A picture strip reverses that, on every device the app is copied to.
+    That is a decision to take deliberately, not as a side effect of a UI change.
+  - **Nothing planned draws models.** §8 draws one SVG per _answer option_ —
+    layouts, cutouts, size silhouettes. Per-model artwork is 37 drawings the
+    plan does not otherwise call for.
+  - **It is weakest where it is needed most.** 35 of 37 models resolve alone
+    (§9), so on most runs the strip is decoration that empties out. It earns its
+    keep on the group screens — and those are the pairs §9 records as identical
+    on every attribute here. Their pictures would be indistinguishable, and 13
+    vs 14 needed both bodies normalised to the same width before the difference
+    was visible at all.
+
+  There is also a softer tension, worth stating because it shapes the design
+  rather than settling it: prompts deliberately describe what is in the
+  technician's hand and never which model it might be (`questions.ts`). A
+  standing wall of model photos invites matching the phone against pictures
+  instead of answering the question, which is the failure mode §1 opens with.
+  That argues for the strip being a _readout_ of narrowing rather than a lookup
+  surface.
+
+  _Leaning: revisit after Phase 5, when reverse lookup has settled what a
+  per-model visual is and the image question above has an answer._
