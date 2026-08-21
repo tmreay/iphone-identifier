@@ -121,6 +121,15 @@ function parseModelFile(text, file) {
   return { id: header[1], name, released: Number(header[2]), attributes, colours }
 }
 
+/** Codepoint order over a case-folded, digit-padded key. Locale-independent. */
+function compareNames(a, b) {
+  const fold = (name) => name.toLowerCase().replace(/\d+/g, (d) => d.padStart(6, '0'))
+  const [left, right] = [fold(a), fold(b)]
+  if (left !== right) return left < right ? -1 : 1
+  // Same folded key: fall through to the raw strings so the order stays total.
+  return a < b ? -1 : a > b ? 1 : 0
+}
+
 export function readReferenceModels() {
   const files = readdirSync(referenceDir)
     .filter((f) => f.endsWith('.md'))
@@ -139,9 +148,14 @@ export function readReferenceModels() {
   })
 
   // Chronological, then natural order by name. Presentation only — no attribute
-  // depends on it.
-  const byName = new Intl.Collator('en', { numeric: true }).compare
-  return models.sort((a, b) => a.released - b.released || byName(a.name, b.name))
+  // depends on it, but it must still be reproducible: `transcribe:check` compares
+  // this output byte for byte, so an ordering that shifts under a different
+  // toolchain would fail CI rather than merely look untidy.
+  //
+  // Hence no `Intl.Collator`, whose ordering depends on the runtime's ICU data.
+  // Sorting on a folded key instead — lower-cased, with digit runs zero-padded
+  // so "iPhone 8" precedes "iPhone 11" — is a pure function of the strings.
+  return models.sort((a, b) => a.released - b.released || compareNames(a.name, b.name))
 }
 
 const quote = (s) => `'${s.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`
