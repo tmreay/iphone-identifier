@@ -102,6 +102,13 @@ export function canGoBack(state: IdentifyState): boolean {
  * candidates, the result screen says so explicitly and offers to revisit."
  * Skips that no longer matter are left out, so the prompt only appears when
  * revisiting would actually help.
+ *
+ * "Would help" is two claims, and both are checked here: the question can still
+ * split the candidates, *and* taking up the offer actually puts it back in
+ * front of the technician. The second is answered by running `unskip` and
+ * reading the pool it produces, rather than by re-testing the tier here — the
+ * offer and the flow that has to honour it then read one rule, and cannot
+ * drift apart (D-18).
  */
 export function revisitableSkips(
   questions: Question[],
@@ -115,7 +122,10 @@ export function revisitableSkips(
     .map((step) => step.attribute)
     .filter((attribute) => {
       const question = byId.get(attribute)
-      return question !== undefined && splits(candidates, question)
+      if (question === undefined || !splits(candidates, question)) return false
+      return availableQuestions(questions, unskip(state, attribute)).some(
+        (available) => available.id === attribute,
+      )
     })
 }
 
