@@ -12,11 +12,7 @@ import type {
   Question,
 } from '../data/types.ts'
 import { candidatesFor } from './candidates.ts'
-import {
-  availableQuestions,
-  scoreQuestion,
-  selectNextQuestion,
-} from './question-selection.ts'
+import { availableQuestions, selectNextQuestion, splits } from './question-selection.ts'
 import type { IdentifyResult, IdentifyState, IdentifyStatus } from './types.ts'
 
 /** A fresh run: no steps taken, coarse tier, all 37 models in play. */
@@ -42,6 +38,29 @@ export function skip(state: IdentifyState, attribute: AttributeId): IdentifyStat
   return {
     ...state,
     steps: [...state.steps, { attribute, value: null, tier: state.tier }],
+  }
+}
+
+/**
+ * Puts one skipped question back in circulation, leaving every other step
+ * untouched.
+ *
+ * This is the action behind the offer in §4.2: the result screen names the
+ * attributes still standing between candidates, and taking it up must not cost
+ * the technician the answers they gave after skipping. `back()` cannot do this
+ * job — reaching a skip five questions back means popping five good answers
+ * with it.
+ *
+ * Removing the step rather than recording a value is deliberate: the question
+ * returns to the pool and the selector offers it again when it is the most
+ * useful thing to ask, which may be immediately.
+ */
+export function unskip(state: IdentifyState, attribute: AttributeId): IdentifyState {
+  return {
+    ...state,
+    steps: state.steps.filter(
+      (step) => !(step.attribute === attribute && step.value === null),
+    ),
   }
 }
 
@@ -90,7 +109,7 @@ export function revisitableSkips(
     .map((step) => step.attribute)
     .filter((attribute) => {
       const question = byId.get(attribute)
-      return question !== undefined && scoreQuestion(candidates, question).gain > 0
+      return question !== undefined && splits(candidates, question)
     })
 }
 
@@ -134,10 +153,10 @@ function statusOf(
   // terminal ambiguity.
   if (state.tier === 'coarse') {
     const deep = { ...state, tier: 'deep' as const }
-    const splits = availableQuestions(questions, deep).some(
-      (candidate) => scoreQuestion(candidates, candidate).gain > 0,
+    const deepCanSplit = availableQuestions(questions, deep).some((candidate) =>
+      splits(candidates, candidate),
     )
-    if (splits) return 'narrow-further'
+    if (deepCanSplit) return 'narrow-further'
   }
   return 'ambiguous'
 }

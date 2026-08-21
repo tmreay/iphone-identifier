@@ -127,14 +127,17 @@ export const attributes: AttributeDefinition[] = [
     values: ['iphone_text_present', 'logo_only_centred'],
   },
   {
+    // Hole counts either side of the port. Photographed and counted only for
+    // the iPhone X, XS and XS Max, which is the only group it separates; every
+    // other model is absent here and so survives any answer (§5.4).
+    //
+    // The `asymmetric` catch-all §6.2 once listed is deliberately gone. It was
+    // a *superset* of the three specific counts, and the matching rule treats
+    // values as mutually exclusive — so a technician who truthfully counted
+    // three and six on an iPhone 11 eliminated it and was shown an iPhone XS.
     id: 'bottom_mic_hole_pattern',
     tier: 'deep',
-    values: [
-      'symmetric_six_six',
-      'asymmetric_three_six',
-      'asymmetric_four_seven',
-      'asymmetric',
-    ],
+    values: ['symmetric_six_six', 'asymmetric_three_six', 'asymmetric_four_seven'],
   },
   {
     // Relative, not absolute: larger or smaller *than the other models sharing

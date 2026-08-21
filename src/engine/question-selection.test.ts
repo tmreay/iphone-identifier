@@ -10,6 +10,7 @@ import {
   rankQuestions,
   scoreQuestion,
   selectNextQuestion,
+  splits,
 } from './question-selection.ts'
 import { model, question } from './fixtures.ts'
 import type { IdentifyState } from './types.ts'
@@ -94,6 +95,62 @@ describe('scoreQuestion', () => {
     const score = scoreQuestion(models, question('colour', ['black', 'red']))
     expect(score.expectedRemaining).toBeCloseTo(1.75)
     expect(score.gain).toBeCloseTo(0.25)
+  })
+})
+
+describe('a non-eliminating question is worth nothing (§6.4)', () => {
+  const models = [
+    model('a', { colour: ['black'] }),
+    model('b', { colour: ['red'] }),
+    model('c', { colour: ['green'] }),
+  ]
+
+  it('scores zero, however well it would have split the set', () => {
+    const hard = question('colour', ['black', 'red', 'green'])
+    const soft = question('colour', ['black', 'red', 'green'], { eliminating: false })
+    expect(scoreQuestion(models, hard).gain).toBeGreaterThan(0)
+    expect(scoreQuestion(models, soft).gain).toBe(0)
+  })
+
+  it('is never chosen, which is what makes the §6.4 revert a revert', () => {
+    // Flipping the flag has to stop colour being *asked*, not merely stop it
+    // eliminating. Otherwise the escape hatch leaves the technician answering a
+    // prominent early question that removes nothing at all.
+    const soft = [question('colour', ['black', 'red', 'green'], { eliminating: false })]
+    expect(selectNextQuestion(soft, models, coarse)).toBeUndefined()
+  })
+})
+
+describe('splits', () => {
+  it('is false for a gain that is only floating-point noise', () => {
+    // Two models with identical three-value sets. The shares are 1/3 each and
+    // do not sum to exactly 1 in IEEE754, so the gain is a few ulps above zero
+    // on a question that provably cannot separate them.
+    const twins = [
+      model('a', { colour: ['black', 'red', 'green'] }),
+      model('b', { colour: ['black', 'red', 'green'] }),
+    ]
+    const colour = question('colour', ['black', 'red', 'green'])
+    expect(scoreQuestion(twins, colour).gain).toBeLessThan(1e-9)
+    expect(splits(twins, colour)).toBe(false)
+  })
+
+  it('agrees with the selector about the same question', () => {
+    const twins = [
+      model('a', { colour: ['black', 'red', 'green'] }),
+      model('b', { colour: ['black', 'red', 'green'] }),
+    ]
+    const colour = question('colour', ['black', 'red', 'green'])
+    expect(selectNextQuestion([colour], twins, coarse)).toBeUndefined()
+    expect(splits(twins, colour)).toBe(false)
+  })
+
+  it('is true for a question that genuinely narrows', () => {
+    const models = [
+      model('a', { port: ['usb_c'] }),
+      model('b', { port: ['lightning'] }),
+    ]
+    expect(splits(models, question('port', ['usb_c', 'lightning']))).toBe(true)
   })
 })
 

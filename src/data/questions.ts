@@ -433,7 +433,7 @@ export const questions: Question[] = [
     id: 'bottom_mic_hole_pattern',
     tier: 'deep',
     prompt: 'How many holes are drilled either side of the charging port?',
-    help: 'Count the holes in the bottom edge, left of the port and then right of it. Use a bright light and take your time — the counts are close together. This one only ever separates the iPhone X, XS and XS Max from each other.',
+    help: 'Count the holes in the bottom edge, left of the port and then right of it. Use a bright light and take your time — the counts are close together. This one only ever separates the iPhone X, XS and XS Max from each other, so if the count you see is not one of these three, answer "Can\'t tell" — that is the honest answer and it rules nothing out.',
     options: [
       {
         value: 'symmetric_six_six',
@@ -449,13 +449,6 @@ export const questions: Question[] = [
         value: 'asymmetric_four_seven',
         label: 'Four on the left, seven on the right',
         diagram: 'bottom-mic-hole-pattern-asymmetric-four-seven',
-      },
-      {
-        value: 'asymmetric',
-        label: 'Uneven, some other count',
-        diagram: 'bottom-mic-hole-pattern-asymmetric',
-        caveat:
-          'Most models carry this as a generalisation with no hole count behind it, so this answer will rarely narrow anything.',
       },
     ],
     priority: 12,

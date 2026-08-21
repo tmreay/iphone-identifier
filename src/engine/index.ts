@@ -10,6 +10,7 @@ export {
   availableQuestions,
   rankQuestions,
   selectNextQuestion,
+  splits,
 } from './question-selection.ts'
 export {
   startOver,
@@ -18,6 +19,7 @@ export {
   narrowFurther,
   back,
   canGoBack,
+  unskip,
   revisitableSkips,
   resolve,
 } from './identify.ts'

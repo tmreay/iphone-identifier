@@ -17,8 +17,27 @@ import type { AttributeId, IPhoneModel, Question } from '../data/types.ts'
 import { isConsistent, liveValues } from './candidates.ts'
 import type { IdentifyState, ScoredQuestion } from './types.ts'
 
-/** Float slack for gain comparisons, so ties are ties rather than noise. */
+/**
+ * Float slack for gain comparisons, so ties are ties rather than noise.
+ *
+ * Not cosmetic. `scoreQuestion` sums `1/values.length` per candidate, and three
+ * or more equal shares do not sum to exactly 1 in IEEE754 — two models with
+ * identical six-value colour sets score a gain of 2.2e-16 on a question that
+ * provably cannot separate them. Anything asking "can this split the set?" must
+ * go through `splits`, never a bare `> 0`.
+ */
 const EPSILON = 1e-9
+
+/**
+ * Whether `question` can actually narrow `models`.
+ *
+ * The single answer to "is this question worth anything here?" — used by the
+ * selector, by the "Narrow further" decision and by the revisit prompt, so the
+ * three cannot disagree about the same question.
+ */
+export function splits(models: IPhoneModel[], question: Question): boolean {
+  return scoreQuestion(models, question).gain > EPSILON
+}
 
 /**
  * Expected candidate count after `question` is answered.
@@ -42,9 +61,14 @@ export function scoreQuestion(
   const attribute = question.id
   const known = models.filter((model) => (model.attributes[attribute]?.length ?? 0) > 0)
 
+  // A non-eliminating question removes nothing by definition (§6.4), so it has
+  // no gain to offer under a metric defined as expected reduction in candidate
+  // count — and scoring it as though it did is what would let the §6.4 revert
+  // leave colour asked early and prominently for no benefit.
+  //
   // Nothing recorded this attribute, so no answer can tell the candidates
   // apart. Same result for a set of one, where there is nothing left to split.
-  if (known.length === 0 || models.length <= 1) {
+  if (!question.eliminating || known.length === 0 || models.length <= 1) {
     return { attribute, gain: 0, expectedRemaining: models.length }
   }
 
@@ -120,6 +144,6 @@ export function selectNextQuestion(
 ): Question | undefined {
   if (models.length <= 1) return undefined
   const best = rankQuestions(questions, models, state)[0]
-  if (!best || best.score.gain <= EPSILON) return undefined
+  if (!best || !splits(models, best.question)) return undefined
   return best.question
 }

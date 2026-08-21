@@ -11,6 +11,7 @@ import {
   revisitableSkips,
   skip,
   startOver,
+  unskip,
 } from './identify.ts'
 import { model, question } from './fixtures.ts'
 
@@ -140,5 +141,70 @@ describe("revisiting a Can't tell (§4.2)", () => {
   it('ignores answered questions — only skips are revisitable', () => {
     const state = answer(startOver(), 'port', 'usb_c')
     expect(revisitableSkips(questions, models, state)).toEqual([])
+  })
+
+  it('does not name a skip that only floating-point noise makes look useful', () => {
+    // Two candidates with identical three-value sets: the shares are 1/3 each
+    // and do not sum to exactly 1, so a bare `gain > 0` would offer to revisit
+    // a question that cannot possibly narrow the pair.
+    const twins = [
+      model('a', { colour: ['black', 'red', 'green'] }),
+      model('b', { colour: ['black', 'red', 'green'] }),
+    ]
+    const colourQuestion = [question('colour', ['black', 'red', 'green'])]
+    const state = skip(startOver(), 'colour')
+    expect(resolve(twins, colourQuestion, state).revisitable).toEqual([])
+  })
+})
+
+describe('unskip (§4.2)', () => {
+  it('puts the question back without touching the answers given since', () => {
+    const state = answer(
+      answer(skip(startOver(), 'lidar'), 'port', 'usb_c'),
+      'home',
+      'x',
+    )
+    const revived = unskip(state, 'lidar')
+    expect(revived.steps.map((step) => step.attribute)).toEqual(['port', 'home'])
+    // The five-good-answers case: nothing but the skip is lost.
+    expect(revived.steps).toEqual(state.steps.filter((step) => step.value !== null))
+  })
+
+  it('lets the flow ask the question again', () => {
+    const skipped = skip(startOver(), 'port')
+    expect(resolve(models, questions, skipped).question?.id).not.toBe('port')
+    expect(resolve(models, questions, unskip(skipped, 'port')).question?.id).toBe(
+      'port',
+    )
+  })
+
+  it('closes the loop the result screen opens', () => {
+    // What §4.2 actually promises: the screen names the attribute standing
+    // between candidates, and taking up the offer narrows the group.
+    const state = skip(startOver(), 'port')
+    const before = resolve(models, questions, state)
+    expect(before.revisitable).toEqual(['port'])
+    expect(before.candidates).toHaveLength(3)
+
+    const revived = answer(unskip(state, before.revisitable[0]!), 'port', 'lightning')
+    const after = resolve(models, questions, revived)
+    expect(after.status).toBe('resolved')
+    expect(after.candidates.map((candidate) => candidate.id)).toEqual(['c'])
+  })
+
+  it('never touches an answered step, only a skip', () => {
+    const answered = answer(startOver(), 'port', 'usb_c')
+    expect(unskip(answered, 'port')).toEqual(answered)
+  })
+
+  it('is a no-op for an attribute that was never skipped', () => {
+    const state = skip(startOver(), 'lidar')
+    expect(unskip(state, 'port')).toEqual(state)
+  })
+
+  it('never mutates the state it is given', () => {
+    const before = skip(startOver(), 'port')
+    unskip(before, 'port')
+    expect(before.steps).toHaveLength(1)
   })
 })

@@ -86,20 +86,55 @@ describe('the matrix', () => {
   })
 
   it('leaves the unverified and not-applicable rows absent', () => {
-    // reference/README.md: `bottom_mic_hole_pattern` is 🔴 unverified on the four
-    // home-button bodies, and `camera_bump_size` is ⚪ not applicable outside the
-    // six dual_diagonal_square models. Guessing either would be a wrong answer
+    // reference/README.md: `bottom_mic_hole_pattern` is 🔴 unverified on every
+    // model but the three whose bottom edge was photographed, and
+    // `camera_bump_size` is ⚪ not applicable outside the six
+    // dual_diagonal_square models. Guessing either would be a wrong answer
     // waiting to happen; absent is safe (§5.4).
-    for (const id of ['iphone-8', 'iphone-8-plus', 'iphone-se-2', 'iphone-se-3']) {
-      const model = models.find((candidate) => candidate.id === id)
-      expect(model?.attributes.bottom_mic_hole_pattern, id).toBeUndefined()
-    }
+    const counted = models.filter((model) => model.attributes.bottom_mic_hole_pattern)
+    expect(counted.map((model) => model.id)).toEqual([
+      'iphone-x',
+      'iphone-xs',
+      'iphone-xs-max',
+    ])
     const withBumpSize = models.filter((model) => model.attributes.camera_bump_size)
     expect(withBumpSize).toHaveLength(6)
     for (const model of withBumpSize) {
       expect(model.attributes.rear_camera_layout, model.id).toEqual([
         'dual_diagonal_square',
       ])
+    }
+  })
+})
+
+describe('no attribute value is a superset of another', () => {
+  it('never lets a truthful specific answer eliminate a model that is merely vaguer', () => {
+    // The regression this guards: `bottom_mic_hole_pattern` used to carry an
+    // `asymmetric` catch-all on 30 models alongside the three real counts. The
+    // matching rule treats values as mutually exclusive, so a technician who
+    // counted three and six on an iPhone 11 — exactly what the help text asks —
+    // eliminated it and was shown an iPhone XS.
+    //
+    // Stated generally (D-16): within one attribute, no value may describe a
+    // set of phones that another value also describes. A model that cannot be
+    // pinned to a specific value must be absent, not filed under a vaguer one.
+    //
+    // This catches the shape by naming convention — a value that extends
+    // another, as `asymmetric_three_six` extends `asymmetric`. That is a
+    // heuristic, not a proof: a catch-all named without the shared prefix would
+    // slip past it. It is worth having because the convention is what the
+    // schema already follows, and it makes the rule visible at the point
+    // someone would add the next value.
+    for (const attribute of attributes) {
+      for (const value of attribute.values) {
+        const vaguer = attribute.values.filter(
+          (other) => other !== value && value.startsWith(other),
+        )
+        expect(
+          vaguer,
+          `\`${value}\` reads as a special case of ${vaguer.map((v) => `\`${v}\``).join(', ')} on ${attribute.id}`,
+        ).toEqual([])
+      }
     }
   })
 })
