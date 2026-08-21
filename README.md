@@ -25,14 +25,16 @@ tablet on the same network.
 
 ## Scripts
 
-| Command              | Purpose                            |
-| -------------------- | ---------------------------------- |
-| `npm run dev`        | Dev server with hot reload         |
-| `npm run build`      | Type-check and build to `dist/`    |
-| `npm run preview`    | Serve the production build locally |
-| `npm test`           | Run the Vitest suite once          |
-| `npm run test:watch` | Vitest in watch mode               |
-| `npm run typecheck`  | Type-check without emitting        |
+| Command              | Purpose                                                       |
+| -------------------- | ------------------------------------------------------------- |
+| `npm run dev`        | Dev server with hot reload                                    |
+| `npm run build`      | Type-check and build to `dist/`                               |
+| `npm run preview`    | Serve the production build locally                            |
+| `npm test`           | Run the Vitest suite once                                     |
+| `npm run test:watch` | Vitest in watch mode                                          |
+| `npm run typecheck`  | Type-check without emitting                                   |
+| `npm run transcribe` | Regenerate `src/data/models.ts` from `reference/`             |
+| `npm run ci`         | Everything CI runs: format, lint, types, transcription, tests |
 
 The build uses relative asset paths, so `dist/` can be copied to a device and
 opened directly. The app has no backend and no runtime network dependency.
@@ -42,13 +44,21 @@ opened directly. The app has no backend and no runtime network dependency.
 ```
 SPEC.md          the specification — read this first
 reference/       Phase 1 research output: sourced model facts and images
+scripts/         build tooling — the reference/ -> src/data/ transcription
 src/data/        attribute definitions, questions, the model matrix
 src/engine/      pure TypeScript identification logic (no React)
 src/diagrams/    SVG components illustrating answer options
 src/ui/          screens
 ```
 
+## The matrix is generated
+
+`src/data/models.ts` is not hand-written. It is transcribed from
+`reference/models/<id>.md` by `npm run transcribe`, so every value in it traces
+to a cited source (SPEC.md D-11). Edit the reference file, then regenerate —
+CI fails if the two drift apart.
+
 ## Status
 
-Phase 0 — scaffolding complete. Phase 1 (sourced data collection) is next and
-runs in its own session; see SPEC.md §10.
+Phases 0-2 complete: scaffolding, sourced data collection, and the matrix plus
+the identification engine. Phase 3 (the identify UI) is next; see SPEC.md §10.

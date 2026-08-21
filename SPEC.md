@@ -1,6 +1,6 @@
 # iPhone Identifier — Specification
 
-**Status:** draft v1.1 · **Last updated:** 2026-08-19
+**Status:** draft v1.2 · **Last updated:** 2026-08-22
 
 A local web app that walks a repair-shop technician through a short series of
 questions about a phone's _visible_ characteristics until it identifies which
@@ -101,8 +101,10 @@ rather than guess or ask pointless questions:
 > **iPhone SE (2nd gen) or iPhone SE (3rd gen)** — these are externally
 > identical. No visible characteristic distinguishes them.
 
-There are **three** such groups, not one (§9): SE (2nd)/SE (3rd), iPhone 16/17 in black or
-white, and iPhone 16e/17e in black or white.
+There are **two** such groups, not one (§9): SE (2nd)/SE (3rd), and iPhone 16/17 in black
+or white. Phase 1 counted a third, iPhone 16e/17e, because it scored separability on
+visible characteristics alone — but `magsafe` is a matrix attribute and the engine uses
+it, so that pair does resolve. See §9.
 
 Where a non-visual tiebreaker exists and the device might power on, the app may
 suggest it (Settings → General → About → Model Name) — always as a hint, never
@@ -161,11 +163,14 @@ SPEC.md
 reference/            Phase 1 research output — sourced facts and images.
   models/<id>.md      Committed to the repo (D-13), not bundled into the build.
   images/
+scripts/
+  transcribe.js       reference/models/ -> src/data/models.ts (D-14)
 src/
   data/
+    types.ts          the shared data model (§5.4)
     attributes.ts     attribute ids and their allowed values
     questions.ts      question text, options, tiers, ordering hints
-    models.ts         the attribute matrix
+    models.ts         the attribute matrix — generated, not hand-written
   engine/
   diagrams/
   ui/
@@ -248,8 +253,15 @@ settled against that research and are no longer provisional.
 | `colour`             | descriptive palette values, per Phase 1 enumeration (§6.5)                                                                                                                                                                                            |
 
 `rear_camera_layout` is the strongest single question in the set — eleven values across
-37 models — and it subsumes `rear_camera_count`. Phase 2 should check whether the count
-question still earns its place or is pure redundancy.
+37 models — and it subsumes `rear_camera_count`.
+
+**Phase 2 checked whether the count question still earns its place. It does, but not as a
+question the engine ever chooses.** Across all 288 concrete devices the layout question
+always scores higher, so `rear_camera_count` is never asked and removing it changes no
+outcome. It is not redundant, though: the moment the layout is answered "Can't tell" the
+count becomes the top-scoring question on every device, and separability is unchanged —
+the same two terminal groups, the same 35 models resolving alone. It is kept as the
+fallback for §4.2, which is the case it exists for. Both results are asserted by test.
 
 **`sim_tray` identifies the market, not the model.** The tray moved from the right side
 to the left at the iPhone 12, and from the iPhone 14 onward a unit sold in the United
@@ -395,9 +407,10 @@ The algorithm is deterministic and must be covered by unit tests, including:
 
 - **every model is reachable** — for each model there exists an answer path
   leading to it alone, or to a documented terminal group (§4.4). Phase 1 checked this by
-  brute force over every _concrete device_ (one real value per attribute) and found 34 of
-  37 models resolve to exactly one; the test must assert the three groups in §9 and no
-  others, so that a data change which creates a fourth group fails the build;
+  brute force over every _concrete device_ (one real value per attribute); Phase 2 redid
+  it through the real engine and the real question set and found **35 of 37** models
+  resolve to exactly one. The test asserts the two groups in §9 and no others, so that a
+  data change which creates a third fails the build;
 - **colour layers agree** — every model's `attributes.colour` set equals the
   set of `colours[].value` (§5.4, §6.5);
 - **palette is closed** — every colour value used by a model exists in the
@@ -446,13 +459,23 @@ which is the two-tier split in D-03 earning its place:
 | iPhone 16 + iPhone 17                 | **nothing — terminal**                            |
 | iPhone 16e + iPhone 17e               | nothing visible — `magsafe` settles it off-screen |
 
-**After both tiers, three groups remain.** 34 of 37 models resolve to exactly one:
+The coarse-tier result is **reproduced exactly** by the Phase 2 engine over all 288
+concrete devices: the same seven groups, no more and no fewer. It is asserted by test.
+
+**After both tiers, two groups remain.** 35 of 37 models resolve to exactly one:
 
 | Terminal group       | Situation                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | SE (2nd) vs SE (3rd) | Externally identical. Expected; documented from the outset.                                                                                                                                                                                                                                                                                                                                                                                                 |
 | iPhone 16 vs 17      | Identical on every attribute in this spec when black or white. Height differs by 2 mm and the display by 0.2 inch — both below what §6.3 says a technician can judge. The 48MP Ultra Wide on the 17 was checked as a possible tell against Apple's product shots and the camera pills are the same. Colour separates them only on the non-shared finishes (16: Pink, Teal, Ultramarine · 17: Mist Blue, Sage, Lavender). **No workbench tiebreaker known.** |
-| iPhone 16e vs 17e    | Identical bodies, both notched, single lens, USB-C, Action button. Soft Pink is the only finish that separates them by sight. Solved off-screen by `magsafe` (§4.4).                                                                                                                                                                                                                                                                                        |
+
+**iPhone 16e vs 17e was on this list and is not any more.** Identical bodies, both notched,
+single lens, USB-C, Action button; Soft Pink is the only finish that separates them by
+sight. Phase 1 counted it terminal because it scored separability on what the eye can see.
+But §4.4 asks for the `magsafe` test precisely because it works on a dead phone, §6.2
+records the attribute for all 37 models, and the engine therefore asks it and resolves the
+pair. Deny the engine that one attribute and the group comes back — a test asserts both
+halves, so the pair's separability cannot quietly regress to resting on colour.
 
 There is no iPhone 17 Plus — the iPhone Air took that slot — so the iPhone 16 Plus has no
 equivalent twin at `max` size.
@@ -526,7 +549,38 @@ Neither blocks Phase 2: under §5.4 an absent value eliminates nothing, so an in
 matrix degrades to a larger candidate group rather than a wrong answer.
 
 **Phase 2 — data and engine.** Transcribe `reference/` into `src/data/`; build
-and unit-test the engine, including the reachability test in §7.
+and unit-test the engine, including the reachability test in §7. _(done)_
+
+**Phase 2 is done.** The matrix, the schema, the question set, the engine and 80 tests.
+
+_The matrix is generated, not typed._ `src/data/models.ts` is produced from
+`reference/models/<id>.md` by `npm run transcribe`, and `npm run transcribe:check` — which
+CI runs — fails if the committed file has drifted from the evidence layer. D-11 said no
+attribute may be written from memory; making the matrix a build output means none can be
+(D-14). The flags decide what crosses over: ✅ and 🟡 transcribe, 🔴 and ⚪ are dropped.
+That is **631 of the 666 rows** — the 31 ⚪ `camera_bump_size` and 4 🔴
+`bottom_mic_hole_pattern` rows are absent rather than guessed, which under §5.4 costs a
+larger candidate group and never a wrong answer.
+
+What Phase 2 changed in this spec, all of it from running the real engine over all 288
+concrete devices rather than from re-reading the research:
+
+- **§4.4 and §9: two terminal groups, not three.** iPhone 16e vs 17e resolves on
+  `magsafe`, exactly as §4.4 asks it to. Phase 1's count was of _visually_ terminal groups;
+  the engine is not limited to sight. 35 of 37 models now resolve alone, not 34.
+- **§6.1: `rear_camera_count` earns its place, as a fallback only.** Never chosen while
+  the layout question is answerable; the top-scoring question the moment it is not.
+- **§9's coarse-tier table is confirmed** — the same seven groups, reproduced by test.
+
+Two things the transcription surfaced that are worth a later look, neither blocking:
+
+- `(PRODUCT) RED` and `(PRODUCT)RED` both appear as marketing names in `reference/`. It is
+  display text only and the engine never matches on it (D-12), but it will read as
+  inconsistent on the reverse-lookup entry in Phase 5.
+- Six coarse and deep attributes — `home_button`, `action_button`, `frame_material_finish`,
+  `back_glass_finish`, `flash_position`, `lidar` — are never the best question on any
+  device, being subsumed by cheaper ones. They still earn their keep as "Can't tell"
+  fallbacks and as the reverse-lookup entry's content (§4.6), so none was removed.
 
 **Phase 3 — identify UI.** Question flow, can't-tell, back/start-over, answer
 trail, result and group screens.
@@ -541,21 +595,23 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 
 ## 11. Decisions log
 
-| #    | Decision                                                                                                                                                                                       |
-| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| D-01 | Coverage is iPhone 8 → iPhone 17e, including iPhone Air, 16e, and both SE generations. Extended from 36 to 37 models during Phase 1 when the iPhone 17e shipped.                               |
-| D-02 | Attribute matrix with dynamic question selection, not a hand-authored decision tree. Adding a model is one data row.                                                                           |
-| D-03 | Coarse questions by default; micro-detail questions behind an explicit "Narrow further" step.                                                                                                  |
-| D-04 | Vite + React + TypeScript, static build, offline-capable.                                                                                                                                      |
-| D-05 | Hand-drawn SVG schematics rather than photographs.                                                                                                                                             |
-| D-06 | Result screen shows the model name only.                                                                                                                                                       |
-| D-07 | Both US and international body variants are in scope; SIM-tray presence is a real discriminator.                                                                                               |
-| D-08 | Colour is a normal eliminating question, with rehousing caveats and an escape hatch (§6.4).                                                                                                    |
-| D-09 | "Can't tell" on every question; the engine routes around unavailable attributes and never eliminates on missing data.                                                                          |
-| D-10 | Size is expressed as five body-size classes with permitted overlap, never as measurements.                                                                                                     |
-| D-11 | Data verification (Phase 1) happens before any matrix authoring, in its own session, and everything is sourced. No model attribute may be written from memory — it must trace to `reference/`. |
-| D-12 | Colours carry both an Apple marketing name and a plain descriptive palette value. The engine matches on the descriptive value only (§6.5).                                                     |
-| D-13 | Phase 1 reference images are committed to the repo, not kept local. They are never imported into the build.                                                                                    |
+| #    | Decision                                                                                                                                                                                                               |
+| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| D-01 | Coverage is iPhone 8 → iPhone 17e, including iPhone Air, 16e, and both SE generations. Extended from 36 to 37 models during Phase 1 when the iPhone 17e shipped.                                                       |
+| D-02 | Attribute matrix with dynamic question selection, not a hand-authored decision tree. Adding a model is one data row.                                                                                                   |
+| D-03 | Coarse questions by default; micro-detail questions behind an explicit "Narrow further" step.                                                                                                                          |
+| D-04 | Vite + React + TypeScript, static build, offline-capable.                                                                                                                                                              |
+| D-05 | Hand-drawn SVG schematics rather than photographs.                                                                                                                                                                     |
+| D-06 | Result screen shows the model name only.                                                                                                                                                                               |
+| D-07 | Both US and international body variants are in scope; SIM-tray presence is a real discriminator.                                                                                                                       |
+| D-08 | Colour is a normal eliminating question, with rehousing caveats and an escape hatch (§6.4).                                                                                                                            |
+| D-09 | "Can't tell" on every question; the engine routes around unavailable attributes and never eliminates on missing data.                                                                                                  |
+| D-10 | Size is expressed as five body-size classes with permitted overlap, never as measurements.                                                                                                                             |
+| D-11 | Data verification (Phase 1) happens before any matrix authoring, in its own session, and everything is sourced. No model attribute may be written from memory — it must trace to `reference/`.                         |
+| D-12 | Colours carry both an Apple marketing name and a plain descriptive palette value. The engine matches on the descriptive value only (§6.5).                                                                             |
+| D-13 | Phase 1 reference images are committed to the repo, not kept local. They are never imported into the build.                                                                                                            |
+| D-14 | `src/data/models.ts` is generated from `reference/models/` by `npm run transcribe`, not hand-written, and CI fails if the two drift. D-11 becomes a build rule rather than a discipline.                               |
+| D-15 | The engine may use any recorded attribute to separate models, including ones that need an accessory rather than an eye (`magsafe`). Terminal ambiguity means the _matrix_ cannot separate them, not that sight cannot. |
 
 D-11 has already paid for itself twice, which is worth recording because both failures
 looked like solid data at the time:
