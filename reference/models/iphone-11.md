@@ -52,7 +52,7 @@
 | `light_green`     | Green                | Shade resolved per model — Apple reuses this bare name across generations at different shades. |
 | `yellow`          | Yellow               |                                                                                                |
 | `purple`          | Purple               |                                                                                                |
-| `red`             | (PRODUCT) RED        |                                                                                                |
+| `red`             | (PRODUCT)RED         |                                                                                                |
 | `white_silver`    | White                |                                                                                                |
 
 All marketing names from S1. Descriptive values per `reference/palette.md`.

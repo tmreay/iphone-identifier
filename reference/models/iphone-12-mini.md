@@ -51,7 +51,7 @@
 | ----------------- | -------------------- | ---------------------------------------------------------------------------------------------- |
 | `black`           | Black                |                                                                                                |
 | `white_silver`    | White                |                                                                                                |
-| `red`             | (PRODUCT) RED        |                                                                                                |
+| `red`             | (PRODUCT)RED         |                                                                                                |
 | `light_green`     | Green                | Shade resolved per model — Apple reuses this bare name across generations at different shades. |
 | `dark_blue`       | Blue                 | Shade resolved per model — Apple reuses this bare name across generations at different shades. |
 | `purple`          | Purple               |                                                                                                |

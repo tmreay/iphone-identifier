@@ -52,7 +52,7 @@
 | `black`           | Midnight             |                                                                                                |
 | `purple`          | Purple               |                                                                                                |
 | `white_silver`    | Starlight            |                                                                                                |
-| `red`             | (PRODUCT) RED        |                                                                                                |
+| `red`             | (PRODUCT)RED         |                                                                                                |
 | `light_blue`      | Blue                 | Shade resolved per model — Apple reuses this bare name across generations at different shades. |
 | `yellow`          | Yellow               |                                                                                                |
 

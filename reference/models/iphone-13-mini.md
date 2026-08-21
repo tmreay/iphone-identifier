@@ -49,7 +49,7 @@
 
 | Descriptive value | Apple marketing name | Note                                                                                           |
 | ----------------- | -------------------- | ---------------------------------------------------------------------------------------------- |
-| `red`             | (PRODUCT) RED        |                                                                                                |
+| `red`             | (PRODUCT)RED         |                                                                                                |
 | `white_silver`    | Starlight            |                                                                                                |
 | `black`           | Midnight             |                                                                                                |
 | `light_blue`      | Blue                 | Boundary shade: carries both values so neither answer can eliminate this model.                |

@@ -39,7 +39,7 @@ export const models: IPhoneModel[] = [
       { value: 'gold', marketing: 'Gold' },
       { value: 'white_silver', marketing: 'Silver' },
       { value: 'black', marketing: 'Space Gray' },
-      { value: 'red', marketing: '(PRODUCT) RED' },
+      { value: 'red', marketing: '(PRODUCT)RED' },
     ],
   },
   {
@@ -122,7 +122,7 @@ export const models: IPhoneModel[] = [
       lidar: ['absent'],
     },
     colours: [
-      { value: 'red', marketing: '(PRODUCT) RED' },
+      { value: 'red', marketing: '(PRODUCT)RED' },
       { value: 'yellow', marketing: 'Yellow' },
       { value: 'white_silver', marketing: 'White' },
       { value: 'coral', marketing: 'Coral' },
@@ -215,7 +215,7 @@ export const models: IPhoneModel[] = [
       { value: 'light_green', marketing: 'Green' },
       { value: 'yellow', marketing: 'Yellow' },
       { value: 'purple', marketing: 'Purple' },
-      { value: 'red', marketing: '(PRODUCT) RED' },
+      { value: 'red', marketing: '(PRODUCT)RED' },
       { value: 'white_silver', marketing: 'White' },
     ],
   },
@@ -302,7 +302,7 @@ export const models: IPhoneModel[] = [
     colours: [
       { value: 'black', marketing: 'Black' },
       { value: 'white_silver', marketing: 'White' },
-      { value: 'red', marketing: '(PRODUCT) RED' },
+      { value: 'red', marketing: '(PRODUCT)RED' },
       { value: 'light_green', marketing: 'Green' },
       { value: 'dark_blue', marketing: 'Blue' },
       { value: 'purple', marketing: 'Purple' },
@@ -333,7 +333,7 @@ export const models: IPhoneModel[] = [
     colours: [
       { value: 'black', marketing: 'Black' },
       { value: 'white_silver', marketing: 'White' },
-      { value: 'red', marketing: '(PRODUCT) RED' },
+      { value: 'red', marketing: '(PRODUCT)RED' },
       { value: 'light_green', marketing: 'Green' },
       { value: 'dark_blue', marketing: 'Blue' },
       { value: 'purple', marketing: 'Purple' },
@@ -422,7 +422,7 @@ export const models: IPhoneModel[] = [
     colours: [
       { value: 'black', marketing: 'Black' },
       { value: 'white_silver', marketing: 'White' },
-      { value: 'red', marketing: '(PRODUCT) RED' },
+      { value: 'red', marketing: '(PRODUCT)RED' },
     ],
   },
   {
@@ -457,7 +457,7 @@ export const models: IPhoneModel[] = [
       lidar: ['absent'],
     },
     colours: [
-      { value: 'red', marketing: '(PRODUCT) RED' },
+      { value: 'red', marketing: '(PRODUCT)RED' },
       { value: 'white_silver', marketing: 'Starlight' },
       { value: 'black', marketing: 'Midnight' },
       { value: 'light_blue', marketing: 'Blue' },
@@ -498,7 +498,7 @@ export const models: IPhoneModel[] = [
       lidar: ['absent'],
     },
     colours: [
-      { value: 'red', marketing: '(PRODUCT) RED' },
+      { value: 'red', marketing: '(PRODUCT)RED' },
       { value: 'white_silver', marketing: 'Starlight' },
       { value: 'black', marketing: 'Midnight' },
       { value: 'light_blue', marketing: 'Blue' },
@@ -594,7 +594,7 @@ export const models: IPhoneModel[] = [
       { value: 'black', marketing: 'Midnight' },
       { value: 'purple', marketing: 'Purple' },
       { value: 'white_silver', marketing: 'Starlight' },
-      { value: 'red', marketing: '(PRODUCT) RED' },
+      { value: 'red', marketing: '(PRODUCT)RED' },
       { value: 'light_blue', marketing: 'Blue' },
       { value: 'yellow', marketing: 'Yellow' },
     ],
@@ -626,7 +626,7 @@ export const models: IPhoneModel[] = [
       { value: 'black', marketing: 'Midnight' },
       { value: 'purple', marketing: 'Purple' },
       { value: 'white_silver', marketing: 'Starlight' },
-      { value: 'red', marketing: '(PRODUCT) RED' },
+      { value: 'red', marketing: '(PRODUCT)RED' },
       { value: 'light_blue', marketing: 'Blue' },
       { value: 'yellow', marketing: 'Yellow' },
     ],
@@ -712,7 +712,7 @@ export const models: IPhoneModel[] = [
       lidar: ['absent'],
     },
     colours: [
-      { value: 'red', marketing: '(PRODUCT) RED' },
+      { value: 'red', marketing: '(PRODUCT)RED' },
       { value: 'white_silver', marketing: 'Starlight' },
       { value: 'black', marketing: 'Midnight' },
     ],

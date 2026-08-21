@@ -575,7 +575,7 @@ matrix degrades to a larger candidate group rather than a wrong answer.
 **Phase 2 — data and engine.** Transcribe `reference/` into `src/data/`; build
 and unit-test the engine, including the reachability test in §7. _(done)_
 
-**Phase 2 is done.** The matrix, the schema, the question set, the engine and 98 tests.
+**Phase 2 is done.** The matrix, the schema, the question set, the engine and 100 tests.
 
 _The matrix is generated, not typed._ `src/data/models.ts` is produced from
 `reference/models/<id>.md` by `npm run transcribe`, and `npm run transcribe:check` — which
@@ -587,7 +587,14 @@ That is **601 of the 666 rows** — the 31 ⚪ `camera_bump_size` and 34 🔴
 larger candidate group and never a wrong answer.
 
 What Phase 2 changed in this spec, all of it from running the real engine over all 288
-concrete devices rather than from re-reading the research:
+concrete devices rather than from re-reading the research (plus one the transcription surfaced):
+
+- **`(PRODUCT)RED` has no space.** Phase 1 wrote it eleven ways with a space and once
+  without. Checked in Phase 2 against the Apple tech-spec pages already cited as the
+  source: the odd one out was the correct one. Marketing names never narrow the candidate
+  set (D-12), but the reverse-lookup entry displays them (§4.6), so one product reading two
+  ways would look like a data error to whoever is checking a phone against it. Both the
+  spelling and the general "one marketing name, one spelling" rule are pinned by test.
 
 - **§4.4 and §9: two terminal groups, not three.** iPhone 16e vs 17e resolves on
   `magsafe`, exactly as §4.4 asks it to. Phase 1's count was of _visually_ terminal groups;
@@ -624,11 +631,8 @@ again, now with no skip step left for the screen to offer. Verified over all 288
 devices that the additive reading changes no outcome and lets no deep question into the
 main flow.
 
-Two things the transcription surfaced that are worth a later look, neither blocking:
+One thing the transcription surfaced that is worth a later look, not blocking:
 
-- `(PRODUCT) RED` and `(PRODUCT)RED` both appear as marketing names in `reference/`. It is
-  display text only and the engine never matches on it (D-12), but it will read as
-  inconsistent on the reverse-lookup entry in Phase 5.
 - Six coarse and deep attributes — `home_button`, `action_button`, `frame_material_finish`,
   `back_glass_finish`, `flash_position`, `lidar` — are never the best question on any
   device, being subsumed by cheaper ones. They still earn their keep as "Can't tell"

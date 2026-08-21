@@ -148,6 +148,38 @@ describe('colour layers agree (§5.4, §6.5)', () => {
     }
   })
 
+  it('spells each marketing name one way across the whole matrix', () => {
+    // Phase 1 wrote `(PRODUCT)RED` eleven ways with a space and once without.
+    // The engine never matches on marketing names (D-12), so it cost nothing —
+    // but the reverse-lookup entry (§4.6) shows them, and one product reading
+    // two ways looks like a data error to whoever is checking a phone against it.
+    const byNormalised = new Map<string, Set<string>>()
+    for (const model of models) {
+      for (const colour of model.colours) {
+        const normalised = colour.marketing.toLowerCase().replace(/\s+/g, '')
+        const spellings = byNormalised.get(normalised) ?? new Set()
+        spellings.add(colour.marketing)
+        byNormalised.set(normalised, spellings)
+      }
+    }
+    for (const [normalised, spellings] of byNormalised) {
+      expect([...spellings], `${normalised} is spelled more than one way`).toHaveLength(
+        1,
+      )
+    }
+  })
+
+  it('uses Apple’s own styling for (PRODUCT)RED — no space', () => {
+    // Verified against the tech-spec pages cited as S1: the iPhone 8 Plus page
+    // has the literal `(PRODUCT)RED&trade;`, the iPhone 11 page renders it
+    // `(PRODUCT)<sup>RED</sup>`. See reference/palette.md.
+    const reds = models.flatMap((model) =>
+      model.colours.filter((colour) => colour.marketing.includes('PRODUCT')),
+    )
+    expect(reds.length).toBeGreaterThan(0)
+    for (const red of reds) expect(red.marketing).toBe('(PRODUCT)RED')
+  })
+
   it('gives every colour a marketing name', () => {
     for (const model of models) {
       expect(model.colours.length, model.id).toBeGreaterThan(0)

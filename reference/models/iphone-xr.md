@@ -48,7 +48,7 @@
 
 | Descriptive value | Apple marketing name | Note                                                                                           |
 | ----------------- | -------------------- | ---------------------------------------------------------------------------------------------- |
-| `red`             | (PRODUCT) RED        |                                                                                                |
+| `red`             | (PRODUCT)RED         |                                                                                                |
 | `yellow`          | Yellow               |                                                                                                |
 | `white_silver`    | White                |                                                                                                |
 | `coral`           | Coral                |                                                                                                |
