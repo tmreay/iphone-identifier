@@ -155,6 +155,22 @@ describe("revisiting a Can't tell (§4.2)", () => {
     const state = skip(startOver(), 'colour')
     expect(resolve(twins, colourQuestion, state).revisitable).toEqual([])
   })
+
+  it('does not offer a skip the current tier could not ask again (D-18)', () => {
+    // A deep question skipped while still on the coarse tier. No sequence of
+    // taps reaches this — deep questions are only asked on the deep tier
+    // (D-03) — but a caller assembling its own state can, and Phase 3 restoring
+    // a saved session is that caller. Offering it here would name an attribute
+    // that `unskip` puts back into a pool the coarse tier does not consult.
+    const state = skip(startOver(), 'lidar')
+    expect(state.tier).toBe('coarse')
+    expect(resolve(models, questions, state).revisitable).toEqual([])
+
+    // The same skip on the deep tier is a real offer, and stays one.
+    expect(resolve(models, questions, narrowFurther(state)).revisitable).toEqual([
+      'lidar',
+    ])
+  })
 })
 
 describe('unskip (§4.2)', () => {
