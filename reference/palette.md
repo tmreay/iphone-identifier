@@ -15,7 +15,7 @@ text for the reverse-lookup entry and for talking to suppliers.
 | `black`           | Space Gray, Black, Graphite, Midnight, Space Black, Black Titanium      | 35            |
 | `white_silver`    | Silver, White, Starlight, White Titanium, Natural Titanium, Cloud White | 39            |
 | `gold`            | Gold, Desert Titanium, Light Gold                                       | 15            |
-| `red`             | (PRODUCT) RED                                                           | 12            |
+| `red`             | (PRODUCT)RED                                                            | 12            |
 | `pink`            | Pink, Soft Pink                                                         | 7             |
 | `purple`          | Purple, Deep Purple, Lavender                                           | 8             |
 | `light_blue`      | Blue (XR, 13, 14, 15), Sierra Blue, Sky Blue, Mist Blue                 | 11            |
@@ -52,6 +52,13 @@ place the palette is deliberately finer than "one word per hue".
 **Apple's bare "Blue" and "Green" resolve per model.** Apple reused both names
 across generations at very different shades, so the mapping is per model rather
 than global — see the `SHADE` table in the generator, and the per-model files.
+
+**`(PRODUCT)RED` has no space, and that is not a typo.** Phase 1 wrote it eleven
+ways with a space and once without. Checked against the cited Apple tech-spec
+pages in Phase 2: the iPhone 8 Plus page carries the literal `(PRODUCT)RED&trade;`
+and the iPhone 11 page renders it `(PRODUCT)<sup>RED</sup>` — superscript markup,
+not a space. The odd one out was the correct one. A test pins the spelling so it
+does not drift back.
 
 ## Known risks
 

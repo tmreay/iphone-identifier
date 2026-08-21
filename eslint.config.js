@@ -34,10 +34,10 @@ export default tseslint.config(
     },
   },
 
-  // Config files at the repo root run in Node and sit outside tsconfig, so
-  // they get plain (non type-aware) linting.
+  // Config files at the repo root and the build scripts run in Node and sit
+  // outside tsconfig, so they get plain (non type-aware) linting.
   {
-    files: ['*.{js,ts}'],
+    files: ['*.{js,ts}', 'scripts/**/*.js'],
     extends: [js.configs.recommended, tseslint.configs.recommended],
     languageOptions: {
       ecmaVersion: 2022,

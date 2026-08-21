@@ -50,7 +50,7 @@
 | ----------------- | -------------------- | ---- |
 | `black`           | Black                |      |
 | `white_silver`    | White                |      |
-| `red`             | (PRODUCT) RED        |      |
+| `red`             | (PRODUCT)RED         |      |
 
 All marketing names from S1. Descriptive values per `reference/palette.md`.
 

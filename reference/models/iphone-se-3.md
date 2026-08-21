@@ -48,7 +48,7 @@
 
 | Descriptive value | Apple marketing name | Note |
 | ----------------- | -------------------- | ---- |
-| `red`             | (PRODUCT) RED        |      |
+| `red`             | (PRODUCT)RED         |      |
 | `white_silver`    | Starlight            |      |
 | `black`           | Midnight             |      |
 

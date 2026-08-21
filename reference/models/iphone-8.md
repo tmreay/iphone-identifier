@@ -51,7 +51,7 @@
 | `gold`            | Gold                 |      |
 | `white_silver`    | Silver               |      |
 | `black`           | Space Gray           |      |
-| `red`             | (PRODUCT) RED        |      |
+| `red`             | (PRODUCT)RED         |      |
 
 All marketing names from S1. Descriptive values per `reference/palette.md`.
 

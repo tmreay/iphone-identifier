@@ -30,7 +30,8 @@ into the matrix from memory.
   was attached to. All six diagonal-dual models are now measured off the product shots
   with each body normalised to the same width.
 - `bottom_mic_hole_pattern` is photographed and verified for the iPhone X,
-  XS and XS Max — see `images/ifixit/` — and carries no value on the other 34 models.
+  XS and XS Max — see `images/ifixit/` — and carries no value on the other 34 models
+  (Phase 2 removed the `asymmetric` generalisation the other 30 used to carry; see below).
   The XS Max value was **corrected** from the photograph: Phase 1 had copied the XS's
   three/six across, and the Max is actually four/seven (SPEC.md §11).
 - Separability was checked by brute force. After both tiers three groups remain
@@ -64,15 +65,24 @@ Roughly where each flag falls:
 - **⚪ not applicable** covers 31 rows, all `camera_bump_size` outside the
   `dual_diagonal_square` family. The value is relative to a layout family (SPEC.md §6.2),
   so outside that family there is nothing to compare against and no value to find.
-- **🔴 unverified** covers 4 rows: `bottom_mic_hole_pattern` on the home-button bodies
-  (8, 8 Plus, SE 2nd, SE 3rd). Those phones do have a hole pattern; it was simply never
-  researched, because the attribute only discriminates inside the X / XS / XS Max group.
+- **🔴 unverified** covers 34 rows: `bottom_mic_hole_pattern` on every model but the three
+  whose bottom edge was photographed. Those phones do have a hole pattern; nobody counted
+  it, because the attribute only discriminates inside the X / XS / XS Max group.
   **Do not transcribe these into `src/data/models.ts`** — leave them absent.
 
-One flag is worth questioning in Phase 2: the 30 models carrying a bare `asymmetric`
-`bottom_mic_hole_pattern` are marked 🟡, but their Source column is `—`. Nothing was
-consulted; the value is a generalisation from the iPhone X onward. It is harmless because
-the attribute only discriminates within the X / XS / XS Max group, but by the standard set
-out above it is closer to 🔴 than 🟡.
+**Settled in Phase 2.** This file used to end by questioning one flag: the 30 models
+carrying a bare `asymmetric` `bottom_mic_hole_pattern` were marked 🟡 with `—` in the
+Source column, which by the standard above is closer to 🔴. It called them harmless. They
+were not.
 
-Row totals across the 37 models: **498 verified, 133 inferred, 31 not applicable, 4 unverified.**
+A catch-all cannot coexist with the SPEC.md §5.4 matching rule, which treats an attribute's
+values as mutually exclusive. `asymmetric` was therefore not a vaguer version of
+`asymmetric_three_six` — it was a rival to it. A technician who counted three holes then
+six on an iPhone 11, exactly as the question asks, eliminated the iPhone 11 and was shown
+an iPhone XS. Sixty model pairs sat in that position.
+
+All 30 rows are now 🔴 and the value is absent from the matrix, which eliminates nothing.
+The rule this produced is D-16: **a model that cannot be pinned to a specific value is
+recorded absent, never filed under a vaguer one.**
+
+Row totals across the 37 models: **498 verified, 103 inferred, 31 not applicable, 34 unverified.**
