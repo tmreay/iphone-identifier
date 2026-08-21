@@ -763,3 +763,39 @@ looked like solid data at the time:
   ship in the build, this is low risk — but if the repo ever goes public it
   needs revisiting. _Record the source URL for each image in
   `reference/models/<id>.md` so this stays traceable._
+- **A candidate strip along the top of the identify flow**, showing all 37
+  models and dimming each as it is eliminated. Raised after Phase 3; deferred
+  rather than declined, and worth splitting in two because the halves cost very
+  different things.
+
+  The **narrowing** half is cheap and already sanctioned: §4.1 step 3 asks for a
+  live count, and a row of model names that dims is that count made legible. It
+  needs no new assets and could land any time.
+
+  The **pictures** half is the one to think about, for three reasons:
+
+  - **It would ship the reference images.** The 37 shots in
+    `reference/images/apple/` are Apple's product shots, and the bullet above
+    calls redistribution low risk _because_ D-13 and §8 keep them out of the
+    build. A picture strip reverses that, on every device the app is copied to.
+    That is a decision to take deliberately, not as a side effect of a UI change.
+  - **Nothing planned draws models.** §8 draws one SVG per _answer option_ —
+    layouts, cutouts, size silhouettes. Per-model artwork is 37 drawings the
+    plan does not otherwise call for.
+  - **It is weakest where it is needed most.** 35 of 37 models resolve alone
+    (§9), so on most runs the strip is decoration that empties out. It earns its
+    keep on the group screens — and those are the pairs §9 records as identical
+    on every attribute here. Their pictures would be indistinguishable, and 13
+    vs 14 needed both bodies normalised to the same width before the difference
+    was visible at all.
+
+  There is also a softer tension, worth stating because it shapes the design
+  rather than settling it: prompts deliberately describe what is in the
+  technician's hand and never which model it might be (`questions.ts`). A
+  standing wall of model photos invites matching the phone against pictures
+  instead of answering the question, which is the failure mode §1 opens with.
+  That argues for the strip being a _readout_ of narrowing rather than a lookup
+  surface.
+
+  _Leaning: revisit after Phase 5, when reverse lookup has settled what a
+  per-model visual is and the image question above has an answer._
