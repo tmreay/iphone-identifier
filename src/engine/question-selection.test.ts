@@ -161,14 +161,21 @@ describe('availableQuestions', () => {
     question('home_button', ['present']),
   ]
 
-  it('offers only the active tier', () => {
+  it('never offers a deep question in the main flow (§4.3, D-03)', () => {
     expect(availableQuestions(set, coarse).map((q) => q.id)).toEqual([
       'port',
       'home_button',
     ])
+  })
+
+  it('adds deep questions rather than hiding coarse ones', () => {
+    // §4.3 constrains deep questions, not coarse ones. On an ordinary run this
+    // is invisible — the coarse tier only exhausts once nothing coarse is left
+    // to ask — but it is what lets `unskip` revive a coarse question from a
+    // deep-tier group screen.
     expect(
       availableQuestions(set, { steps: [], tier: 'deep' }).map((q) => q.id),
-    ).toEqual(['lidar'])
+    ).toEqual(['port', 'lidar', 'home_button'])
   })
 
   it('drops anything already answered', () => {

@@ -93,6 +93,15 @@ frame finish, flash placement. They are never asked in the main flow. They are
 offered only when the coarse tier leaves more than one candidate, on an explicit
 _Narrow further_ tap.
 
+**The deep tier adds questions; it does not take the coarse ones away** (D-17).
+The constraint above is on deep questions, and reads as one. On an ordinary run
+the difference is invisible — the coarse tier only ends once nothing coarse can
+split the candidates, and narrowing further cannot revive one — so it shows up
+in exactly one place: a group screen offering to revisit a coarse question the
+technician skipped (§4.2). Under a strict reading that question came back to a
+pool the flow would never consult again, so the offer did nothing and the
+question could not be reached again without starting over.
+
 ### 4.4 Terminal ambiguity
 
 Some pairs cannot be separated visually at all. The app must state this plainly
@@ -408,7 +417,9 @@ to the reverse-lookup entry.
 
 Given the current candidate set:
 
-1. Consider only unanswered, unskipped questions of the active tier.
+1. Consider only unanswered, unskipped questions the active tier permits. The
+   coarse tier permits coarse questions only; **the deep tier is additive** and
+   permits both (§4.3, D-17).
 2. Score each by **information gain** — the expected reduction in candidate
    count, treating remaining models as equally likely.
 3. Break ties by `priority`, so quick whole-hand checks (home button, port,
@@ -564,7 +575,7 @@ matrix degrades to a larger candidate group rather than a wrong answer.
 **Phase 2 — data and engine.** Transcribe `reference/` into `src/data/`; build
 and unit-test the engine, including the reachability test in §7. _(done)_
 
-**Phase 2 is done.** The matrix, the schema, the question set, the engine and 93 tests.
+**Phase 2 is done.** The matrix, the schema, the question set, the engine and 98 tests.
 
 _The matrix is generated, not typed._ `src/data/models.ts` is produced from
 `reference/models/<id>.md` by `npm run transcribe`, and `npm run transcribe:check` — which
@@ -602,6 +613,17 @@ _states_ did not actually hold in code. All three are fixed and pinned by test:
   scored 2.2e-16 on a question that cannot separate them — enough to make the §4.2 result
   screen offer a revisit that provably cannot help. All three now call one `splits` helper.
 
+A second review then found that the `unskip` added for the fourth finding had the same
+shape as the rest: a coarse question revived from a deep-tier group screen went back to a
+pool the flow would never consult, so the revisit offer did nothing and the question could
+not be reached again without starting over. §4.3 and §7 now say the deep tier is additive
+(D-17), which is the reading the section already supported. Rewinding `state.tier` in
+`unskip` was the obvious alternative and is a trap: `back()` decides the tier by comparing
+it against the last step's, so it flips straight back to deep — stranding the question
+again, now with no skip step left for the screen to offer. Verified over all 288 concrete
+devices that the additive reading changes no outcome and lets no deep question into the
+main flow.
+
 Two things the transcription surfaced that are worth a later look, neither blocking:
 
 - `(PRODUCT) RED` and `(PRODUCT)RED` both appear as marketing names in `reference/`. It is
@@ -625,24 +647,25 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 
 ## 11. Decisions log
 
-| #    | Decision                                                                                                                                                                                                                                                                                                                                                                                                               |
-| ---- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| D-01 | Coverage is iPhone 8 → iPhone 17e, including iPhone Air, 16e, and both SE generations. Extended from 36 to 37 models during Phase 1 when the iPhone 17e shipped.                                                                                                                                                                                                                                                       |
-| D-02 | Attribute matrix with dynamic question selection, not a hand-authored decision tree. Adding a model is one data row.                                                                                                                                                                                                                                                                                                   |
-| D-03 | Coarse questions by default; micro-detail questions behind an explicit "Narrow further" step.                                                                                                                                                                                                                                                                                                                          |
-| D-04 | Vite + React + TypeScript, static build, offline-capable.                                                                                                                                                                                                                                                                                                                                                              |
-| D-05 | Hand-drawn SVG schematics rather than photographs.                                                                                                                                                                                                                                                                                                                                                                     |
-| D-06 | Result screen shows the model name only.                                                                                                                                                                                                                                                                                                                                                                               |
-| D-07 | Both US and international body variants are in scope; SIM-tray presence is a real discriminator.                                                                                                                                                                                                                                                                                                                       |
-| D-08 | Colour is a normal eliminating question, with rehousing caveats and an escape hatch (§6.4).                                                                                                                                                                                                                                                                                                                            |
-| D-09 | "Can't tell" on every question; the engine routes around unavailable attributes and never eliminates on missing data.                                                                                                                                                                                                                                                                                                  |
-| D-10 | Size is expressed as five body-size classes with permitted overlap, never as measurements.                                                                                                                                                                                                                                                                                                                             |
-| D-11 | Data verification (Phase 1) happens before any matrix authoring, in its own session, and everything is sourced. No model attribute may be written from memory — it must trace to `reference/`.                                                                                                                                                                                                                         |
-| D-12 | Colours carry both an Apple marketing name and a plain descriptive palette value. The engine matches on the descriptive value only (§6.5).                                                                                                                                                                                                                                                                             |
-| D-13 | Phase 1 reference images are committed to the repo, not kept local. They are never imported into the build.                                                                                                                                                                                                                                                                                                            |
-| D-14 | `src/data/models.ts` is generated from `reference/models/` by `npm run transcribe`, not hand-written, and CI fails if the two drift. D-11 becomes a build rule rather than a discipline.                                                                                                                                                                                                                               |
-| D-15 | The engine may use any recorded attribute to separate models, including ones that need an accessory rather than an eye (`magsafe`). Terminal ambiguity means the _matrix_ cannot separate them, not that sight cannot.                                                                                                                                                                                                 |
-| D-16 | No attribute may carry a catch-all value covering models that a specific value also covers. §5.4 matches values as mutually exclusive, so a catch-all is a rival to the specific values, not a weaker form of them: a truthful specific answer eliminates every model filed under the generic one. A model that cannot be pinned to a specific value is recorded **absent**. Enforced by test across the whole schema. |
+| #    | Decision                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| D-01 | Coverage is iPhone 8 → iPhone 17e, including iPhone Air, 16e, and both SE generations. Extended from 36 to 37 models during Phase 1 when the iPhone 17e shipped.                                                                                                                                                                                                                                                         |
+| D-02 | Attribute matrix with dynamic question selection, not a hand-authored decision tree. Adding a model is one data row.                                                                                                                                                                                                                                                                                                     |
+| D-03 | Coarse questions by default; micro-detail questions behind an explicit "Narrow further" step.                                                                                                                                                                                                                                                                                                                            |
+| D-04 | Vite + React + TypeScript, static build, offline-capable.                                                                                                                                                                                                                                                                                                                                                                |
+| D-05 | Hand-drawn SVG schematics rather than photographs.                                                                                                                                                                                                                                                                                                                                                                       |
+| D-06 | Result screen shows the model name only.                                                                                                                                                                                                                                                                                                                                                                                 |
+| D-07 | Both US and international body variants are in scope; SIM-tray presence is a real discriminator.                                                                                                                                                                                                                                                                                                                         |
+| D-08 | Colour is a normal eliminating question, with rehousing caveats and an escape hatch (§6.4).                                                                                                                                                                                                                                                                                                                              |
+| D-09 | "Can't tell" on every question; the engine routes around unavailable attributes and never eliminates on missing data.                                                                                                                                                                                                                                                                                                    |
+| D-10 | Size is expressed as five body-size classes with permitted overlap, never as measurements.                                                                                                                                                                                                                                                                                                                               |
+| D-11 | Data verification (Phase 1) happens before any matrix authoring, in its own session, and everything is sourced. No model attribute may be written from memory — it must trace to `reference/`.                                                                                                                                                                                                                           |
+| D-12 | Colours carry both an Apple marketing name and a plain descriptive palette value. The engine matches on the descriptive value only (§6.5).                                                                                                                                                                                                                                                                               |
+| D-13 | Phase 1 reference images are committed to the repo, not kept local. They are never imported into the build.                                                                                                                                                                                                                                                                                                              |
+| D-14 | `src/data/models.ts` is generated from `reference/models/` by `npm run transcribe`, not hand-written, and CI fails if the two drift. D-11 becomes a build rule rather than a discipline.                                                                                                                                                                                                                                 |
+| D-15 | The engine may use any recorded attribute to separate models, including ones that need an accessory rather than an eye (`magsafe`). Terminal ambiguity means the _matrix_ cannot separate them, not that sight cannot.                                                                                                                                                                                                   |
+| D-16 | No attribute may carry a catch-all value covering models that a specific value also covers. §5.4 matches values as mutually exclusive, so a catch-all is a rival to the specific values, not a weaker form of them: a truthful specific answer eliminates every model filed under the generic one. A model that cannot be pinned to a specific value is recorded **absent**. Enforced by test across the whole schema.   |
+| D-17 | The deep tier is **additive**: it adds deep questions rather than hiding coarse ones. §4.3 constrains deep questions only, so `tier` records how far the technician has agreed to go, not which questions can be reached. Keeping it out of reachability is what lets `unskip` revive a coarse question without rewinding the tier — and `back()` would flip a rewound tier straight back, stranding the question again. |
 
 D-11 has already paid for itself twice, which is worth recording because both failures
 looked like solid data at the time:

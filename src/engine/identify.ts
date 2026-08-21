@@ -54,6 +54,12 @@ export function skip(state: IdentifyState, attribute: AttributeId): IdentifyStat
  * Removing the step rather than recording a value is deliberate: the question
  * returns to the pool and the selector offers it again when it is the most
  * useful thing to ask, which may be immediately.
+ *
+ * Deliberately leaves `state.tier` alone. Reviving a coarse question from a
+ * deep-tier group screen works because the deep tier is additive
+ * (`availableQuestions`), not because this rewinds the tier — rewinding would
+ * make `back()` flip straight back to deep and strand the question again, this
+ * time with no skip step left for the result screen to offer.
  */
 export function unskip(state: IdentifyState, attribute: AttributeId): IdentifyState {
   return {

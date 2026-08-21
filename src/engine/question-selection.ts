@@ -2,7 +2,9 @@
  * Question selection — SPEC.md §7.
  *
  * Given the current candidate set:
- *   1. consider only unanswered, unskipped questions of the active tier;
+ *   1. consider only unanswered, unskipped questions the active tier permits —
+ *      coarse only in the main flow, coarse *and* deep once the technician has
+ *      tapped "Narrow further" (see `availableQuestions`);
  *   2. score each by information gain — the expected reduction in candidate
  *      count, treating remaining models as equally likely;
  *   3. break ties by `priority`, so quick whole-hand checks win over checks
@@ -96,14 +98,36 @@ export function scoreQuestion(
   }
 }
 
-/** Questions still in play for `state`: right tier, not answered, not skipped. */
+/**
+ * Questions still in play for `state`: not answered, not skipped, and permitted
+ * by the current tier.
+ *
+ * **The deep tier is additive.** §4.3 constrains deep questions — "never asked
+ * in the main flow", offered only on an explicit _Narrow further_ tap — and says
+ * nothing about coarse ones. So the tier gates what the deep tier *adds*, rather
+ * than hiding what came before it.
+ *
+ * That distinction is invisible on an ordinary run: the coarse tier only
+ * exhausts once no unsettled coarse question can split the set, and narrowing
+ * further cannot revive one, so by the time the deep tier opens there is nothing
+ * coarse left to offer. It matters when `unskip` puts a coarse question back
+ * (§4.2). Under a strict same-tier filter that question returned to a pool the
+ * flow would never consult again, so the revisit offer did nothing and the
+ * question became unreachable without starting over.
+ *
+ * Fixing it here rather than by rewinding `state.tier` in `unskip` keeps the
+ * tier meaning one thing — how far the technician has agreed to go — instead of
+ * doubling as a reachability filter that `back()` could then flip.
+ */
 export function availableQuestions(
   questions: Question[],
   state: IdentifyState,
 ): Question[] {
   const settled = new Set<AttributeId>(state.steps.map((step) => step.attribute))
   return questions.filter(
-    (question) => question.tier === state.tier && !settled.has(question.id),
+    (question) =>
+      !settled.has(question.id) &&
+      (state.tier === 'deep' || question.tier === 'coarse'),
   )
 }
 

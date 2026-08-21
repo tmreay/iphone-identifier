@@ -207,4 +207,44 @@ describe('unskip (§4.2)', () => {
     unskip(before, 'port')
     expect(before.steps).toHaveLength(1)
   })
+
+  describe('revisiting a coarse skip from the deep tier', () => {
+    // The case the same-tier tests missed. A group screen on the deep tier can
+    // name a coarse skip as revisitable, so unskipping it has to actually put
+    // the question back in front of the technician.
+    const reachDeep = () => narrowFurther(skip(startOver(), 'port'))
+
+    it('asks the coarse question again rather than stranding it', () => {
+      const stranded = reachDeep()
+      expect(resolve(models, questions, stranded).revisitable).toContain('port')
+
+      const revived = unskip(stranded, 'port')
+      expect(resolve(models, questions, revived).question?.id).toBe('port')
+    })
+
+    it('narrows on the revived answer', () => {
+      const revived = answer(unskip(reachDeep(), 'port'), 'port', 'lightning')
+      const result = resolve(models, questions, revived)
+      expect(result.status).toBe('resolved')
+      expect(result.candidates.map((candidate) => candidate.id)).toEqual(['c'])
+    })
+
+    it('leaves the tier alone, so Back cannot strand the question again', () => {
+      // Rewinding the tier here would look right and then fail one tap later:
+      // `back()` compares the tier against the last step's, so it would flip
+      // straight back to deep — with the skip step now gone, leaving the
+      // question neither offered nor revisitable.
+      const revived = unskip(reachDeep(), 'port')
+      expect(revived.tier).toBe('deep')
+      expect(resolve(models, questions, back(revived)).question?.id).toBe('port')
+    })
+
+    it('keeps deep answers working after a coarse question is revived', () => {
+      const state = answer(unskip(reachDeep(), 'port'), 'lidar', 'absent')
+      expect(resolve(models, questions, state).candidates.map((c) => c.id)).toEqual([
+        'b',
+        'c',
+      ])
+    })
+  })
 })
