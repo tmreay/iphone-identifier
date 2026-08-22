@@ -294,3 +294,75 @@ code {
   font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
   font-size: 0.9em;
 }
+
+/* --- Diagrams (SPEC.md §8) ---------------------------------------------- */
+
+/*
+ * Two colours and no more: `currentColor` for the schematic line work, one
+ * accent for the feature the question is about. Setting `color` here rather
+ * than on each drawing means the whole set follows the theme, light and dark,
+ * without a single colour literal inside an SVG.
+ */
+.diagram {
+  flex: 0 0 auto;
+  width: 6.25rem;
+  color: var(--muted);
+  --diagram-accent: var(--accent);
+}
+
+.diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.dg-line {
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dg-line-fill {
+  fill: currentColor;
+}
+
+.dg-accent {
+  stroke: var(--diagram-accent);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dg-accent-fill {
+  fill: var(--diagram-accent);
+}
+
+/* The size question's reference outline, and the bump question's other option. */
+.dg-ghost {
+  stroke: currentColor;
+  opacity: 0.45;
+}
+
+.dg-word {
+  font-family: inherit;
+  font-weight: 600;
+}
+
+/*
+ * An illustrated option puts the picture beside the words, not above them: on a
+ * phone held in one hand the label has to stay on the same line of sight as the
+ * drawing it describes.
+ */
+.option-with-diagram {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.625rem 0.875rem;
+}
+
+.option-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+

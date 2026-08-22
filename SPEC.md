@@ -701,12 +701,60 @@ Two things Phase 3 deliberately did not build, both belonging to later phases:
 - **Diagrams.** `QuestionScreen` carries the slot and the `option.diagram` id;
   Phase 4 fills it. One deep question already asks for a picture in its own help
   text — `camera_bump_size` says to answer it "only with the two outlines drawn
-  side by side" — so it is answerable but not yet properly askable.
+  side by side" — so it is answerable but not yet properly askable. _(Phase 4
+  filled both.)_
 - **The reverse-lookup link** §4.5 asks for. Phase 5 builds the entry; the result
   screen names the model it will open rather than carrying a dead link.
 
 **Phase 4 — diagrams.** Draw the SVG set; wire into questions and reverse
-lookup.
+lookup. _(done — reverse lookup waits on Phase 5)_
+
+**Phase 4 is done.** Thirty-three hand-drawn SVG components across the seven
+questions that declared a `diagram` id, plus the registry binding ids to
+components and the slot in `QuestionScreen`. `questions.ts` still knows nothing
+about React: it names diagrams, `src/diagrams/registry.ts` resolves them, and a
+test asserts the two agree in both directions so neither a missing drawing nor an
+orphaned one can pass CI.
+
+Wiring into reverse lookup is the half that does not exist yet, because reverse
+lookup does not (Phase 5).
+
+What Phase 4 changed in this spec, all of it from drawing against the committed
+reference images rather than from re-reading §8:
+
+- **One square viewBox for everything was wrong.** §8 asks for drawings legible
+  at roughly 120 px, and a square frame spent two thirds of every camera diagram
+  on blank back glass — the housing, which is the whole content, came out around
+  30 px. Each family now gets the frame that fits it: a wide crop of the phone's
+  top for the camera and cutout questions, a tall one for `rear_wordmark`, a
+  landscape strip for `bottom_mic_hole_pattern`, a square for the size
+  silhouettes. §8's requirement is that options **within a question** be
+  comparable, and one viewBox per family is what delivers that.
+- **`single_lens_flash_below`'s label was wrong, and its own reference file said
+  so.** The label read "One lens on the glass, flash directly below it". The
+  layout row in `reference/models/iphone-8.md` is marked 🟡 inferred and carries
+  the instruction "confirm against a reference image", while the `flash_position`
+  row two tables down is ✅ verified as "to the right of the lens on the bare
+  glass, level with it, past the mic hole", read off the committed product shot.
+  The iPhone 8, SE 2 and SE 3 all read the same way. Drawing the diagram is what
+  performed the confirmation the reference file asked for, so the label now
+  matches the photograph. The **value name** is left alone — see §12.
+- **Correcting it collides two options.** With the flash beside the lens on both,
+  `single_lens_flash_below` (8, SE) and `single_lens_no_housing` (16e, 17e)
+  describe the same arrangement, and separate only on how large the lens is. The
+  labels and the two drawings now carry that difference, and the question's help
+  text says to compare against the drawings rather than from memory. This costs
+  the engine nothing — both groups are separated several times over by
+  `home_button`, `port` and `front_cutout` — but it is a question a technician
+  can now answer wrongly where before they could not answer it at all.
+- **The camera-bump comparison is schematic, and says so.** §12 records that the
+  13/14 difference was invisible until both bodies were normalised to the same
+  width, and the diagrams do normalise. The **ratio** between the two housings
+  does not come from measurement: `iphone-13.jpg` and `iphone-14.jpg` are shot
+  at different angles, so a housing-to-body ratio taken across them measures the
+  photography as much as the phones. §8 permits a diagram to exaggerate the
+  detail that matters, and this one states the direction of the difference, which
+  is all the question asks for.
 
 **Phase 5 — reverse lookup.** Browsable model list and detail view.
 
@@ -736,6 +784,8 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 | D-17 | The deep tier is **additive**: it adds deep questions rather than hiding coarse ones. §4.3 constrains deep questions only, so `tier` records how far the technician has agreed to go, not which questions can be reached. Keeping it out of reachability is what lets `unskip` revive a coarse question without rewinding the tier — and `back()` would flip a rewound tier straight back, stranding the question again.                                                                                                          |
 | D-18 | The §4.2 revisit offer names only skips the flow can honour: the question must still split the candidates **and** be one the current tier would offer. `revisitableSkips` decides the second half by running `unskip` and reading the resulting pool, rather than re-testing the tier itself, so the offer and the flow cannot drift apart. Unreachable through play — a UI can only skip what it was asked — and one call away for a caller that assembles its own `IdentifyState`, which Phase 3 will when restoring a session. |
 | D-19 | §4.4's "no visible characteristic distinguishes them" is claimed only when **nothing** can split the group, not merely when nothing is left to ask. A run that skipped an attribute reaches the same `ambiguous` status with that attribute still able to separate the candidates, and stating it there contradicts the §4.2 offer to revisit printed underneath. The statement is suppressed whenever a skip is revisitable; the offer speaks instead. The two are mutually exclusive by test.                                   |
+| D-20 | Diagrams never redraw a manufacturer's mark. §8 chose hand-drawn SVG partly to keep the app clear of artwork that is not ours, and reproducing the Apple logo walks straight back into it. `rear_wordmark` draws the mark as a plain roundel: the question asks **where** the mark sits and whether a word is under it, and a technician looking at the back already knows its shape.                                                                                                                                             |
+| D-21 | An option **label** may be corrected against a reference image without touching the attribute **value** it labels. Labels are display text; values are matrix data under D-11 and renaming one is a change to `reference/`, the transcription and the separability check. Phase 4 corrected a label the reference file itself flagged for confirmation, and left the value it names for a deliberate data pass.                                                                                                                   |
 
 D-11 has already paid for itself twice, which is worth recording because both failures
 looked like solid data at the time:
@@ -752,6 +802,25 @@ looked like solid data at the time:
   separates that pair anyway.
 
 ## 12. Open questions
+
+- **`single_lens_flash_below` is named for a flash position no model has.** The
+  three models carrying it — iPhone 8, SE 2, SE 3 — all put the flash _beside_
+  the lens, verified off the product shots (§10, Phase 4). The label is fixed;
+  the value name is not, because renaming it touches `reference/models/`, the
+  transcription and the separability check, and D-11 keeps that in a data pass
+  rather than a UI one. Two options, both cheap:
+
+  - **Rename** to `single_lens_flash_beside`. Mechanical, and safe for
+    separability — one value renamed uniformly partitions the set exactly as
+    before.
+  - **Merge** it with `single_lens_no_housing`, which after the correction
+    describes the same arrangement at a different lens size. This one is _not_
+    free: it drops a value from the matrix, and although `home_button`, `port`
+    and `front_cutout` each separate the two groups on their own, the
+    brute-force check in §7 has to be re-run to say so.
+
+  _Leaning: rename. The merge asks whether lens size is a real thing to ask a
+  technician to judge, which is a bigger question than the name._
 
 - Should the reverse-lookup view be editable in-app, or is correcting the data
   strictly a code change? _Leaning code change._

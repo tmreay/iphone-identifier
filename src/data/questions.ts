@@ -12,12 +12,13 @@
  *
  * - **"Can't tell".** It is on every question as a UI affordance (§4.2, D-09),
  *   not as a data value, so it is not in any `options` array.
- * - **Diagram components.** Phase 4 draws them (§8). The `diagram` ids here are
- *   the contract: stable, kebab-case, one per option. They are set only where a
- *   picture is what the technician actually needs — layouts, cutouts, size
- *   silhouettes, flash position, hole patterns, bump size, wordmark — and left
- *   off where a word does the job. Within a question it is all or nothing, so a
- *   screen never renders half a row of pictures.
+ * - **Diagram components.** `src/diagrams/` draws them (§8); the `diagram` ids
+ *   here are the contract between the two, and `registry.test.ts` checks it
+ *   holds in both directions. They are set only where a picture is what the
+ *   technician actually needs — layouts, cutouts, size silhouettes, flash
+ *   position, hole patterns, bump size, wordmark — and left off where a word
+ *   does the job. Within a question it is all or nothing, so a screen never
+ *   renders half a row of pictures.
  * - **Model names.** Prompts describe what is in the technician's hand, never
  *   which model it might be; the help text names a model only where the spec
  *   already does, to say how far an answer will get them.
@@ -36,11 +37,11 @@ export const questions: Question[] = [
     id: 'rear_camera_layout',
     tier: 'coarse',
     prompt: 'Which rear camera arrangement matches the phone?',
-    help: 'Match the housing as well as the lenses: whether they sit straight on the back glass, in a pill, in a large rounded square, or in a plateau running across the back. Ignore the small round microphone hole.',
+    help: 'Match the housing as well as the lenses: whether they sit straight on the back glass, in a pill, in a large rounded square, or in a plateau running across the back. Ignore the small round microphone hole. Two of these are a single lens on bare glass with the flash beside it, and they differ only in how big the lens is — compare them against the drawings rather than from memory.',
     options: [
       {
         value: 'single_lens_flash_below',
-        label: 'One lens on the glass, flash directly below it',
+        label: 'One small lens on the glass, flash beside it',
         diagram: 'rear-camera-layout-single-lens-flash-below',
       },
       {
@@ -50,7 +51,7 @@ export const questions: Question[] = [
       },
       {
         value: 'single_lens_no_housing',
-        label: 'One lens standing straight out of the back glass, no housing',
+        label: 'One large lens standing proud of the glass, flash beside it',
         diagram: 'rear-camera-layout-single-lens-no-housing',
       },
       {

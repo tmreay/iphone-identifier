@@ -1,8 +1,14 @@
 /**
- * The question screen — SPEC.md §4.1, §4.2.
+ * The question screen — SPEC.md §4.1, §4.2, §4.3, §8.
  *
  * One question, its options, and "Can't tell" on every one of them (D-09).
+ *
+ * Options carry a diagram where a picture is what the technician actually needs
+ * (§8). Within a question it is all or nothing — `questions.ts` guarantees it
+ * and a test enforces it — so the row either has pictures throughout or is the
+ * plain text list Phase 3 shipped, and never a ragged mixture of the two.
  */
+import { Diagram } from '../diagrams/index.tsx'
 import type { AttributeValue, IPhoneModel, Question } from '../data/types.ts'
 import { candidateCount, visibleOptions } from './presenters.ts'
 
@@ -34,12 +40,16 @@ export function QuestionScreen({
           <li key={option.value}>
             <button
               type="button"
-              className="option"
+              className={option.diagram ? 'option option-with-diagram' : 'option'}
               onClick={() => onAnswer(option.value)}
             >
-              {/* Phase 4 slots the diagram for `option.diagram` in here (§8). */}
-              <span className="option-label">{option.label}</span>
-              {option.caveat && <span className="option-caveat">{option.caveat}</span>}
+              <Diagram id={option.diagram} />
+              <span className="option-text">
+                <span className="option-label">{option.label}</span>
+                {option.caveat && (
+                  <span className="option-caveat">{option.caveat}</span>
+                )}
+              </span>
             </button>
           </li>
         ))}
