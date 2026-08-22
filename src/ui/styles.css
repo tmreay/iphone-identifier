@@ -366,3 +366,12 @@ code {
   gap: 0.25rem;
 }
 
+
+/*
+ * `camera_bump_size` is drawn to measured scale and its two housings differ by
+ * about 7%. At the width the rest of the set uses that is a couple of pixels,
+ * so this pair takes the room the true ratio needs (`registry.ts`).
+ */
+.diagram-large {
+  width: 10rem;
+}

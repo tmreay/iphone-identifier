@@ -1,40 +1,68 @@
 /**
  * `camera_bump_size` — the pair of outlines the question cannot be asked
- * without, SPEC.md §6.2 and §12.
+ * without, SPEC.md §6.2, §9 and §12.
  *
  * The help text is unusually specific about what it needs: "answer it only with
- * the two outlines drawn side by side at the same body width". Both halves of
- * that are load-bearing, and both are honoured here. Side by side comes free —
- * the two options render as one list at one scale. Same body width is why both
- * drawings use the shared `BodyCrop` untouched: if the bodies differed the
- * comparison would be measuring the drawing, not the phone.
+ * the two outlines drawn side by side at the same body width". Both halves are
+ * honoured. Side by side comes free — the two options render as one list at one
+ * scale. Same body width is why both drawings use the shared `BodyCrop`
+ * untouched: if the bodies differed the comparison would be measuring the
+ * drawing, not the phone.
  *
- * An earlier draft ghosted the other option in behind each housing. It was
- * dropped: at this size the ghost's outline crossed the very lenses whose size
- * the technician is being asked to judge, and made the comparison harder rather
- * than easier. Two clean outlines in one list is what the help text asked for.
+ * **These are drawn to measured scale, not to a guess.** Both housings and both
+ * lens sizes come from the committed Apple product shots, whose bodies are
+ * square on (checked: the back panel's left edge holds the same x to within
+ * 4 px down its whole straight run). Body width in pixels is derived from body
+ * height and the real millimetre dimensions in `reference/matrix.md`, then
+ * confirmed against the panel's own right edge, which lands within 2 px.
  *
- * **The ratio is schematic, not measured.** §8 permits a diagram to exaggerate
- * the detail that matters, and this one does. The two committed product shots —
- * `iphone-13.jpg` and `iphone-14.jpg` — are taken at different angles, so a
- * housing-to-body ratio measured across them would be measuring the
- * photographers' perspective as much as the phones. The drawing states the
- * direction of the difference, which is all the question asks for: it is a
- * comparison, not a measurement.
+ * | Model         | Housing width | Outer lens |
+ * | ------------- | ------------- | ---------- |
+ * | iPhone 13     | 29.5 mm       | ~13.5 mm   |
+ * | iPhone 13 mini| 28.9 mm       | ~13.9 mm   |
+ * | iPhone 14     | 30.7 mm       | ~15.8 mm   |
+ * | iPhone 14 Plus| 30.7 mm       | ~15.9 mm   |
+ * | iPhone 15     | 31.6 mm       | ~15.9 mm   |
+ * | iPhone 15 Plus| 31.7 mm       | ~15.9 mm   |
+ *
+ * The 14 figure is independently confirmed: the 14 and the 14 Plus are
+ * different images with different body widths and land on the same 30.7 mm.
+ * Lens figures are softer — a lens rim gives several concentric edges — so they
+ * are recorded to the nearest half millimetre and no further.
+ *
+ * **What the numbers say about the question.** The housings differ by about
+ * 2 mm in 30, which is 7%. That is far less than a schematic drawing naturally
+ * suggests, and drawing it larger would be inventing a difference the phone
+ * does not have. The **lenses** are the better cue at roughly 18%, which is why
+ * this pair leans on lens size and why the help text now says so. Even 18% is
+ * a fine judgement, so these two diagrams render larger than the rest of the
+ * set — the honest ratio needs the room.
  */
 import { BodyCrop, DiagramSvg, Housing, Lens, REAR_VIEW_BOX } from './primitives.tsx'
 
-const LARGER = { x: 17, y: 12, size: 46, lens: 9.5 }
-const SMALLER = { x: 21, y: 16, size: 36, lens: 7.5 }
+/** Body edges in the shared rear crop, and the body's real width. */
+const BODY_LEFT = 14
+const BODY_UNITS = 72
+const BODY_MM = 71.5
+
+const mm = (v: number) => (v / BODY_MM) * BODY_UNITS
+
+/** Measured off `reference/images/apple/`; see the table above. */
+const LARGER = { inset: 4.6, housing: 30.7, lens: 15.8 }
+const SMALLER = { inset: 4.4, housing: 29.5, lens: 13.5 }
 
 function DiagonalDual({ spec }: { spec: typeof LARGER }) {
-  const { x, y, size, lens } = spec
+  const x = BODY_LEFT + (spec.inset / 100) * BODY_UNITS
+  const size = mm(spec.housing)
+  const y = 13
+  const r = mm(spec.lens) / 2
+
   return (
     <DiagramSvg viewBox={REAR_VIEW_BOX}>
       <BodyCrop />
       <Housing x={x} y={y} width={size} height={size} radius={size * 0.31} accent />
-      <Lens cx={x + size * 0.29} cy={y + size * 0.29} r={lens} accent />
-      <Lens cx={x + size * 0.7} cy={y + size * 0.7} r={lens} accent />
+      <Lens cx={x + size * 0.29} cy={y + size * 0.29} r={r} accent />
+      <Lens cx={x + size * 0.71} cy={y + size * 0.71} r={r} accent />
     </DiagramSvg>
   )
 }

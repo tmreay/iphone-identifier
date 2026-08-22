@@ -5,13 +5,13 @@
  * picture is the state Phase 3 shipped in and the screen already handles it.
  * Nothing should reach that path, and the registry test is what keeps it true.
  */
-import { diagrams } from './registry.ts'
+import { diagrams, largeDiagrams } from './registry.ts'
 
 export function Diagram({ id }: { id: string | undefined }) {
   const Drawing = id === undefined ? undefined : diagrams[id]
   if (!Drawing) return null
   return (
-    <span className="diagram">
+    <span className={id && largeDiagrams.has(id) ? 'diagram diagram-large' : 'diagram'}>
       <Drawing />
     </span>
   )

@@ -414,7 +414,7 @@ export const questions: Question[] = [
     tier: 'deep',
     prompt:
       'Held against these two outlines, which camera housing is the phone closer to?',
-    help: 'This is a comparison, not a measurement. Larger and smaller mean larger or smaller than the other models with the same camera arrangement, so answer it only with the two outlines drawn side by side at the same body width — hold the phone against them and compare the footprint of the housing and the size of the lens elements.',
+    help: 'This is a comparison, not a measurement. Larger and smaller mean larger or smaller than the other models with the same camera arrangement, so answer it only with the two outlines drawn side by side at the same body width — hold the phone against them. The two housings differ by about 2 mm in 30, which is less than it sounds; the lenses are the better cue, being about a fifth wider on the larger one. If neither reads clearly, say so — "Can\'t tell" rules nothing out.',
     options: [
       {
         value: 'larger',

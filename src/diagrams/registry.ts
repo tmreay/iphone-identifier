@@ -100,3 +100,17 @@ export const diagrams: Record<string, ComponentType> = {
   'bottom-mic-hole-pattern-asymmetric-four-seven':
     BottomMicHolePatternAsymmetricFourSeven,
 }
+
+/**
+ * Diagrams that render larger than the rest of the set.
+ *
+ * `camera_bump_size` is drawn to measured scale (see `cameraBumpSize.tsx`), and
+ * the real difference between the two housings is about 7%. At the size the
+ * other diagrams use, 7% is a couple of pixels. Exaggerating it would be
+ * inventing a difference the phone does not have, so the drawing keeps the true
+ * ratio and takes the room it needs instead.
+ */
+export const largeDiagrams = new Set([
+  'camera-bump-size-larger',
+  'camera-bump-size-smaller',
+])

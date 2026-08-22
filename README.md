@@ -88,7 +88,11 @@ Phase 5 (reverse lookup) is next; see SPEC.md §10. Two things wait on it:
 - §8 asks for the diagrams to be wired into reverse lookup as well as into the
   questions. Half of that shipped with Phase 4; the other half needs the view.
 
-One thing Phase 4 turned up and did not settle: `single_lens_flash_below` is an
-attribute value named for a flash position none of the three models carrying it
-actually has. The option label is corrected; the value name is a data change, and
-SPEC.md §12 records the two ways to take it.
+Two things Phase 4 turned up and did not settle, both in SPEC.md §12:
+
+- `single_lens_flash_below` is an attribute value named for a flash position
+  none of the three models carrying it actually has. The option label is
+  corrected; the value name is a data change.
+- `camera_bump_size` asks the technician to tell 29.5 mm from 30.7 mm of camera
+  housing. Measuring it was what put a number on it; whether a question that fine
+  should still eliminate models is a judgement, not a measurement.

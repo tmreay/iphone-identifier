@@ -747,14 +747,33 @@ reference images rather than from re-reading §8:
   the engine nothing — both groups are separated several times over by
   `home_button`, `port` and `front_cutout` — but it is a question a technician
   can now answer wrongly where before they could not answer it at all.
-- **The camera-bump comparison is schematic, and says so.** §12 records that the
-  13/14 difference was invisible until both bodies were normalised to the same
-  width, and the diagrams do normalise. The **ratio** between the two housings
-  does not come from measurement: `iphone-13.jpg` and `iphone-14.jpg` are shot
-  at different angles, so a housing-to-body ratio taken across them measures the
-  photography as much as the phones. §8 permits a diagram to exaggerate the
-  detail that matters, and this one states the direction of the difference, which
-  is all the question asks for.
+- **The camera-bump comparison is measured, and much smaller than it reads.**
+  The committed product shots are all square on — the back panel's left edge
+  holds the same x to within 4 px down its whole straight run — so the housings
+  can be measured directly. Body width in pixels comes from body height and the
+  millimetre dimensions in `reference/matrix.md`, and is confirmed against the
+  panel's own right edge, which lands within 2 px.
+
+  | Model          | Housing width | Outer lens | Value     |
+  | -------------- | ------------- | ---------- | --------- |
+  | iPhone 13      | 29.5 mm       | ~13.5 mm   | `smaller` |
+  | iPhone 13 mini | 28.9 mm       | ~13.9 mm   | `smaller` |
+  | iPhone 14      | 30.7 mm       | ~15.8 mm   | `larger`  |
+  | iPhone 14 Plus | 30.7 mm       | ~15.9 mm   | `larger`  |
+  | iPhone 15      | 31.6 mm       | ~15.9 mm   | `larger`  |
+  | iPhone 15 Plus | 31.7 mm       | ~15.9 mm   | `larger`  |
+
+  The 14 figure is independently confirmed: the 14 and the 14 Plus are different
+  images at different body widths and land on the same 30.7 mm. Lens figures are
+  softer, because a lens rim gives several concentric edges.
+
+  **The housings differ by about 2 mm in 30 — 7%.** That is far less than a
+  schematic drawing naturally suggests, and an earlier draft of these diagrams
+  overstated it roughly fourfold. They are now drawn to the measured ratio, and
+  render larger than the rest of the set because the honest ratio needs the room.
+  The **lenses** are the better cue at about 18%, so the drawings lean on lens
+  size and the help text says so outright, along with an invitation to answer
+  "Can't tell" — which rules nothing out.
 
 **Phase 5 — reverse lookup.** Browsable model list and detail view.
 
@@ -822,6 +841,20 @@ looked like solid data at the time:
   _Leaning: rename. The merge asks whether lens size is a real thing to ask a
   technician to judge, which is a bigger question than the name._
 
+- **Is `camera_bump_size` worth asking at all?** Phase 4 measured what it asks
+  a technician to judge: 29.5 mm against 30.7 mm of housing, and roughly 13.5 mm
+  against 15.8 mm of lens (§10). The lens difference is about 18% and is the
+  reason the question is still answerable; the housing difference is 7% and is
+  close to the limit of what an eye can call against a drawing. The attribute is
+  `deep` and its `priority` of 18 is nearly the lowest in the set, so it is
+  already asked last and rarely — but it is the only thing separating the 13
+  from the 14 once the coarse tier is exhausted (§9), which is exactly when a
+  wrong answer costs the most. Worth deciding whether it should carry a caveat
+  on the option rows, the way `colour` does, or be made non-eliminating.
+
+  _Leaning: leave it eliminating, add the caveat. The help text now states the
+  real magnitude and invites "Can't tell", which is most of the mitigation._
+
 - Should the reverse-lookup view be editable in-app, or is correcting the data
   strictly a code change? _Leaning code change._
 - How the built app is served at the shop — copied to each device, or served
@@ -854,9 +887,9 @@ looked like solid data at the time:
   - **It is weakest where it is needed most.** 35 of 37 models resolve alone
     (§9), so on most runs the strip is decoration that empties out. It earns its
     keep on the group screens — and those are the pairs §9 records as identical
-    on every attribute here. Their pictures would be indistinguishable, and 13
-    vs 14 needed both bodies normalised to the same width before the difference
-    was visible at all.
+    on every attribute here. Their pictures would be indistinguishable: Phase 4
+    measured the 13/14 camera housings at 29.5 mm against 30.7 mm, a 7%
+    difference on a part that is itself a fifth of the body (§10).
 
   There is also a softer tension, worth stating because it shapes the design
   rather than settling it: prompts deliberately describe what is in the
