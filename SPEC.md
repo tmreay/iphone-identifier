@@ -704,10 +704,11 @@ Two things Phase 3 deliberately did not build, both belonging to later phases:
   side by side" — so it is answerable but not yet properly askable. _(Phase 4
   filled both.)_
 - **The reverse-lookup link** §4.5 asks for. Phase 5 builds the entry; the result
-  screen names the model it will open rather than carrying a dead link.
+  screen names the model it will open rather than carrying a dead link. _(Phase 5
+  replaced the placeholder with the link.)_
 
 **Phase 4 — diagrams.** Draw the SVG set; wire into questions and reverse
-lookup. _(done — reverse lookup waits on Phase 5)_
+lookup. _(done)_
 
 **Phase 4 is done.** Thirty-three hand-drawn SVG components across the seven
 questions that declared a `diagram` id, plus the registry binding ids to
@@ -717,7 +718,8 @@ test asserts the two agree in both directions so neither a missing drawing nor a
 orphaned one can pass CI.
 
 Wiring into reverse lookup is the half that does not exist yet, because reverse
-lookup does not (Phase 5).
+lookup does not (Phase 5). _(Phase 5 wired it: an entry renders the same
+components against the same ids, so the set had nothing added to it.)_
 
 What Phase 4 changed in this spec, all of it from drawing against the committed
 reference images rather than from re-reading §8:
@@ -796,7 +798,58 @@ reference image"; drawing the diagram in Phase 4 performed it, so they are now
 ✅ verified against the committed product shot, cited as that model's image
 source. The flag change alters nothing downstream — 🟡 and ✅ both transcribe.
 
-**Phase 5 — reverse lookup.** Browsable model list and detail view.
+**Phase 5 — reverse lookup.** Browsable model list and detail view. _(done)_
+
+**Phase 5 is done.** A list of all 37 models grouped by release year, and an
+entry per model showing every characteristic the matrix records for it, carrying
+the same diagram components the questions use — so confirming a result is
+comparing the phone against the pictures it was just asked about rather than
+against a second vocabulary for the same features. The result screen's
+placeholder is now the link §4.5 asked for, and the list is reachable from
+anywhere in the flow, because two of §4.6's three jobs — training, and reviewing
+the data — are not things a technician arrives at by identifying a phone first.
+
+The shape follows Phase 3's: the components are thin, and everything that could
+be _wrong_ rather than merely ugly is a pure function in `ui/lookup.ts`, tested
+against the real matrix over all 37 models rather than a fixture.
+
+What Phase 5 changed in this spec, from building the view rather than from
+re-reading §4.6:
+
+- **A blank row is a row, not an omission.** 65 of the 666 rows are absent by
+  design (§10, Phase 2), and an entry that quietly listed 16 characteristics for
+  one model and 18 for another would read as a bug in whichever one the
+  technician saw second. Every attribute gets a row; an absent one says so and
+  says what it costs — under §5.4 a value the matrix does not record eliminates
+  nothing (D-26). The screen cannot do better than that, and should not pretend
+  to: 🔴 unverified and ⚪ not applicable both transcribe to absence, so nothing
+  downstream can tell "nobody counted the holes" from "there is nothing here to
+  count".
+
+- **The two colour layers are not one-to-one in either direction**, and both
+  directions are in the data. Two marketing names under one palette value is the
+  expected case §6.5 already describes — the iPhone 15 Pro's Natural Titanium
+  and White Titanium are both `white_silver`. The reverse is not described
+  there and is real: the iPhone 13 and 13 mini record "Blue" as **both**
+  `light_blue` and `dark_blue`, which `reference/models/iphone-13.md` calls a
+  boundary shade — carrying both values is how a shade sitting between two
+  palette entries is recorded so that neither answer eliminates the model. On
+  screen that reads as the same colour listed twice by mistake, so the entry
+  explains it, derived from the data rather than named in the code.
+
+- **Row order is `attributes.ts` order, which is the reference files' order.**
+  §4.6 names reviewing and correcting the underlying data as one of this view's
+  jobs, and that job is reading the entry beside `reference/models/<id>.md`. The
+  two now read in the same sequence, so a discrepancy shows up level with
+  itself. The entry also names that file, which is the whole of what D-24 leaves
+  a technician to do about a wrong value.
+
+- **The view lives in the URL, the run does not** (D-25). §2 puts this on a
+  phone at a workbench, where the system Back button is the back button; a view
+  held in React state makes it leave the app. So the hash carries which screen
+  is showing and nothing else, which is also what makes the §4.5 link safe —
+  looking a model up mid-run and coming back leaves the answer trail exactly
+  where it was, because navigating never touched it.
 
 Phases 1 and 2 are strictly ordered. No model attribute may be written into
 `src/data/models.ts` from memory — it must trace to `reference/`.
@@ -829,6 +882,8 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 | D-22 | Attribute **values** are named for what the technician sees, and a value whose name contradicts the reference images is renamed rather than left as a label-only correction. `single_lens_flash_below` became `single_lens_flash_beside` in a data pass: the three models carrying it put the flash beside the lens, not below it. Safe by construction — renaming one value uniformly re-labels a partition without changing it, so no separability result moves. The alternative, merging it into `single_lens_no_housing`, was declined: it drops a value from the matrix and asks whether lens size is a fair thing to put to a technician, which is a bigger question than the name. |
 | D-23 | `camera_bump_size` stays **eliminating** and gains a caveat on its option rows. Phase 4 measured the judgement it asks for at about 2 mm in 30 — close to the limit of what an eye can call against a drawing — but it is the only thing separating the iPhone 13 from the 14 once the coarse tier is exhausted, so removing its power to eliminate would give that pair up entirely. Mitigation is honesty at the point of the tap: the help text states the real magnitude and the rows carry the "Can't tell" escape hatch, which rules nothing out.                                                                                                                                   |
 | D-24 | Reverse lookup is **read-only**. Correcting a model attribute is a change to `reference/models/<id>.md` followed by `npm run transcribe`, never an edit in the app. In-app editing would put a value into the matrix that no source backs, which is the one thing D-11 exists to prevent, and the matrix is a build output under D-14 with nowhere to write back to. §4.6's "review and correct" is the review half in the app and the correction half in the repo.                                                                                                                                                                                                                       |
+| D-25 | Which view is showing lives in the **URL hash**; the identify run lives in React state, and the two never mix. §2 puts this on a phone at a workbench, where the system Back button is the back button — a view held in state makes it leave the app, and one held in the hash steps back through the entry, the list and the flow. The run is deliberately not addressable: it is an answer trail and a tier, and a bookmark of it would be a half-finished diagnosis. That separation is what lets the §4.5 link open a model mid-run and come back to the trail intact. Hand-rolled, not a router: §5.1 asks for a concrete need and three parameterless routes are not one.           |
+| D-26 | An attribute the matrix does not record gets a row **saying so**, never an omitted row. 65 of the 666 rows are absent by design, and an entry listing 16 characteristics for one model and 18 for another reads as a bug rather than as sparse data. The row states the consequence — under §5.4 an absent value eliminates nothing — because that is the whole of what is knowable: 🔴 unverified and ⚪ not applicable both transcribe to absence, so no screen can tell "nobody counted" from "there is nothing to count".                                                                                                                                                             |
 
 D-11 has already paid for itself twice, which is worth recording because both failures
 looked like solid data at the time:
