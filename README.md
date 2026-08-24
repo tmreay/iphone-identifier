@@ -50,7 +50,7 @@ reference/       Phase 1 research output: sourced model facts and images
 scripts/         build tooling — the reference/ -> src/data/ transcription
 src/data/        attribute definitions, questions, the model matrix
 src/engine/      pure TypeScript identification logic (no React)
-src/diagrams/    SVG components illustrating answer options (Phase 4 — empty)
+src/diagrams/    hand-drawn SVG illustrating answer options, and the id registry
 src/ui/          screens, and the display text they derive (presenters.ts)
 ```
 
@@ -61,18 +61,38 @@ src/ui/          screens, and the display text they derive (presenters.ts)
 to a cited source (SPEC.md D-11). Edit the reference file, then regenerate —
 CI fails if the two drift apart.
 
+## The diagrams are drawn, not photographed
+
+Every answer option that describes a shape, layout or position carries a
+hand-drawn SVG (SPEC.md §8): schematic, two colours, and drawn from the product
+shots committed under `reference/images/`. Those photographs are the drawing
+source and are never imported by the build, so the shipped app contains SVG only.
+
+`questions.ts` names each diagram by a stable id and knows nothing about React;
+`src/diagrams/registry.ts` binds ids to components, and a test asserts the two
+agree in both directions — a declared id with no drawing, or a drawing nothing
+declares, fails CI.
+
 ## Status
 
-Phases 0-3 complete: scaffolding, sourced data collection, the matrix plus the
-identification engine, and the identify UI. The app runs end to end — it asks
-questions, narrows the candidate set, and reaches a model, a group, or a stated
+Phases 0-4 complete: scaffolding, sourced data collection, the matrix plus the
+identification engine, the identify UI, and the diagrams. The app runs end to
+end — it asks questions, illustrated where a picture is what the technician
+needs, narrows the candidate set, and reaches a model, a group, or a stated
 terminal ambiguity.
 
-Phase 4 (the SVG diagrams) is next; see SPEC.md §10. Two things wait on it:
+Phase 5 (reverse lookup) is next; see SPEC.md §10. Two things wait on it:
 
-- Questions are text-only. `src/diagrams/` is empty, and one deep-tier question
-  — `camera_bump_size`, which separates the iPhone 13 from the 14 — asks in its
-  own help text to be answered against two outlines drawn side by side. It is
-  answerable today, but not properly askable.
 - The result screen names the model's reverse-lookup entry instead of linking
-  to it. Reverse lookup is Phase 5.
+  to it.
+- §8 asks for the diagrams to be wired into reverse lookup as well as into the
+  questions. Half of that shipped with Phase 4; the other half needs the view.
+
+Two things Phase 4 turned up and did not settle, both in SPEC.md §12:
+
+- `single_lens_flash_below` is an attribute value named for a flash position
+  none of the three models carrying it actually has. The option label is
+  corrected; the value name is a data change.
+- `camera_bump_size` asks the technician to tell 29.5 mm from 30.7 mm of camera
+  housing. Measuring it was what put a number on it; whether a question that fine
+  should still eliminate models is a judgement, not a measurement.

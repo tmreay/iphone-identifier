@@ -55,3 +55,48 @@ These are Apple's marketing renders, not photographs of real handsets — they s
 phone as designed, not as it wears. They also frame the phone face-on and back-on only, so
 the bottom edge (port, mic and speaker hole pattern) and the SIM tray edge are still not
 covered by any image in this repository.
+
+## Measurements taken from these images
+
+Phase 4 measured the diagonal-dual camera housings off this set, because
+`camera_bump_size` is a relative question and nothing else in the repository
+records a size for the housing. Recorded here so it is not redone.
+
+The method matters as much as the numbers. Every shot in this set is square on
+— the back panel's left edge holds the same x to within 4 px down its whole
+straight run — so the panel can be measured directly. Body width in pixels is
+derived from the panel's height and the millimetre dimensions in
+`../../matrix.md`, rather than from its right edge, because on some shots the
+front view overlaps the back and hides it. Where the right edge _is_ visible it
+confirms the derived width to within 2 px.
+
+| Model          | Housing width | Outer lens | `camera_bump_size` |
+| -------------- | ------------- | ---------- | ------------------ |
+| iPhone 13      | 29.5 mm       | ~13.5 mm   | `smaller`          |
+| iPhone 13 mini | 28.9 mm       | ~13.9 mm   | `smaller`          |
+| iPhone 14      | 30.7 mm       | ~15.8 mm   | `larger`           |
+| iPhone 14 Plus | 30.7 mm       | ~15.9 mm   | `larger`           |
+| iPhone 15      | 31.6 mm       | ~15.9 mm   | `larger`           |
+| iPhone 15 Plus | 31.7 mm       | ~15.9 mm   | `larger`           |
+
+The 14 figure is independently confirmed: the 14 and the 14 Plus are different
+images at different body widths and land on the same 30.7 mm. The 13 and 13 mini
+agree the same way. **Lens figures are softer** — a lens rim gives several
+concentric edges (barrel, chrome ring, glass), so they are good to about half a
+millimetre and no further.
+
+These are marketing renders, so the numbers describe the phone as designed. That
+is what the question asks about, but it is worth knowing they are not calipers.
+
+### The iPhone 13 is the weakest image in this set for it
+
+At 485 × 661 of content it gives about 320 px of body width, so a pixel is
+0.22 mm. Adequate for a 2 mm difference, but only just. Apple's CDN was searched
+for a better square-on 13: the other colours on the `-select-2021` convention
+are the same size, `iphone-13-finish-select-202207-6-1inch-midnight` exists but
+is the angled finish shot, and `iphone-13-model-unselect-gallery-1-202207` is a
+wide lineup with the phone smaller still. Wikimedia Commons has CC BY-SA
+photographs of real handsets, but on a real phone the housing is the same colour
+as the body and its rim shows only as a lighting artefact — measurably worse than
+a studio render. No better source was found; the numbers above stand on the
+cross-checks instead.
