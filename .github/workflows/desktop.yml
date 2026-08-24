@@ -193,7 +193,10 @@ jobs:
       # instead of on a release page.
       - name: Upload the bundles
         if: ${{ needs.plan.outputs.release != 'true' }}
-        uses: actions/upload-artifact@v5
+        # v6 is the first major that actually runs on Node 24 -- v5 only had
+        # preliminary support and still declares `using: node20`, so the runner
+        # forces it onto 24 and warns. Every other action here is already node24.
+        uses: actions/upload-artifact@v7
         with:
           name: iphone-identifier-${{ matrix.name }}
           path: src-tauri/target/${{ matrix.target }}/release/bundle/**
