@@ -15,8 +15,10 @@ import {
   ambiguityStatement,
   attributeLabel,
   candidateCount,
+  candidateStrip,
   listPhrase,
   revisitPrompt,
+  shortModelName,
   trailEntries,
   visibleOptions,
 } from './presenters.ts'
@@ -226,5 +228,57 @@ describe('visibleOptions', () => {
     const wordmark = questionNamed('rear_wordmark')
     const blank = models.map((model) => ({ ...model, attributes: {} }))
     expect(visibleOptions(wordmark, blank)).toEqual(wordmark.options)
+  })
+})
+
+describe('shortModelName', () => {
+  it('drops the prefix every name in the matrix shares', () => {
+    expect(shortModelName('iPhone 13 Pro Max')).toBe('13 Pro Max')
+    expect(shortModelName('iPhone Air')).toBe('Air')
+    expect(shortModelName('iPhone 16e')).toBe('16e')
+  })
+
+  it('shortens the SE names without dropping which generation', () => {
+    expect(shortModelName('iPhone SE (2nd generation)')).toBe('SE (2nd)')
+    expect(shortModelName('iPhone SE (3rd generation)')).toBe('SE (3rd)')
+  })
+
+  it('leaves every real model distinguishable from every other', () => {
+    // The strip is only honest if two chips never read the same. A shortening
+    // that collided would show one model eliminated and another still lit under
+    // a name the technician cannot tell apart.
+    const shortened = models.map((model) => shortModelName(model.name))
+    expect(new Set(shortened).size).toBe(models.length)
+    for (const short of shortened) expect(short.length).toBeGreaterThan(0)
+  })
+})
+
+describe('candidateStrip', () => {
+  it('carries every model in matrix order, whatever is left', () => {
+    const strip = candidateStrip(models, [modelNamed('iPhone 13')])
+    expect(strip).toHaveLength(models.length)
+    expect(strip.map((entry) => entry.id)).toEqual(models.map((model) => model.id))
+  })
+
+  it('lights exactly the candidates and dims the rest', () => {
+    const candidates = [modelNamed('iPhone 13'), modelNamed('iPhone 14')]
+    const strip = candidateStrip(models, candidates)
+    const lit = strip.filter((entry) => entry.remaining).map((entry) => entry.name)
+    expect(lit).toEqual(['iPhone 13', 'iPhone 14'])
+    expect(strip.filter((entry) => !entry.remaining)).toHaveLength(models.length - 2)
+  })
+
+  it('lights all 37 before the first answer', () => {
+    const strip = candidateStrip(models, models)
+    expect(strip.every((entry) => entry.remaining)).toBe(true)
+  })
+
+  it('agrees with the count sentence it sits under', () => {
+    // The strip and the live region are two readings of one number, and the
+    // sentence is what a screen reader gets instead of the chips.
+    const candidates = models.slice(0, 5)
+    const strip = candidateStrip(models, candidates)
+    const lit = strip.filter((entry) => entry.remaining).length
+    expect(candidateCount(candidates.length, models.length)).toContain(`${lit} of 37`)
   })
 })

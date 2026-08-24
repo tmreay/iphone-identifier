@@ -13,6 +13,7 @@
 import type {
   AttributeId,
   IPhoneModel,
+  ModelId,
   Question,
   QuestionOption,
 } from '../data/types.ts'
@@ -146,7 +147,14 @@ export function ambiguityStatement(
 export const powerOnHint =
   'If the phone powers on, Settings → General → About → Model Name settles it. Only if it powers on — this is a hint, not a step.'
 
-/** "12 of 37 still match" — the live count §4.1 step 3 asks for. */
+/**
+ * "12 of 37 models match" — the live count §4.1 step 3 asks for.
+ *
+ * The strip below shows the same count as lit chips, which is the reading a
+ * technician glancing at the bench wants. This sentence is what that picture
+ * cannot say out loud: it stays as the strip's accessible summary, announced on
+ * each change, so the count is never something only sighted use has.
+ */
 export function candidateCount(remaining: number, total: number): string {
   if (remaining === 1) return `1 of ${total} models matches`
   return `${remaining} of ${total} models match`
@@ -170,4 +178,56 @@ export function visibleOptions(
   const live = liveValues(candidates, question.id)
   if (live.size === 0) return question.options
   return question.options.filter((option) => live.has(option.value))
+}
+
+/**
+ * One model's place in the candidate strip.
+ *
+ * The strip is §4.1 step 3's live count made legible — the row of model names
+ * §12 asks for, dimming each as it is eliminated. Names only: the pictures half
+ * of that open question costs something quite different and stays deferred
+ * §12 defers.
+ */
+export interface StripEntry {
+  id: ModelId
+  /** The full name, for the chip's title and the accessible reading. */
+  name: string
+  /** The name as the chip shows it, e.g. `iPhone 13 Pro Max` → "13 Pro Max". */
+  short: string
+  /** False once an answer has ruled this model out. */
+  remaining: boolean
+}
+
+/**
+ * A model name at chip width.
+ *
+ * Every name in the matrix opens with "iPhone", so across a strip of all 37 the
+ * word carries no information while costing the width that tells "13 Pro" from
+ * "13 Pro Max". Dropping "generation" from the two SE names is the same trade.
+ * Neither is the only place a model is named in full — the chip keeps the whole
+ * name in its `title`, and the summary sentence spells the survivors out.
+ */
+export function shortModelName(name: string): string {
+  return name.replace(/^iPhone /, '').replace(/ generation\)$/, ')')
+}
+
+/**
+ * The strip: every model in the matrix, flagged for whether it is still in the
+ * running.
+ *
+ * In matrix order, which is release order, because that is what makes the
+ * dimming readable: answers eliminate by era and by generation, so whole runs
+ * of the strip go out together rather than a scatter of chips across it.
+ */
+export function candidateStrip(
+  all: IPhoneModel[],
+  candidates: IPhoneModel[],
+): StripEntry[] {
+  const remaining = new Set(candidates.map((model) => model.id))
+  return all.map((model) => ({
+    id: model.id,
+    name: model.name,
+    short: shortModelName(model.name),
+    remaining: remaining.has(model.id),
+  }))
 }

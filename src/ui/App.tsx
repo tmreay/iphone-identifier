@@ -48,7 +48,7 @@ export function App() {
           key={result.question.id}
           question={result.question}
           candidates={result.candidates}
-          total={models.length}
+          all={models}
           onAnswer={onAnswer(result.question.id)}
           onSkip={() => {
             const attribute = result.question?.id
@@ -62,7 +62,7 @@ export function App() {
           status={result.status}
           candidates={result.candidates}
           revisitable={result.revisitable}
-          total={models.length}
+          all={models}
           onNarrowFurther={() => setState(narrowFurther)}
           onRevisit={(attribute) => setState((current) => unskip(current, attribute))}
         />
