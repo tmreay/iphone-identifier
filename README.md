@@ -144,6 +144,10 @@ instead, which takes one file per upload and names the artifact after it — so
 the run page lists `iPhone Identifier_<version>_x64-setup.exe` and clicking it
 gives you exactly that.
 
+The trade is that `gh run download` cannot fetch these: it assumes every
+artifact is a zip and fails with "not a valid zip file". Download them from the
+run page in a browser, which is where a technician would get them anyway.
+
 It deliberately does **not** run on pull requests. A Rust compile costs minutes
 on three runners where `npm run ci` costs seconds, and the shell it builds is a
 window around a bundle CI already checks. Run it by hand when the shell itself
