@@ -22,7 +22,7 @@ import {
 } from './primitives.tsx'
 
 /** iPhone 8, SE (2nd/3rd gen): a small lens in a thin raised ring, flash out on the glass beside it. */
-export function RearCameraLayoutSingleLensFlashBelow() {
+export function RearCameraLayoutSingleLensFlashBeside() {
   return (
     <DiagramSvg viewBox={REAR_VIEW_BOX}>
       <BodyCrop />

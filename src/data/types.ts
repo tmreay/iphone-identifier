@@ -48,7 +48,7 @@ export interface QuestionOption {
   label: string
   /** Diagram component id (Phase 4). */
   diagram?: string
-  /** Shown inline, e.g. the rehousing warning on colour. */
+  /** Shown inline under the label, e.g. the fine-call warning on camera bump size. */
   caveat?: string
 }
 
