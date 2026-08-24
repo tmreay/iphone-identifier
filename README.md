@@ -10,6 +10,10 @@ Full requirements, data model, and roadmap: **[SPEC.md](SPEC.md)**.
 
 Node 20.19+ (developed on 22.20.0).
 
+Building the **desktop app** additionally needs a Rust toolchain and your
+platform's C toolchain — see [Desktop builds](#desktop-builds). Nothing else in
+this repo needs Rust, and neither does the web build.
+
 ## Getting started
 
 ```bash
@@ -25,19 +29,22 @@ tablet on the same network.
 
 ## Scripts
 
-| Command              | Purpose                                                       |
-| -------------------- | ------------------------------------------------------------- |
-| `npm run dev`        | Dev server with hot reload                                    |
-| `npm run build`      | Type-check and build to `dist/`                               |
-| `npm run preview`    | Serve the production build locally                            |
-| `npm test`           | Run the Vitest suite once                                     |
-| `npm run test:watch` | Vitest in watch mode                                          |
-| `npm run typecheck`  | Type-check without emitting                                   |
-| `npm run lint`       | ESLint                                                        |
-| `npm run lint:fix`   | ESLint, fixing what it can                                    |
-| `npm run format`     | Prettier, writing in place                                    |
-| `npm run transcribe` | Regenerate `src/data/models.ts` from `reference/`             |
-| `npm run ci`         | Everything CI runs: format, lint, types, transcription, tests |
+| Command                 | Purpose                                                       |
+| ----------------------- | ------------------------------------------------------------- |
+| `npm run dev`           | Dev server with hot reload                                    |
+| `npm run build`         | Type-check and build to `dist/`                               |
+| `npm run preview`       | Serve the production build locally                            |
+| `npm run desktop`       | Run the app in a desktop window, with hot reload              |
+| `npm run desktop:build` | Build the desktop installers for the current platform         |
+| `npm run icon`          | Redraw the app icon and derive the platform set               |
+| `npm test`              | Run the Vitest suite once                                     |
+| `npm run test:watch`    | Vitest in watch mode                                          |
+| `npm run typecheck`     | Type-check without emitting                                   |
+| `npm run lint`          | ESLint                                                        |
+| `npm run lint:fix`      | ESLint, fixing what it can                                    |
+| `npm run format`        | Prettier, writing in place                                    |
+| `npm run transcribe`    | Regenerate `src/data/models.ts` from `reference/`             |
+| `npm run ci`            | Everything CI runs: format, lint, types, transcription, tests |
 
 The build uses relative asset paths, so `dist/` can be copied to a device and
 opened directly. The app has no backend and no runtime network dependency.
@@ -47,12 +54,73 @@ opened directly. The app has no backend and no runtime network dependency.
 ```
 SPEC.md          the specification — read this first
 reference/       Phase 1 research output: sourced model facts and images
-scripts/         build tooling — the reference/ -> src/data/ transcription
+scripts/         build tooling — the transcription, and the icon generator
+src-tauri/       the desktop shell — window config and icons, no logic
 src/data/        attribute definitions, questions, the model matrix
 src/engine/      pure TypeScript identification logic (no React)
 src/diagrams/    hand-drawn SVG illustrating answer options, and the id registry
 src/ui/          screens, and the display text they derive (presenters.ts)
 ```
+
+## Desktop builds
+
+The app installs as a desktop application via [Tauri](https://tauri.app)
+(SPEC.md §5.5, D-22). **Windows is the target that matters**; macOS and Linux
+bundles are built alongside and are welcome, but are not what the shop runs.
+
+Tauri wraps the **same `dist/` the web build produces**. `src-tauri/` contains
+no application logic — one Rust file whose only statement opens a window, and no
+Tauri API calls from the frontend — so the web build stays first-class and the
+engine stays testable without a UI.
+
+To build locally you need a Rust toolchain plus your platform's C toolchain:
+
+- **Windows** — [Rust](https://rustup.rs) and the Visual Studio Build Tools with
+  the "Desktop development with C++" workload. Rust on Windows links through
+  MSVC, so `cargo` alone is not enough.
+- **macOS** — Rust and the Xcode command line tools (`xcode-select --install`).
+- **Linux** — Rust plus `libwebkit2gtk-4.1-dev`, `librsvg2-dev`, `libxdo-dev`,
+  `libayatana-appindicator3-dev`, `patchelf` and `build-essential`. The
+  [desktop workflow](.github/workflows/desktop.yml) lists the full set.
+
+Then:
+
+```bash
+npm run desktop:build
+```
+
+Installers land in `src-tauri/target/release/bundle/`. `npm run desktop` runs
+the app in a window against the Vite dev server, with hot reload.
+
+The one thing the Windows installer does not carry is the **WebView2 runtime**.
+Windows 10 1803+ and Windows 11 ship it, so the installer fetches it if it is
+missing rather than embedding ~130 MB in every copy. That is the only moment the
+app wants a network; running it never does.
+
+## Releases are separate from builds
+
+[`.github/workflows/desktop.yml`](.github/workflows/desktop.yml) builds the
+bundles. Three ways in:
+
+| Trigger               | Builds                   | Publishes                  |
+| --------------------- | ------------------------ | -------------------------- |
+| Push a `v*` tag       | Windows, macOS, Linux    | A **draft** GitHub release |
+| Run it by hand        | Windows, or all if asked | Only if you tick `release` |
+| PR touching the shell | Windows                  | Nothing                    |
+
+Everything that does not publish leaves the installers as downloadable workflow
+artifacts, so you can get a build without cutting a release.
+
+Tags carry the version: pushing `v0.2.0` requires `package.json` to say
+`0.2.0`, and the run fails otherwise rather than shipping an app that
+misreports itself. Releases are drafts, so nothing goes out without a look.
+
+## The icon is drawn, not sourced
+
+`npm run icon` runs `scripts/make-icon.js`, which draws the icon from shapes in
+the app's own palette and then derives the per-platform set. It is a schematic
+phone rear with a diagonal dual-camera housing — the same idiom as the diagrams,
+and like them it carries no manufacturer's mark (SPEC.md D-20).
 
 ## The matrix is generated
 

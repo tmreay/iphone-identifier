@@ -1,0 +1,206 @@
+name: Desktop
+
+# Builds the Tauri desktop bundles (SPEC.md D-22). Three ways in:
+#
+#   push a v* tag   build every platform and open a draft release
+#   run it by hand  build the chosen platforms; release only if asked
+#   pull request    build Windows only, to prove the shell still compiles
+#
+# Building and releasing are separate: only a tag push or an explicit
+# `release: true` publishes anything. Every other run leaves the installers as
+# downloadable workflow artifacts.
+
+on:
+  push:
+    tags: ['v*']
+  pull_request:
+    # Only when something the desktop build depends on moved. The app's own
+    # source is covered by ci.yml, which is far cheaper than a Rust compile.
+    paths:
+      - 'src-tauri/**'
+      - 'scripts/make-icon.js'
+      - 'vite.config.ts'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/desktop.yml'
+  workflow_dispatch:
+    inputs:
+      platforms:
+        description: Platforms to build
+        type: choice
+        default: windows
+        options:
+          - windows
+          - all
+      release:
+        description: Publish the bundles as a draft GitHub release
+        type: boolean
+        default: false
+
+concurrency:
+  group: desktop-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    name: Plan
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      release: ${{ steps.plan.outputs.release }}
+      tag: ${{ steps.plan.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - id: plan
+        name: Decide what to build and whether to release
+        shell: bash
+        env:
+          EVENT: ${{ github.event_name }}
+          PLATFORMS: ${{ inputs.platforms }}
+          WANTS_RELEASE: ${{ inputs.release }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+
+          # Windows is the target that matters (SPEC.md §2); the rest are
+          # welcome but never the reason a run exists, so they are the ones
+          # dropped when a run does not need the full set.
+          windows='{"name":"windows","os":"windows-latest","target":"x86_64-pc-windows-msvc"}'
+          all="$windows"',{"name":"macos-arm","os":"macos-latest","target":"aarch64-apple-darwin"}'
+          all="$all"',{"name":"macos-intel","os":"macos-13","target":"x86_64-apple-darwin"}'
+          all="$all"',{"name":"linux","os":"ubuntu-22.04","target":"x86_64-unknown-linux-gnu"}'
+
+          release=false
+          tag=''
+
+          case "$EVENT" in
+            push)
+              # A tag push is the release path: everything, every platform.
+              release=true
+              tag="$REF_NAME"
+
+              # The version baked into the binaries comes from package.json, so
+              # a tag that disagrees with it ships an app that misreports itself.
+              version=$(node -p "require('./package.json').version")
+              if [ "$tag" != "v$version" ]; then
+                echo "::error::Tag $tag does not match package.json version $version. Expected v$version."
+                exit 1
+              fi
+
+              set_matrix="[$all]"
+              ;;
+            workflow_dispatch)
+              release="$WANTS_RELEASE"
+              # No tag exists yet on a manual release; tauri-action fills
+              # __VERSION__ in from package.json and creates the tag itself.
+              # An `&&` one-liner would exit non-zero here under `set -e` on
+              # every build-only run, which is the common case.
+              if [ "$release" = true ]; then tag='v__VERSION__'; fi
+              if [ "$PLATFORMS" = all ]; then set_matrix="[$all]"; else set_matrix="[$windows]"; fi
+              ;;
+            *)
+              # Pull requests prove the shell still compiles. One platform is
+              # enough for that, and it is the one the shop runs.
+              set_matrix="[$windows]"
+              ;;
+          esac
+
+          echo "matrix=$set_matrix" >> "$GITHUB_OUTPUT"
+          echo "release=$release" >> "$GITHUB_OUTPUT"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+
+          names=$(MATRIX="$set_matrix" node -p "JSON.parse(process.env.MATRIX).map(e => e.name).join(', ')")
+          {
+            echo "**Building:** $names"
+            echo ""
+            if [ "$release" = true ]; then
+              echo "**Releasing:** yes, as a draft on tag \`$tag\`."
+            else
+              echo "**Releasing:** no. Bundles are attached to this run as artifacts."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  build:
+    name: ${{ matrix.name }}
+    needs: plan
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    permissions:
+      # Needed only on the release path, and job-level `permissions` cannot take
+      # an expression. Pull requests get a read-only token regardless of what is
+      # written here, and every other path is gated behind the `release` output.
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      # webkit2gtk is the Linux webview; the rest are what the AppImage and deb
+      # bundlers shell out to. 22.04 rather than latest so the binaries run on
+      # older glibc than the runner's own.
+      - name: Install Linux build dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential curl file wget patchelf \
+            libwebkit2gtk-4.1-dev librsvg2-dev libssl-dev \
+            libayatana-appindicator3-dev libxdo-dev libfuse2
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri -> target
+          key: ${{ matrix.target }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Runs `npm run build` first via tauri.conf.json's beforeBuildCommand, so
+      # the bundle it packages is the same one the web build produces.
+      - name: Build the bundles
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          args: --target ${{ matrix.target }}
+          # Empty tagName means build only - tauri-action skips the release
+          # entirely rather than publishing a half-named one.
+          tagName: ${{ needs.plan.outputs.release == 'true' && needs.plan.outputs.tag || '' }}
+          releaseName: iPhone Identifier __VERSION__
+          releaseBody: |
+            Desktop builds of the iPhone Identifier (SPEC.md §5.1).
+
+            Windows: `.exe` is the NSIS installer, `.msi` the Windows Installer package.
+            macOS: `.dmg`, one per architecture - `aarch64` for Apple silicon, `x64` for Intel.
+            Linux: `.AppImage` runs anywhere, `.deb` for Debian and Ubuntu.
+
+            The app is offline-only and talks to nothing.
+          releaseDraft: true
+          prerelease: false
+          # No updater is configured, so there is no latest.json to publish.
+          includeUpdaterJson: false
+
+      # The build-without-release path. Bundles land here as workflow artifacts
+      # instead of on a release page.
+      - name: Upload the bundles
+        if: ${{ needs.plan.outputs.release != 'true' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: iphone-identifier-${{ matrix.name }}
+          path: src-tauri/target/${{ matrix.target }}/release/bundle/**
+          if-no-files-found: error
+          retention-days: 14
