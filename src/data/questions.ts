@@ -31,6 +31,19 @@
  */
 import type { AttributeId, Question } from './types.ts'
 
+/**
+ * The warning carried by both `camera_bump_size` options.
+ *
+ * The attribute stays eliminating, because it is the only thing separating the
+ * iPhone 13 from the 14 once the coarse tier is exhausted. But Phase 4 measured
+ * what it asks a technician to judge — 29.5 mm of housing against 30.7 mm — and
+ * a 7% difference is close to the limit of what an eye can call against a
+ * drawing. The help text states the magnitude; this puts the escape hatch on
+ * the rows themselves, where the tap happens.
+ */
+const CAMERA_BUMP_CAVEAT =
+  'A fine call — about 2 mm in 30. If it does not read clearly against the outline, answer "Can’t tell" rather than guessing.'
+
 export const questions: Question[] = [
   // Coarse tier — asked in the main flow (§6.1).
   {
@@ -40,9 +53,9 @@ export const questions: Question[] = [
     help: 'Match the housing as well as the lenses: whether they sit straight on the back glass, in a pill, in a large rounded square, or in a plateau running across the back. Ignore the small round microphone hole. Two of these are a single lens on bare glass with the flash beside it, and they differ only in how big the lens is — compare them against the drawings rather than from memory.',
     options: [
       {
-        value: 'single_lens_flash_below',
+        value: 'single_lens_flash_beside',
         label: 'One small lens on the glass, flash beside it',
-        diagram: 'rear-camera-layout-single-lens-flash-below',
+        diagram: 'rear-camera-layout-single-lens-flash-beside',
       },
       {
         value: 'single_lens_in_pill',
@@ -420,11 +433,13 @@ export const questions: Question[] = [
         value: 'larger',
         label: 'The larger housing — wider footprint, bigger lenses',
         diagram: 'camera-bump-size-larger',
+        caveat: CAMERA_BUMP_CAVEAT,
       },
       {
         value: 'smaller',
         label: 'The smaller housing — tighter footprint, smaller lenses',
         diagram: 'camera-bump-size-smaller',
+        caveat: CAMERA_BUMP_CAVEAT,
       },
     ],
     priority: 18,

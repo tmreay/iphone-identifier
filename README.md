@@ -88,11 +88,15 @@ Phase 5 (reverse lookup) is next; see SPEC.md §10. Two things wait on it:
 - §8 asks for the diagrams to be wired into reverse lookup as well as into the
   questions. Half of that shipped with Phase 4; the other half needs the view.
 
-Two things Phase 4 turned up and did not settle, both in SPEC.md §12:
+A data pass between Phases 4 and 5 settled the three questions Phase 4 left
+open (SPEC.md D-22 to D-24):
 
-- `single_lens_flash_below` is an attribute value named for a flash position
-  none of the three models carrying it actually has. The option label is
-  corrected; the value name is a data change.
-- `camera_bump_size` asks the technician to tell 29.5 mm from 30.7 mm of camera
-  housing. Measuring it was what put a number on it; whether a question that fine
-  should still eliminate models is a judgement, not a measurement.
+- The attribute value `single_lens_flash_below` named a flash position none of
+  the three models carrying it actually has. It is now
+  `single_lens_flash_beside`, renamed through `reference/` and regenerated, and
+  those three rows are verified against the product shots rather than inferred.
+- `camera_bump_size` stays eliminating — it is the only thing separating the
+  iPhone 13 from the 14 — and its option rows now carry the measured magnitude
+  and the "Can't tell" escape hatch.
+- Reverse lookup will be read-only. Correcting a model attribute means editing
+  `reference/models/<id>.md` and re-running `npm run transcribe`.

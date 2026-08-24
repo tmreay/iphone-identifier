@@ -54,7 +54,7 @@ export const attributes: AttributeDefinition[] = [
     id: 'rear_camera_layout',
     tier: 'coarse',
     values: [
-      'single_lens_flash_below',
+      'single_lens_flash_beside',
       'single_lens_in_pill',
       'single_lens_no_housing',
       'dual_horizontal_pill',

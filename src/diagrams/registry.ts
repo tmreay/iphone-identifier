@@ -47,7 +47,7 @@ import {
   RearCameraLayoutDualVerticalSquare,
   RearCameraLayoutPlateauBarTriple,
   RearCameraLayoutPlateauOvalSingle,
-  RearCameraLayoutSingleLensFlashBelow,
+  RearCameraLayoutSingleLensFlashBeside,
   RearCameraLayoutSingleLensInPill,
   RearCameraLayoutSingleLensNoHousing,
   RearCameraLayoutTripleSquare,
@@ -58,7 +58,7 @@ import {
 } from './rearWordmark.tsx'
 
 export const diagrams: Record<string, ComponentType> = {
-  'rear-camera-layout-single-lens-flash-below': RearCameraLayoutSingleLensFlashBelow,
+  'rear-camera-layout-single-lens-flash-beside': RearCameraLayoutSingleLensFlashBeside,
   'rear-camera-layout-single-lens-in-pill': RearCameraLayoutSingleLensInPill,
   'rear-camera-layout-single-lens-no-housing': RearCameraLayoutSingleLensNoHousing,
   'rear-camera-layout-dual-horizontal-pill': RearCameraLayoutDualHorizontalPill,
