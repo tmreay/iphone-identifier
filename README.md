@@ -108,8 +108,12 @@ bundles. Two ways in:
 | Push a `v*` tag | Windows, macOS, Linux    | A **draft** GitHub release |
 | Run it by hand  | Windows, or all if asked | Only if you tick `release` |
 
-A manual run that does not publish leaves the installers as downloadable
-workflow artifacts, so you can get a build without cutting a release.
+A manual run that does not publish leaves the installers as a downloadable
+workflow artifact, so you can get a build without cutting a release. The
+artifact holds the installers themselves and nothing else — on Windows that is
+`iPhone Identifier_<version>_x64-setup.exe` and the matching `.msi`, sitting at
+the top of the zip rather than inside Tauri's `bundle/msi/` and `bundle/nsis/`
+tree.
 
 It deliberately does **not** run on pull requests. A Rust compile costs minutes
 on three runners where `npm run ci` costs seconds, and the shell it builds is a

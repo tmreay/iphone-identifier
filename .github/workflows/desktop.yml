@@ -189,9 +189,40 @@ jobs:
           # No updater is configured, so there is no latest.json to publish.
           includeUpdaterJson: false
 
-      # The build-without-release path. Bundles land here as workflow artifacts
-      # instead of on a release page.
-      - name: Upload the bundles
+      # Tauri writes each bundle type into its own subdirectory, alongside the
+      # unpacked .app/ and the bundler's working files. Uploading that tree
+      # whole means downloading a zip and digging through msi/ and nsis/ to
+      # reach the thing you actually wanted. Collect the installers into one
+      # flat directory instead, so the artifact unzips straight to them.
+      #
+      # Two patterns rather than one: `*.exe` alone would also match the bare
+      # unpacked binary that sits in release/, which is not an installer and
+      # would be the one a technician double-clicks by mistake.
+      - name: Collect the installers
+        if: ${{ needs.plan.outputs.release != 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p installers
+          find "src-tauri/target/${{ matrix.target }}/release/bundle" -type f \
+            \( -name '*.msi' -o -name '*-setup.exe' -o -name '*.dmg' \
+               -o -name '*.AppImage' -o -name '*.deb' -o -name '*.rpm' \) \
+            -exec cp {} installers/ \;
+
+          if [ -z "$(ls -A installers)" ]; then
+            echo "::error::The build produced no installer. Bundle tree was:"
+            find "src-tauri/target/${{ matrix.target }}/release/bundle" -type f
+            exit 1
+          fi
+
+          echo "### Installers" >> "$GITHUB_STEP_SUMMARY"
+          for f in installers/*; do
+            printf -- '- `%s` (%s)\n' "$(basename "$f")" "$(du -h "$f" | cut -f1)" >> "$GITHUB_STEP_SUMMARY"
+          done
+
+      # The build-without-release path: the installers land here as a workflow
+      # artifact instead of on a release page.
+      - name: Upload the installers
         if: ${{ needs.plan.outputs.release != 'true' }}
         # v6 is the first major that actually runs on Node 24 -- v5 only had
         # preliminary support and still declares `using: node20`, so the runner
@@ -199,6 +230,6 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: iphone-identifier-${{ matrix.name }}
-          path: src-tauri/target/${{ matrix.target }}/release/bundle/**
+          path: installers/
           if-no-files-found: error
           retention-days: 14
