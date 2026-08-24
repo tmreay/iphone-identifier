@@ -46,7 +46,9 @@
         "silent": true
       },
       "nsis": {
-        "installMode": "both"
+        "installMode": "currentUser",
+        "languages": ["English"],
+        "displayLanguageSelector": false
       }
     },
     "linux": {

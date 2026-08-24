@@ -278,11 +278,24 @@ design constraint, and everything else follows from it:
   dependency (§3.2), and the shell adds none: the capability file grants the
   core defaults and no plugin permissions — no filesystem, no shell, no HTTP.
 
-The one place the desktop build is not self-contained is the **Windows WebView2
-runtime**. Windows 10 1803+ and Windows 11 ship it, so the installer uses the
-download bootstrapper rather than embedding ~130 MB into every copy. On a bench
-machine old enough to lack it, installation needs the network once; running the
-app never does.
+**Installing it on a bench PC is one file and one double-click.** The Windows
+build produces `iPhone Identifier_<version>_x64-setup.exe` — the NSIS installer,
+about 1 MB. It installs **for the current user**, which is what makes it a
+double-click rather than a negotiation: no UAC prompt, no administrator, and no
+question about per-user versus per-machine. It writes to
+`%LOCALAPPDATA%\Programs`, adds a Start Menu entry, and registers an uninstaller
+under Settings → Apps. A `.msi` is built alongside it for the case where the
+shop ever wants scripted or group-policy deployment, but it is not the file a
+technician needs. Per-machine installation is one `installMode` value away if
+several Windows accounts share a bench PC.
+
+Two known and accepted frictions, neither worth engineering around at this
+scale. The installer is **unsigned**, so SmartScreen asks once before the first
+run; signing it would mean buying a certificate and holding it as a CI secret.
+And the **WebView2 runtime** is the one part the build does not carry — Windows
+10 1803+ and Windows 11 ship it, so the installer fetches it only on a machine
+old enough to lack it, rather than embedding ~130 MB into every copy. Running
+the app never touches the network either way.
 
 Bundles are built by `.github/workflows/desktop.yml`. **Building and releasing
 are separate**: a `v*` tag builds every platform and opens a draft release,

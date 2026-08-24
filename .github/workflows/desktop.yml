@@ -189,47 +189,86 @@ jobs:
           # No updater is configured, so there is no latest.json to publish.
           includeUpdaterJson: false
 
-      # Tauri writes each bundle type into its own subdirectory, alongside the
-      # unpacked .app/ and the bundler's working files. Uploading that tree
-      # whole means downloading a zip and digging through msi/ and nsis/ to
-      # reach the thing you actually wanted. Collect the installers into one
-      # flat directory instead, so the artifact unzips straight to them.
-      #
-      # Two patterns rather than one: `*.exe` alone would also match the bare
-      # unpacked binary that sits in release/, which is not an installer and
-      # would be the one a technician double-clicks by mistake.
-      - name: Collect the installers
+      - name: Check the build produced an installer
         if: ${{ needs.plan.outputs.release != 'true' }}
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p installers
-          find "src-tauri/target/${{ matrix.target }}/release/bundle" -type f \
-            \( -name '*.msi' -o -name '*-setup.exe' -o -name '*.dmg' \
-               -o -name '*.AppImage' -o -name '*.deb' -o -name '*.rpm' \) \
-            -exec cp {} installers/ \;
+          bundle="src-tauri/target/${{ matrix.target }}/release/bundle"
 
-          if [ -z "$(ls -A installers)" ]; then
+          # `*-setup.exe` rather than `*.exe`: the bare unpacked binary sits
+          # beside the bundle tree and is not an installer, but is the one
+          # someone would double-click by mistake.
+          found=$(find "$bundle" -type f \
+            \( -name '*.msi' -o -name '*-setup.exe' -o -name '*.dmg' \
+               -o -name '*.AppImage' -o -name '*.deb' \))
+
+          if [ -z "$found" ]; then
             echo "::error::The build produced no installer. Bundle tree was:"
-            find "src-tauri/target/${{ matrix.target }}/release/bundle" -type f
+            find "$bundle" -type f
             exit 1
           fi
 
           echo "### Installers" >> "$GITHUB_STEP_SUMMARY"
-          for f in installers/*; do
-            printf -- '- `%s` (%s)\n' "$(basename "$f")" "$(du -h "$f" | cut -f1)" >> "$GITHUB_STEP_SUMMARY"
-          done
+          while IFS= read -r f; do
+            printf -- '- `%s` (%s)\n' "$(basename "$f")" "$(du -h "$f" | cut -f1)" \
+              >> "$GITHUB_STEP_SUMMARY"
+          done <<< "$found"
 
-      # The build-without-release path: the installers land here as a workflow
-      # artifact instead of on a release page.
-      - name: Upload the installers
-        if: ${{ needs.plan.outputs.release != 'true' }}
+      # The build-without-release path. Each installer is uploaded on its own
+      # with `archive: false`, so the Actions page offers it as the file itself
+      # rather than a zip to download and unpack -- click the .exe, run it.
+      #
+      # That mode takes exactly one file per step, and names the artifact after
+      # it, which is why these are separate steps rather than one glob. The
+      # `if-no-files-found: error` guard means a bundler that moves its output
+      # fails the run rather than quietly uploading nothing.
+      - name: Upload the Windows installer
+        if: ${{ needs.plan.outputs.release != 'true' && runner.os == 'Windows' }}
         # v6 is the first major that actually runs on Node 24 -- v5 only had
         # preliminary support and still declares `using: node20`, so the runner
         # forces it onto 24 and warns. Every other action here is already node24.
         uses: actions/upload-artifact@v7
         with:
-          name: iphone-identifier-${{ matrix.name }}
-          path: installers/
+          path: src-tauri/target/${{ matrix.target }}/release/bundle/nsis/*-setup.exe
+          archive: false
+          if-no-files-found: error
+          retention-days: 14
+
+      # Not the file to install by hand -- it is here for scripted or
+      # group-policy deployment.
+      - name: Upload the Windows MSI
+        if: ${{ needs.plan.outputs.release != 'true' && runner.os == 'Windows' }}
+        uses: actions/upload-artifact@v7
+        with:
+          path: src-tauri/target/${{ matrix.target }}/release/bundle/msi/*.msi
+          archive: false
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload the macOS disk image
+        if: ${{ needs.plan.outputs.release != 'true' && runner.os == 'macOS' }}
+        uses: actions/upload-artifact@v7
+        with:
+          path: src-tauri/target/${{ matrix.target }}/release/bundle/dmg/*.dmg
+          archive: false
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload the Linux AppImage
+        if: ${{ needs.plan.outputs.release != 'true' && runner.os == 'Linux' }}
+        uses: actions/upload-artifact@v7
+        with:
+          path: src-tauri/target/${{ matrix.target }}/release/bundle/appimage/*.AppImage
+          archive: false
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload the Debian package
+        if: ${{ needs.plan.outputs.release != 'true' && runner.os == 'Linux' }}
+        uses: actions/upload-artifact@v7
+        with:
+          path: src-tauri/target/${{ matrix.target }}/release/bundle/deb/*.deb
+          archive: false
           if-no-files-found: error
           retention-days: 14

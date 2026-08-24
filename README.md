@@ -63,6 +63,32 @@ src/ui/          screens, and the display text they derive (presenters.ts,
                  lookup.ts) plus the hash routing between them (route.ts)
 ```
 
+## Installing it on a Windows PC
+
+Grab **`iPhone Identifier_<version>_x64-setup.exe`** and double-click it. That
+is the whole procedure.
+
+It installs for the current user, so there is no UAC prompt, no administrator
+and no per-user-versus-per-machine question. It lands in
+`%LOCALAPPDATA%\Programs`, adds a Start Menu entry, and uninstalls from
+Settings → Apps like anything else.
+
+Where to get it:
+
+- **From a release** — the draft release a `v*` tag opens carries it.
+- **From a build** — run the [Desktop workflow](.github/workflows/desktop.yml)
+  by hand. Each installer is its own artifact, named after the file, and
+  downloads as that file: click `iPhone Identifier_<version>_x64-setup.exe` and
+  you have the installer, not a zip.
+- **From this machine** — `npm run desktop:build` writes it to
+  `src-tauri/target/release/bundle/nsis/`.
+
+The `.msi` built alongside it is for scripted or group-policy deployment. If you
+are installing by hand, ignore it.
+
+The installer is unsigned, so SmartScreen asks once — _More info_ → _Run
+anyway_.
+
 ## Desktop builds
 
 The app installs as a desktop application via [Tauri](https://tauri.app)
@@ -108,12 +134,15 @@ bundles. Two ways in:
 | Push a `v*` tag | Windows, macOS, Linux    | A **draft** GitHub release |
 | Run it by hand  | Windows, or all if asked | Only if you tick `release` |
 
-A manual run that does not publish leaves the installers as a downloadable
-workflow artifact, so you can get a build without cutting a release. The
-artifact holds the installers themselves and nothing else — on Windows that is
-`iPhone Identifier_<version>_x64-setup.exe` and the matching `.msi`, sitting at
-the top of the zip rather than inside Tauri's `bundle/msi/` and `bundle/nsis/`
-tree.
+A manual run that does not publish leaves the installers as downloadable
+workflow artifacts, so you can get a build without cutting a release.
+
+**One artifact per installer, each downloading as the file itself.** Actions
+normally zips an artifact, so a single bundle would mean downloading an archive
+and unpacking it to reach the `.exe`. These are uploaded with `archive: false`
+instead, which takes one file per upload and names the artifact after it — so
+the run page lists `iPhone Identifier_<version>_x64-setup.exe` and clicking it
+gives you exactly that.
 
 It deliberately does **not** run on pull requests. A Rust compile costs minutes
 on three runners where `npm run ci` costs seconds, and the shell it builds is a
