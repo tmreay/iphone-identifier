@@ -65,7 +65,9 @@ variants are in scope where they differ physically.
 2. It asks the single most useful **coarse-tier** question for the current
    candidate set (see §7).
 3. The technician picks an answer; candidates inconsistent with it are
-   eliminated. The app shows a live count of remaining candidates.
+   eliminated. The app shows a live count of remaining candidates — as the
+   candidate strip, a row of all 37 model names that dims each one as it goes
+   out (§12), with the count itself spoken to assistive technology.
 4. Repeat until one model remains, or until coarse-tier questions are exhausted.
 5. **One model left** → result screen (§4.5).
    **More than one** → group screen with a _Narrow further_ action (§4.3).
@@ -914,11 +916,28 @@ looked like solid data at the time:
   rather than declined, and worth splitting in two because the halves cost very
   different things.
 
-  The **narrowing** half is cheap and already sanctioned: §4.1 step 3 asks for a
+  The **narrowing** half **has shipped** — `CandidateStrip.tsx`, on the question
+  and group screens. It was cheap and already sanctioned: §4.1 step 3 asks for a
   live count, and a row of model names that dims is that count made legible. It
-  needs no new assets and could land any time.
+  needed no new assets. Three things settled in the building, recorded here
+  because they are what the rest of this bullet turns on:
 
-  The **pictures** half is the one to think about, for three reasons:
+  - **It replaces the count sentence rather than joining it.** "12 of 37 models
+    match" and a strip showing twelve lit chips are one fact printed twice, and
+    the strip is the one that also says _which_ twelve. The sentence stays as
+    the strip's accessible summary, in a live region, because thirty-seven names
+    re-read on every answer is noise: the chips are `aria-hidden` and the count
+    §4.1 asks for is announced once, in words.
+  - **The chips are not buttons.** Nothing on the strip is clickable and nothing
+    on it claims which survivor the phone is — the softer tension below decided
+    this, not styling. It is a readout.
+  - **Names are shortened, never invented.** Every name in the matrix opens with
+    "iPhone", so the chips drop it (and "generation" from the two SE names) to
+    buy the width that separates "13 Pro" from "13 Pro Max". A test asserts the
+    37 shortened names stay distinct, since two chips reading alike would show
+    one model out and another in under the same word.
+
+  The **pictures** half remains deferred, for three reasons:
 
   - **It would ship the reference images.** The 37 shots in
     `reference/images/apple/` are Apple's product shots, and the bullet above
@@ -935,13 +954,14 @@ looked like solid data at the time:
     measured the 13/14 camera housings at 29.5 mm against 30.7 mm, a 7%
     difference on a part that is itself a fifth of the body (§10).
 
-  There is also a softer tension, worth stating because it shapes the design
-  rather than settling it: prompts deliberately describe what is in the
-  technician's hand and never which model it might be (`questions.ts`). A
-  standing wall of model photos invites matching the phone against pictures
-  instead of answering the question, which is the failure mode §1 opens with.
-  That argues for the strip being a _readout_ of narrowing rather than a lookup
-  surface.
+  There is also a softer tension, which the shipped half has now had to answer:
+  prompts deliberately describe what is in the technician's hand and never which
+  model it might be (`questions.ts`). A standing wall of model photos invites
+  matching the phone against pictures instead of answering the question, which
+  is the failure mode §1 opens with. The strip is therefore built as a _readout_
+  of narrowing and not a lookup surface — small chips, no tap targets, no
+  claim about which one it is — and a picture strip would pull hard the other
+  way, because a photograph is a thing to match against in a way a name is not.
 
   _Leaning: revisit after Phase 5, when reverse lookup has settled what a
   per-model visual is and the image question above has an answer._

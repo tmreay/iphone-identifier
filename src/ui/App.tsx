@@ -38,6 +38,7 @@ import { ModelListScreen } from './ModelListScreen.tsx'
 import { QuestionScreen } from './QuestionScreen.tsx'
 import { ResultScreen } from './ResultScreen.tsx'
 import { modelById } from './lookup.ts'
+import { candidateCount } from './presenters.ts'
 import { identifyRoute, useRoute } from './route.ts'
 
 export function App() {
@@ -47,6 +48,13 @@ export function App() {
 
   const onAnswer = (attribute: AttributeId) => (value: AttributeValue) =>
     setState((current) => answer(current, attribute, value))
+
+  // The question and group screens are the ones that narrow; the result and
+  // contradiction screens say their own thing and a count under them is noise.
+  const counted =
+    result.status === 'asking' ||
+    result.status === 'narrow-further' ||
+    result.status === 'ambiguous'
 
   // A hash naming a model the matrix does not have — an old bookmark, a typo —
   // lands on the list rather than on an error. The list is where someone
@@ -95,6 +103,21 @@ export function App() {
         <h1>iPhone Identifier</h1>
       </header>
 
+      {/*
+        The strip's spoken half, mounted once for the whole run rather than
+        inside the screens. The question screen remounts on every question, and
+        a live region inserted with its text already in place is not announced —
+        it has to outlive the change for a screen reader to report it. So it
+        sits here, where nothing about answering unmounts it, and carries the
+        sentence §4.1 step 3 asks for while the chips carry the picture.
+
+        Empty on the screens that have no count to give; emptying a live region
+        announces nothing.
+      */}
+      <p className="visually-hidden" aria-live="polite">
+        {counted ? candidateCount(result.candidates.length, models.length) : ''}
+      </p>
+
       {result.status === 'asking' && result.question && (
         <QuestionScreen
           // Remount on each question so a long options list is never left
@@ -102,7 +125,7 @@ export function App() {
           key={result.question.id}
           question={result.question}
           candidates={result.candidates}
-          total={models.length}
+          all={models}
           onAnswer={onAnswer(result.question.id)}
           onSkip={() => {
             const attribute = result.question?.id
@@ -116,7 +139,7 @@ export function App() {
           status={result.status}
           candidates={result.candidates}
           revisitable={result.revisitable}
-          total={models.length}
+          all={models}
           onNarrowFurther={() => setState(narrowFurther)}
           onRevisit={(attribute) => setState((current) => unskip(current, attribute))}
         />
