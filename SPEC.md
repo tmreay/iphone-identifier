@@ -278,24 +278,30 @@ design constraint, and everything else follows from it:
   dependency (§3.2), and the shell adds none: the capability file grants the
   core defaults and no plugin permissions — no filesystem, no shell, no HTTP.
 
-**Installing it on a bench PC is one file and one double-click.** The Windows
-build produces `iPhone Identifier_<version>_x64-setup.exe` — the NSIS installer,
-about 1 MB. It installs **for the current user**, which is what makes it a
-double-click rather than a negotiation: no UAC prompt, no administrator, and no
-question about per-user versus per-machine. It writes to
-`%LOCALAPPDATA%\Programs`, adds a Start Menu entry, and registers an uninstaller
-under Settings → Apps. A `.msi` is built alongside it for the case where the
-shop ever wants scripted or group-policy deployment, but it is not the file a
-technician needs. Per-machine installation is one `installMode` value away if
-several Windows accounts share a bench PC.
+**Windows ships two files, and the primary one installs nothing.** Tauri
+compiles the frontend into the binary, so `iphone-identifier.exe` is by itself
+the whole program — about 3 MB, runs from any directory with nothing beside it.
+Published as `iPhone Identifier_<version>_x64_portable.exe`, that is what goes on
+a bench PC: copy and double-click. It buys the simplest possible deployment at
+the cost of the things installation provides — no Start Menu entry, no
+uninstaller, and updating is replacing a file.
+
+The `.msi` alongside it is for the other case: registering the app on a machine
+properly, deployable by script or group policy without anyone at the keyboard.
+It installs per-machine and so wants administrator rights, which is precisely
+the trade that makes it deployable.
+
+An NSIS `-setup.exe` was built and dropped. It sat between the two — a
+double-click installer, but still an install — and offering three Windows files
+where two cover the cases only invites picking the wrong one.
 
 Two known and accepted frictions, neither worth engineering around at this
-scale. The installer is **unsigned**, so SmartScreen asks once before the first
-run; signing it would mean buying a certificate and holding it as a CI secret.
-And the **WebView2 runtime** is the one part the build does not carry — Windows
-10 1803+ and Windows 11 ship it, so the installer fetches it only on a machine
-old enough to lack it, rather than embedding ~130 MB into every copy. Running
-the app never touches the network either way.
+scale. Nothing is **signed**, so SmartScreen asks once before the first run;
+signing would mean buying a certificate and holding it as a CI secret. And the
+**WebView2 runtime** is the one part the build does not carry — Windows 10 1803+
+and Windows 11 ship it, so only a machine old enough to lack it needs it
+fetched, rather than embedding ~130 MB into every copy. Running the app never
+touches the network either way.
 
 Bundles are built by `.github/workflows/desktop.yml`. **Building and releasing
 are separate**: a `v*` tag builds every platform and opens a draft release,

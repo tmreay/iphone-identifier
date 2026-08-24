@@ -35,7 +35,7 @@ tablet on the same network.
 | `npm run build`         | Type-check and build to `dist/`                               |
 | `npm run preview`       | Serve the production build locally                            |
 | `npm run desktop`       | Run the app in a desktop window, with hot reload              |
-| `npm run desktop:build` | Build the desktop installers for the current platform         |
+| `npm run desktop:build` | Build the desktop app and installer for the current platform  |
 | `npm run icon`          | Redraw the app icon and derive the platform set               |
 | `npm test`              | Run the Vitest suite once                                     |
 | `npm run test:watch`    | Vitest in watch mode                                          |
@@ -63,31 +63,37 @@ src/ui/          screens, and the display text they derive (presenters.ts,
                  lookup.ts) plus the hash routing between them (route.ts)
 ```
 
-## Installing it on a Windows PC
+## Getting it onto a Windows PC
 
-Grab **`iPhone Identifier_<version>_x64-setup.exe`** and double-click it. That
-is the whole procedure.
+Two files, for two different jobs:
 
-It installs for the current user, so there is no UAC prompt, no administrator
-and no per-user-versus-per-machine question. It lands in
-`%LOCALAPPDATA%\Programs`, adds a Start Menu entry, and uninstalls from
-Settings → Apps like anything else.
+| File                                            | What to do with it                                         |
+| ----------------------------------------------- | ---------------------------------------------------------- |
+| `iPhone Identifier_<version>_x64_portable.exe`  | Copy it to the bench PC and run it. No install.            |
+| `iPhone Identifier_<version>_x64_installer.msi` | For deploying across machines, via script or group policy. |
 
-Where to get it:
+**The portable one is the app.** Tauri compiles the frontend into the binary, so
+that single ~3 MB file is the whole program — put it on a USB stick, a shared
+folder, or the desktop, and double-click. Nothing is installed, so there is no
+Start Menu entry and no uninstaller: updating means replacing the file, and
+removing it means deleting it.
 
-- **From a release** — the draft release a `v*` tag opens carries it.
+**The MSI installs it properly**, and is the one to reach for when a machine
+should have the app registered like any other software. It installs per-machine,
+so it needs administrator rights — which is the trade for it being deployable
+without anyone sitting at the keyboard.
+
+Where to get them:
+
+- **From a release** — the draft release a `v*` tag opens carries them.
 - **From a build** — run the [Desktop workflow](.github/workflows/desktop.yml)
-  by hand. Each installer is its own artifact, named after the file, and
-  downloads as that file: click `iPhone Identifier_<version>_x64-setup.exe` and
-  you have the installer, not a zip.
-- **From this machine** — `npm run desktop:build` writes it to
-  `src-tauri/target/release/bundle/nsis/`.
+  by hand. Each file is its own artifact, named after itself, and downloads as
+  that file rather than a zip.
+- **From this machine** — `npm run desktop:build`. The portable binary is
+  `src-tauri/target/release/iphone-identifier.exe`; the MSI is under
+  `src-tauri/target/release/bundle/msi/`.
 
-The `.msi` built alongside it is for scripted or group-policy deployment. If you
-are installing by hand, ignore it.
-
-The installer is unsigned, so SmartScreen asks once — _More info_ → _Run
-anyway_.
+Neither is signed, so SmartScreen asks once — _More info_ → _Run anyway_.
 
 ## Desktop builds
 
@@ -116,13 +122,17 @@ Then:
 npm run desktop:build
 ```
 
-Installers land in `src-tauri/target/release/bundle/`. `npm run desktop` runs
-the app in a window against the Vite dev server, with hot reload.
+On Windows that writes the portable binary to
+`src-tauri/target/release/iphone-identifier.exe` and the MSI under
+`src-tauri/target/release/bundle/msi/`; other platforms get their bundles under
+`bundle/`. `npm run desktop` runs the app in a window against the Vite dev
+server, with hot reload.
 
-The one thing the Windows installer does not carry is the **WebView2 runtime**.
-Windows 10 1803+ and Windows 11 ship it, so the installer fetches it if it is
-missing rather than embedding ~130 MB in every copy. That is the only moment the
-app wants a network; running it never does.
+The one thing neither Windows file carries is the **WebView2 runtime**, which
+Windows 10 1803+ and Windows 11 ship. The MSI fetches it when it is missing
+rather than embedding ~130 MB in every copy; the portable exe cannot fetch
+anything, so it simply needs a machine that already has it — every current
+Windows does. Running the app never touches the network either way.
 
 ## Releases are separate from builds
 
@@ -137,12 +147,16 @@ bundles. Two ways in:
 A manual run that does not publish leaves the installers as downloadable
 workflow artifacts, so you can get a build without cutting a release.
 
-**One artifact per installer, each downloading as the file itself.** Actions
-normally zips an artifact, so a single bundle would mean downloading an archive
-and unpacking it to reach the `.exe`. These are uploaded with `archive: false`
-instead, which takes one file per upload and names the artifact after it — so
-the run page lists `iPhone Identifier_<version>_x64-setup.exe` and clicking it
-gives you exactly that.
+**One artifact per file, each downloading as that file.** Actions normally zips
+an artifact, so a single bundle would mean downloading an archive and unpacking
+it to reach the `.exe`. These are uploaded with `archive: false` instead, which
+takes one file per upload and names the artifact after it — so the run page
+lists `iPhone Identifier_<version>_x64_portable.exe` and clicking it gives you
+exactly that.
+
+That naming is also why the Windows files are renamed before upload: `name:` is
+ignored in this mode, so the filename is the only place a label can live, and
+`_portable` versus `_installer` is the distinction that matters.
 
 The trade is that `gh run download` cannot fetch these: it assumes every
 artifact is a zip and fails with "not a valid zip file". Download them from the

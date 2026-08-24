@@ -189,59 +189,67 @@ jobs:
           # No updater is configured, so there is no latest.json to publish.
           includeUpdaterJson: false
 
-      - name: Check the build produced an installer
-        if: ${{ needs.plan.outputs.release != 'true' }}
+      # Windows ships two things that do different jobs: an MSI for deploying
+      # across machines, and the bare binary, which is the whole app -- Tauri
+      # compiles the frontend into it, so it runs from anywhere with nothing
+      # beside it.
+      #
+      # Both are renamed here, because an unarchived upload takes its artifact
+      # name from the filename and ignores `name:`. The filename is therefore
+      # the only label available, and "portable" versus "installer" is the one
+      # distinction someone downloading these needs to make.
+      - name: Stage the Windows downloads
+        if: ${{ needs.plan.outputs.release != 'true' && runner.os == 'Windows' }}
         shell: bash
         run: |
           set -euo pipefail
-          bundle="src-tauri/target/${{ matrix.target }}/release/bundle"
+          release="src-tauri/target/${{ matrix.target }}/release"
+          version=$(node -p "require('./package.json').version")
+          mkdir -p downloads
 
-          # `*-setup.exe` rather than `*.exe`: the bare unpacked binary sits
-          # beside the bundle tree and is not an installer, but is the one
-          # someone would double-click by mistake.
-          found=$(find "$bundle" -type f \
-            \( -name '*.msi' -o -name '*-setup.exe' -o -name '*.dmg' \
-               -o -name '*.AppImage' -o -name '*.deb' \))
+          cp "$release"/bundle/msi/*.msi \
+             "downloads/iPhone Identifier_${version}_x64_installer.msi"
+          cp "$release/iphone-identifier.exe" \
+             "downloads/iPhone Identifier_${version}_x64_portable.exe"
 
-          if [ -z "$found" ]; then
-            echo "::error::The build produced no installer. Bundle tree was:"
-            find "$bundle" -type f
-            exit 1
-          fi
+          echo "### Downloads" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| File | Size | What it is |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| --- | --- | --- |" >> "$GITHUB_STEP_SUMMARY"
+          printf '| `%s` | %s | Run it. No install. |\n' \
+            "iPhone Identifier_${version}_x64_portable.exe" \
+            "$(du -h "downloads/iPhone Identifier_${version}_x64_portable.exe" | cut -f1)" \
+            >> "$GITHUB_STEP_SUMMARY"
+          printf '| `%s` | %s | For scripted or group-policy deployment. |\n' \
+            "iPhone Identifier_${version}_x64_installer.msi" \
+            "$(du -h "downloads/iPhone Identifier_${version}_x64_installer.msi" | cut -f1)" \
+            >> "$GITHUB_STEP_SUMMARY"
 
-          echo "### Installers" >> "$GITHUB_STEP_SUMMARY"
-          while IFS= read -r f; do
-            printf -- '- `%s` (%s)\n' "$(basename "$f")" "$(du -h "$f" | cut -f1)" \
-              >> "$GITHUB_STEP_SUMMARY"
-          done <<< "$found"
-
-      # The build-without-release path. Each installer is uploaded on its own
-      # with `archive: false`, so the Actions page offers it as the file itself
-      # rather than a zip to download and unpack -- click the .exe, run it.
+      # The build-without-release path. Each file is uploaded on its own with
+      # `archive: false`, so the Actions page offers it as the file itself
+      # rather than a zip to download and unpack.
       #
-      # That mode takes exactly one file per step, and names the artifact after
-      # it, which is why these are separate steps rather than one glob. The
-      # `if-no-files-found: error` guard means a bundler that moves its output
-      # fails the run rather than quietly uploading nothing.
-      - name: Upload the Windows installer
+      # That mode takes exactly one file per step, which is why these are
+      # separate steps rather than one glob. The `if-no-files-found: error`
+      # guard means a bundler that moves its output fails the run rather than
+      # quietly uploading nothing.
+      - name: Upload the portable app
         if: ${{ needs.plan.outputs.release != 'true' && runner.os == 'Windows' }}
         # v6 is the first major that actually runs on Node 24 -- v5 only had
         # preliminary support and still declares `using: node20`, so the runner
         # forces it onto 24 and warns. Every other action here is already node24.
         uses: actions/upload-artifact@v7
         with:
-          path: src-tauri/target/${{ matrix.target }}/release/bundle/nsis/*-setup.exe
+          path: downloads/*_portable.exe
           archive: false
           if-no-files-found: error
           retention-days: 14
 
-      # Not the file to install by hand -- it is here for scripted or
-      # group-policy deployment.
-      - name: Upload the Windows MSI
+      - name: Upload the Windows installer
         if: ${{ needs.plan.outputs.release != 'true' && runner.os == 'Windows' }}
         uses: actions/upload-artifact@v7
         with:
-          path: src-tauri/target/${{ matrix.target }}/release/bundle/msi/*.msi
+          path: downloads/*_installer.msi
           archive: false
           if-no-files-found: error
           retention-days: 14
