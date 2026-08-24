@@ -75,8 +75,12 @@ Two files, for two different jobs:
 **The portable one is the app.** Tauri compiles the frontend into the binary, so
 that single ~3 MB file is the whole program — put it on a USB stick, a shared
 folder, or the desktop, and double-click. Nothing is installed, so there is no
-Start Menu entry and no uninstaller: updating means replacing the file, and
-removing it means deleting it.
+Start Menu entry and no uninstaller, and updating means replacing the file.
+
+It is not quite zero-footprint: the WebView2 runtime keeps a profile for the app
+under `%LOCALAPPDATA%\info.thomasreay.iphone-identifier\` (a few MB), which is
+why a half-finished identification is still there next time you open it. Delete
+that folder as well if you want the machine genuinely clean.
 
 **The MSI installs it properly**, and is the one to reach for when a machine
 should have the app registered like any other software. It installs per-machine,

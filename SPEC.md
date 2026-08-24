@@ -286,6 +286,14 @@ a bench PC: copy and double-click. It buys the simplest possible deployment at
 the cost of the things installation provides — no Start Menu entry, no
 uninstaller, and updating is replacing a file.
 
+"Portable" describes the app, not the machine: WebView2 keeps a profile for it
+under `%LOCALAPPDATA%\<identifier>\`, a few megabytes, shared by every copy of
+the binary on that PC. That is where a half-finished identification survives a
+restart. Pinning it beside the executable is possible — the WebView2 loader
+reads `WEBVIEW2_USER_DATA_FOLDER` — but it would mean the shell doing something
+other than opening a window, which §5.5 otherwise forbids, so it is left alone
+until something actually needs it.
+
 The `.msi` alongside it is for the other case: registering the app on a machine
 properly, deployable by script or group policy without anyone at the keyboard.
 It installs per-machine and so wants administrator rights, which is precisely
