@@ -198,7 +198,7 @@ jobs:
       # instead of on a release page.
       - name: Upload the bundles
         if: ${{ needs.plan.outputs.release != 'true' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: iphone-identifier-${{ matrix.name }}
           path: src-tauri/target/${{ matrix.target }}/release/bundle/**
