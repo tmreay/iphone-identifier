@@ -15,11 +15,14 @@
  * clickable, and the strip never claims which of the survivors it is.
  *
  * **Accessibility.** Thirty-seven names re-read on every answer is noise, not
- * information, so the chips are `aria-hidden` and the live region carries the
- * sentence instead. The count §4.1 asks for is announced, once, in words.
+ * information, so the chips are `aria-hidden` and the count §4.1 asks for is
+ * spoken instead, once, in words. That live region lives in `App.tsx` rather
+ * than here: this component sits inside a screen that remounts on every
+ * question, and a region inserted with its text already in place is not
+ * announced — it has to outlive the change for a screen reader to report it.
  */
 import type { IPhoneModel } from '../data/types.ts'
-import { candidateCount, candidateStrip } from './presenters.ts'
+import { candidateStrip } from './presenters.ts'
 
 export function CandidateStrip({
   all,
@@ -32,9 +35,6 @@ export function CandidateStrip({
 
   return (
     <div className="strip">
-      <p className="visually-hidden" aria-live="polite">
-        {candidateCount(candidates.length, all.length)}
-      </p>
       <ul className="strip-models" aria-hidden="true">
         {entries.map((entry) => (
           <li

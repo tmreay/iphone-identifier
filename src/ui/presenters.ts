@@ -185,8 +185,7 @@ export function visibleOptions(
  *
  * The strip is §4.1 step 3's live count made legible — the row of model names
  * §12 asks for, dimming each as it is eliminated. Names only: the pictures half
- * of that open question costs something quite different and stays deferred
- * §12 defers.
+ * of that open question costs something quite different, and §12 defers it.
  */
 export interface StripEntry {
   id: ModelId
