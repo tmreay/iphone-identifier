@@ -2,3 +2,6 @@ dist/
 coverage/
 node_modules/
 package-lock.json
+
+# Local-only agent scratch space; holds git worktrees for other sessions.
+.claude/
