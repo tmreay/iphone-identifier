@@ -286,10 +286,14 @@ app never does.
 
 Bundles are built by `.github/workflows/desktop.yml`. **Building and releasing
 are separate**: a `v*` tag builds every platform and opens a draft release,
-while a manual run or a pull request touching the shell builds the installers
-and leaves them as workflow artifacts. A tag whose name disagrees with
-`package.json` fails the run rather than shipping an app that misreports its own
-version.
+while a manual run builds the installers and leaves them as workflow artifacts.
+A tag whose name disagrees with `package.json` fails the run rather than
+shipping an app that misreports its own version.
+
+It does not run on pull requests. A Rust compile costs minutes on three runners
+where the existing checks cost seconds, and it builds a window around a bundle
+those checks already cover, so the shell is verified on demand rather than on
+every change.
 
 The app icon is **generated, not committed as an opaque binary** — `npm run
 icon` draws it from shapes in the app's own palette and derives the platform

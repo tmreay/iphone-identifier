@@ -101,16 +101,20 @@ app wants a network; running it never does.
 ## Releases are separate from builds
 
 [`.github/workflows/desktop.yml`](.github/workflows/desktop.yml) builds the
-bundles. Three ways in:
+bundles. Two ways in:
 
-| Trigger               | Builds                   | Publishes                  |
-| --------------------- | ------------------------ | -------------------------- |
-| Push a `v*` tag       | Windows, macOS, Linux    | A **draft** GitHub release |
-| Run it by hand        | Windows, or all if asked | Only if you tick `release` |
-| PR touching the shell | Windows                  | Nothing                    |
+| Trigger         | Builds                   | Publishes                  |
+| --------------- | ------------------------ | -------------------------- |
+| Push a `v*` tag | Windows, macOS, Linux    | A **draft** GitHub release |
+| Run it by hand  | Windows, or all if asked | Only if you tick `release` |
 
-Everything that does not publish leaves the installers as downloadable workflow
-artifacts, so you can get a build without cutting a release.
+A manual run that does not publish leaves the installers as downloadable
+workflow artifacts, so you can get a build without cutting a release.
+
+It deliberately does **not** run on pull requests. A Rust compile costs minutes
+on three runners where `npm run ci` costs seconds, and the shell it builds is a
+window around a bundle CI already checks. Run it by hand when the shell itself
+changes.
 
 Tags carry the version: pushing `v0.2.0` requires `package.json` to say
 `0.2.0`, and the run fails otherwise rather than shipping an app that

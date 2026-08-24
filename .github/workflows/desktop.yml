@@ -1,28 +1,22 @@
 name: Desktop
 
-# Builds the Tauri desktop bundles (SPEC.md D-27). Three ways in:
+# Builds the Tauri desktop bundles (SPEC.md D-27). Two ways in:
 #
 #   push a v* tag   build every platform and open a draft release
 #   run it by hand  build the chosen platforms; release only if asked
-#   pull request    build Windows only, to prove the shell still compiles
 #
 # Building and releasing are separate: only a tag push or an explicit
-# `release: true` publishes anything. Every other run leaves the installers as
+# `release: true` publishes anything. A manual run leaves the installers as
 # downloadable workflow artifacts.
+#
+# Deliberately not on pull_request. A Rust compile costs minutes on three
+# runners where ci.yml costs seconds, and the shell it builds is a window
+# around a bundle ci.yml already checks -- so paying that on every PR buys
+# almost nothing. Run this by hand when the shell itself changes.
 
 on:
   push:
     tags: ['v*']
-  pull_request:
-    # Only when something the desktop build depends on moved. The app's own
-    # source is covered by ci.yml, which is far cheaper than a Rust compile.
-    paths:
-      - 'src-tauri/**'
-      - 'scripts/make-icon.js'
-      - 'vite.config.ts'
-      - 'package.json'
-      - 'package-lock.json'
-      - '.github/workflows/desktop.yml'
   workflow_dispatch:
     inputs:
       platforms:
@@ -103,8 +97,9 @@ jobs:
               if [ "$PLATFORMS" = all ]; then set_matrix="[$all]"; else set_matrix="[$windows]"; fi
               ;;
             *)
-              # Pull requests prove the shell still compiles. One platform is
-              # enough for that, and it is the one the shop runs.
+              # Unreachable: the two triggers above are the only ones declared.
+              # If a third is ever added, build the platform that matters and
+              # publish nothing, rather than guessing.
               set_matrix="[$windows]"
               ;;
           esac
