@@ -7,7 +7,9 @@ import prettier from 'eslint-config-prettier/flat'
 
 // Flat config. Lints JS/TS only — Markdown and CSS are handled by Prettier.
 export default tseslint.config(
-  { ignores: ['dist/', 'node_modules/', 'coverage/'] },
+  // src-tauri/target/ is Rust build output, present only after a local desktop
+  // build, and holds generated JS that is not ours to lint.
+  { ignores: ['dist/', 'node_modules/', 'coverage/', 'src-tauri/target/'] },
 
   // Type-aware linting for the application source.
   {
