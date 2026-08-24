@@ -51,7 +51,8 @@ scripts/         build tooling — the reference/ -> src/data/ transcription
 src/data/        attribute definitions, questions, the model matrix
 src/engine/      pure TypeScript identification logic (no React)
 src/diagrams/    hand-drawn SVG illustrating answer options, and the id registry
-src/ui/          screens, and the display text they derive (presenters.ts)
+src/ui/          screens, and the display text they derive (presenters.ts,
+                 lookup.ts) plus the hash routing between them (route.ts)
 ```
 
 ## The matrix is generated
@@ -75,18 +76,19 @@ declares, fails CI.
 
 ## Status
 
-Phases 0-4 complete: scaffolding, sourced data collection, the matrix plus the
-identification engine, the identify UI, and the diagrams. The app runs end to
-end — it asks questions, illustrated where a picture is what the technician
-needs, narrows the candidate set, and reaches a model, a group, or a stated
-terminal ambiguity.
+**All five phases are complete**: scaffolding, sourced data collection, the
+matrix plus the identification engine, the identify UI, the diagrams, and
+reverse lookup. See SPEC.md §10.
 
-Phase 5 (reverse lookup) is next; see SPEC.md §10. Two things wait on it:
+The app runs end to end. It asks questions, illustrated where a picture is what
+the technician needs, narrows the candidate set, and reaches a model, a group,
+or a stated terminal ambiguity — and from the result, or from anywhere in the
+flow, opens the reverse-lookup entry listing every characteristic the matrix
+records for a model, drawn with the same diagrams the questions used.
 
-- The result screen names the model's reverse-lookup entry instead of linking
-  to it.
-- §8 asks for the diagrams to be wired into reverse lookup as well as into the
-  questions. Half of that shipped with Phase 4; the other half needs the view.
+Reverse lookup is read-only by decision (SPEC.md D-24). Correcting a value means
+editing `reference/models/<id>.md` and re-running `npm run transcribe`; each
+entry names its own file so the fix is one step from the wrong row.
 
 A data pass between Phases 4 and 5 settled the three questions Phase 4 left
 open (SPEC.md D-22 to D-24):
