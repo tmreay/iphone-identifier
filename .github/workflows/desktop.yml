@@ -1,6 +1,6 @@
 name: Desktop
 
-# Builds the Tauri desktop bundles (SPEC.md D-22). Three ways in:
+# Builds the Tauri desktop bundles (SPEC.md D-25). Three ways in:
 #
 #   push a v* tag   build every platform and open a draft release
 #   run it by hand  build the chosen platforms; release only if asked

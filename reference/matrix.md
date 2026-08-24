@@ -6,45 +6,45 @@ the confidence flags live there. Do not transcribe from this page.
 
 ## Coarse tier
 
-| Model                      | Yr   | Home | Port      | Cams | Layout                    | Cutout             | Size class       | SIM tray         |
-| -------------------------- | ---- | ---- | --------- | ---- | ------------------------- | ------------------ | ---------------- | ---------------- |
-| iPhone 8                   | 2017 | yes  | Lightning | 1    | `single_lens_flash_below` | `bezels_no_cutout` | compact          | right_side       |
-| iPhone 8 Plus              | 2017 | yes  | Lightning | 2    | `dual_horizontal_pill`    | `bezels_no_cutout` | max              | right_side       |
-| iPhone X                   | 2017 | —    | Lightning | 2    | `dual_vertical_pill`      | `notch_wide`       | standard         | right_side       |
-| iPhone XR                  | 2018 | —    | Lightning | 1    | `single_lens_in_pill`     | `notch_wide`       | standard / large | right_side       |
-| iPhone XS                  | 2018 | —    | Lightning | 2    | `dual_vertical_pill`      | `notch_wide`       | standard         | right_side       |
-| iPhone XS Max              | 2018 | —    | Lightning | 2    | `dual_vertical_pill`      | `notch_wide`       | max              | right_side       |
-| iPhone 11                  | 2019 | —    | Lightning | 2    | `dual_vertical_square`    | `notch_wide`       | standard / large | right_side       |
-| iPhone 11 Pro              | 2019 | —    | Lightning | 3    | `triple_square`           | `notch_wide`       | standard         | right_side       |
-| iPhone 11 Pro Max          | 2019 | —    | Lightning | 3    | `triple_square`           | `notch_wide`       | max              | right_side       |
-| iPhone SE (2nd generation) | 2020 | yes  | Lightning | 1    | `single_lens_flash_below` | `bezels_no_cutout` | compact          | right_side       |
-| iPhone 12 mini             | 2020 | —    | Lightning | 2    | `dual_vertical_square`    | `notch_wide`       | mini             | left_side        |
-| iPhone 12                  | 2020 | —    | Lightning | 2    | `dual_vertical_square`    | `notch_wide`       | standard         | left_side        |
-| iPhone 12 Pro              | 2020 | —    | Lightning | 3    | `triple_square`           | `notch_wide`       | standard         | left_side        |
-| iPhone 12 Pro Max          | 2020 | —    | Lightning | 3    | `triple_square`           | `notch_wide`       | max              | left_side        |
-| iPhone 13 mini             | 2021 | —    | Lightning | 2    | `dual_diagonal_square`    | `notch_narrow`     | mini             | left_side        |
-| iPhone 13                  | 2021 | —    | Lightning | 2    | `dual_diagonal_square`    | `notch_narrow`     | standard         | left_side        |
-| iPhone 13 Pro              | 2021 | —    | Lightning | 3    | `triple_square`           | `notch_narrow`     | standard         | left_side        |
-| iPhone 13 Pro Max          | 2021 | —    | Lightning | 3    | `triple_square`           | `notch_narrow`     | max              | left_side        |
-| iPhone SE (3rd generation) | 2022 | yes  | Lightning | 1    | `single_lens_flash_below` | `bezels_no_cutout` | compact          | right_side       |
-| iPhone 14                  | 2022 | —    | Lightning | 2    | `dual_diagonal_square`    | `notch_narrow`     | standard         | left_side / none |
-| iPhone 14 Plus             | 2022 | —    | Lightning | 2    | `dual_diagonal_square`    | `notch_narrow`     | max              | left_side / none |
-| iPhone 14 Pro              | 2022 | —    | Lightning | 3    | `triple_square`           | `dynamic_island`   | standard / large | left_side / none |
-| iPhone 14 Pro Max          | 2022 | —    | Lightning | 3    | `triple_square`           | `dynamic_island`   | max              | left_side / none |
-| iPhone 15                  | 2023 | —    | USB-C     | 2    | `dual_diagonal_square`    | `dynamic_island`   | standard / large | left_side / none |
-| iPhone 15 Plus             | 2023 | —    | USB-C     | 2    | `dual_diagonal_square`    | `dynamic_island`   | max              | left_side / none |
-| iPhone 15 Pro              | 2023 | —    | USB-C     | 3    | `triple_square`           | `dynamic_island`   | standard         | left_side / none |
-| iPhone 15 Pro Max          | 2023 | —    | USB-C     | 3    | `triple_square`           | `dynamic_island`   | max              | left_side / none |
-| iPhone 16                  | 2024 | —    | USB-C     | 2    | `dual_vertical_slim_pill` | `dynamic_island`   | standard / large | left_side / none |
-| iPhone 16 Plus             | 2024 | —    | USB-C     | 2    | `dual_vertical_slim_pill` | `dynamic_island`   | max              | left_side / none |
-| iPhone 16 Pro              | 2024 | —    | USB-C     | 3    | `triple_square`           | `dynamic_island`   | standard / large | left_side / none |
-| iPhone 16 Pro Max          | 2024 | —    | USB-C     | 3    | `triple_square`           | `dynamic_island`   | max              | left_side / none |
-| iPhone 16e                 | 2025 | —    | USB-C     | 1    | `single_lens_no_housing`  | `notch_narrow`     | standard         | left_side / none |
-| iPhone Air                 | 2025 | —    | USB-C     | 1    | `plateau_oval_single`     | `dynamic_island`   | max              | none             |
-| iPhone 17                  | 2025 | —    | USB-C     | 2    | `dual_vertical_slim_pill` | `dynamic_island`   | standard / large | left_side / none |
-| iPhone 17 Pro              | 2025 | —    | USB-C     | 3    | `plateau_bar_triple`      | `dynamic_island`   | standard / large | left_side / none |
-| iPhone 17 Pro Max          | 2025 | —    | USB-C     | 3    | `plateau_bar_triple`      | `dynamic_island`   | max              | left_side / none |
-| iPhone 17e                 | 2026 | —    | USB-C     | 1    | `single_lens_no_housing`  | `notch_narrow`     | standard         | left_side / none |
+| Model                      | Yr   | Home | Port      | Cams | Layout                     | Cutout             | Size class       | SIM tray         |
+| -------------------------- | ---- | ---- | --------- | ---- | -------------------------- | ------------------ | ---------------- | ---------------- |
+| iPhone 8                   | 2017 | yes  | Lightning | 1    | `single_lens_flash_beside` | `bezels_no_cutout` | compact          | right_side       |
+| iPhone 8 Plus              | 2017 | yes  | Lightning | 2    | `dual_horizontal_pill`     | `bezels_no_cutout` | max              | right_side       |
+| iPhone X                   | 2017 | —    | Lightning | 2    | `dual_vertical_pill`       | `notch_wide`       | standard         | right_side       |
+| iPhone XR                  | 2018 | —    | Lightning | 1    | `single_lens_in_pill`      | `notch_wide`       | standard / large | right_side       |
+| iPhone XS                  | 2018 | —    | Lightning | 2    | `dual_vertical_pill`       | `notch_wide`       | standard         | right_side       |
+| iPhone XS Max              | 2018 | —    | Lightning | 2    | `dual_vertical_pill`       | `notch_wide`       | max              | right_side       |
+| iPhone 11                  | 2019 | —    | Lightning | 2    | `dual_vertical_square`     | `notch_wide`       | standard / large | right_side       |
+| iPhone 11 Pro              | 2019 | —    | Lightning | 3    | `triple_square`            | `notch_wide`       | standard         | right_side       |
+| iPhone 11 Pro Max          | 2019 | —    | Lightning | 3    | `triple_square`            | `notch_wide`       | max              | right_side       |
+| iPhone SE (2nd generation) | 2020 | yes  | Lightning | 1    | `single_lens_flash_beside` | `bezels_no_cutout` | compact          | right_side       |
+| iPhone 12 mini             | 2020 | —    | Lightning | 2    | `dual_vertical_square`     | `notch_wide`       | mini             | left_side        |
+| iPhone 12                  | 2020 | —    | Lightning | 2    | `dual_vertical_square`     | `notch_wide`       | standard         | left_side        |
+| iPhone 12 Pro              | 2020 | —    | Lightning | 3    | `triple_square`            | `notch_wide`       | standard         | left_side        |
+| iPhone 12 Pro Max          | 2020 | —    | Lightning | 3    | `triple_square`            | `notch_wide`       | max              | left_side        |
+| iPhone 13 mini             | 2021 | —    | Lightning | 2    | `dual_diagonal_square`     | `notch_narrow`     | mini             | left_side        |
+| iPhone 13                  | 2021 | —    | Lightning | 2    | `dual_diagonal_square`     | `notch_narrow`     | standard         | left_side        |
+| iPhone 13 Pro              | 2021 | —    | Lightning | 3    | `triple_square`            | `notch_narrow`     | standard         | left_side        |
+| iPhone 13 Pro Max          | 2021 | —    | Lightning | 3    | `triple_square`            | `notch_narrow`     | max              | left_side        |
+| iPhone SE (3rd generation) | 2022 | yes  | Lightning | 1    | `single_lens_flash_beside` | `bezels_no_cutout` | compact          | right_side       |
+| iPhone 14                  | 2022 | —    | Lightning | 2    | `dual_diagonal_square`     | `notch_narrow`     | standard         | left_side / none |
+| iPhone 14 Plus             | 2022 | —    | Lightning | 2    | `dual_diagonal_square`     | `notch_narrow`     | max              | left_side / none |
+| iPhone 14 Pro              | 2022 | —    | Lightning | 3    | `triple_square`            | `dynamic_island`   | standard / large | left_side / none |
+| iPhone 14 Pro Max          | 2022 | —    | Lightning | 3    | `triple_square`            | `dynamic_island`   | max              | left_side / none |
+| iPhone 15                  | 2023 | —    | USB-C     | 2    | `dual_diagonal_square`     | `dynamic_island`   | standard / large | left_side / none |
+| iPhone 15 Plus             | 2023 | —    | USB-C     | 2    | `dual_diagonal_square`     | `dynamic_island`   | max              | left_side / none |
+| iPhone 15 Pro              | 2023 | —    | USB-C     | 3    | `triple_square`            | `dynamic_island`   | standard         | left_side / none |
+| iPhone 15 Pro Max          | 2023 | —    | USB-C     | 3    | `triple_square`            | `dynamic_island`   | max              | left_side / none |
+| iPhone 16                  | 2024 | —    | USB-C     | 2    | `dual_vertical_slim_pill`  | `dynamic_island`   | standard / large | left_side / none |
+| iPhone 16 Plus             | 2024 | —    | USB-C     | 2    | `dual_vertical_slim_pill`  | `dynamic_island`   | max              | left_side / none |
+| iPhone 16 Pro              | 2024 | —    | USB-C     | 3    | `triple_square`            | `dynamic_island`   | standard / large | left_side / none |
+| iPhone 16 Pro Max          | 2024 | —    | USB-C     | 3    | `triple_square`            | `dynamic_island`   | max              | left_side / none |
+| iPhone 16e                 | 2025 | —    | USB-C     | 1    | `single_lens_no_housing`   | `notch_narrow`     | standard         | left_side / none |
+| iPhone Air                 | 2025 | —    | USB-C     | 1    | `plateau_oval_single`      | `dynamic_island`   | max              | none             |
+| iPhone 17                  | 2025 | —    | USB-C     | 2    | `dual_vertical_slim_pill`  | `dynamic_island`   | standard / large | left_side / none |
+| iPhone 17 Pro              | 2025 | —    | USB-C     | 3    | `plateau_bar_triple`       | `dynamic_island`   | standard / large | left_side / none |
+| iPhone 17 Pro Max          | 2025 | —    | USB-C     | 3    | `plateau_bar_triple`       | `dynamic_island`   | max              | left_side / none |
+| iPhone 17e                 | 2026 | —    | USB-C     | 1    | `single_lens_no_housing`   | `notch_narrow`     | standard         | left_side / none |
 
 ## Deep tier
 
