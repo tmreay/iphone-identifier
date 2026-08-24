@@ -66,7 +66,9 @@ variants are in scope where they differ physically.
 2. It asks the single most useful **coarse-tier** question for the current
    candidate set (see §7).
 3. The technician picks an answer; candidates inconsistent with it are
-   eliminated. The app shows a live count of remaining candidates.
+   eliminated. The app shows a live count of remaining candidates — as the
+   candidate strip, a row of all 37 model names that dims each one as it goes
+   out (§12), with the count itself spoken to assistive technology.
 4. Repeat until one model remains, or until coarse-tier questions are exhausted.
 5. **One model left** → result screen (§4.5).
    **More than one** → group screen with a _Narrow further_ action (§4.3).
@@ -259,7 +261,7 @@ The app **must be installable as a desktop application via Tauri**, and
 **Windows is the platform that matters** — that is what the shop runs. macOS and
 Linux bundles are appreciated and are built alongside, but they are never the
 reason a build exists, and a break on one of them is not a break on the
-release (D-25).
+release (D-27).
 
 Tauri wraps the **same `dist/` the web build produces**. That is the whole
 design constraint, and everything else follows from it:
@@ -750,10 +752,11 @@ Two things Phase 3 deliberately did not build, both belonging to later phases:
   side by side" — so it is answerable but not yet properly askable. _(Phase 4
   filled both.)_
 - **The reverse-lookup link** §4.5 asks for. Phase 5 builds the entry; the result
-  screen names the model it will open rather than carrying a dead link.
+  screen names the model it will open rather than carrying a dead link. _(Phase 5
+  replaced the placeholder with the link.)_
 
 **Phase 4 — diagrams.** Draw the SVG set; wire into questions and reverse
-lookup. _(done — reverse lookup waits on Phase 5)_
+lookup. _(done)_
 
 **Phase 4 is done.** Thirty-three hand-drawn SVG components across the seven
 questions that declared a `diagram` id, plus the registry binding ids to
@@ -763,7 +766,8 @@ test asserts the two agree in both directions so neither a missing drawing nor a
 orphaned one can pass CI.
 
 Wiring into reverse lookup is the half that does not exist yet, because reverse
-lookup does not (Phase 5).
+lookup does not (Phase 5). _(Phase 5 wired it: an entry renders the same
+components against the same ids, so the set had nothing added to it.)_
 
 What Phase 4 changed in this spec, all of it from drawing against the committed
 reference images rather than from re-reading §8:
@@ -842,7 +846,58 @@ reference image"; drawing the diagram in Phase 4 performed it, so they are now
 ✅ verified against the committed product shot, cited as that model's image
 source. The flag change alters nothing downstream — 🟡 and ✅ both transcribe.
 
-**Phase 5 — reverse lookup.** Browsable model list and detail view.
+**Phase 5 — reverse lookup.** Browsable model list and detail view. _(done)_
+
+**Phase 5 is done.** A list of all 37 models grouped by release year, and an
+entry per model showing every characteristic the matrix records for it, carrying
+the same diagram components the questions use — so confirming a result is
+comparing the phone against the pictures it was just asked about rather than
+against a second vocabulary for the same features. The result screen's
+placeholder is now the link §4.5 asked for, and the list is reachable from
+anywhere in the flow, because two of §4.6's three jobs — training, and reviewing
+the data — are not things a technician arrives at by identifying a phone first.
+
+The shape follows Phase 3's: the components are thin, and everything that could
+be _wrong_ rather than merely ugly is a pure function in `ui/lookup.ts`, tested
+against the real matrix over all 37 models rather than a fixture.
+
+What Phase 5 changed in this spec, from building the view rather than from
+re-reading §4.6:
+
+- **A blank row is a row, not an omission.** 65 of the 666 rows are absent by
+  design (§10, Phase 2), and an entry that quietly listed 16 characteristics for
+  one model and 18 for another would read as a bug in whichever one the
+  technician saw second. Every attribute gets a row; an absent one says so and
+  says what it costs — under §5.4 a value the matrix does not record eliminates
+  nothing (D-26). The screen cannot do better than that, and should not pretend
+  to: 🔴 unverified and ⚪ not applicable both transcribe to absence, so nothing
+  downstream can tell "nobody counted the holes" from "there is nothing here to
+  count".
+
+- **The two colour layers are not one-to-one in either direction**, and both
+  directions are in the data. Two marketing names under one palette value is the
+  expected case §6.5 already describes — the iPhone 15 Pro's Natural Titanium
+  and White Titanium are both `white_silver`. The reverse is not described
+  there and is real: the iPhone 13 and 13 mini record "Blue" as **both**
+  `light_blue` and `dark_blue`, which `reference/models/iphone-13.md` calls a
+  boundary shade — carrying both values is how a shade sitting between two
+  palette entries is recorded so that neither answer eliminates the model. On
+  screen that reads as the same colour listed twice by mistake, so the entry
+  explains it, derived from the data rather than named in the code.
+
+- **Row order is `attributes.ts` order, which is the reference files' order.**
+  §4.6 names reviewing and correcting the underlying data as one of this view's
+  jobs, and that job is reading the entry beside `reference/models/<id>.md`. The
+  two now read in the same sequence, so a discrepancy shows up level with
+  itself. The entry also names that file, which is the whole of what D-24 leaves
+  a technician to do about a wrong value.
+
+- **The view lives in the URL, the run does not** (D-25). §2 puts this on a
+  phone at a workbench, where the system Back button is the back button; a view
+  held in React state makes it leave the app. So the hash carries which screen
+  is showing and nothing else, which is also what makes the §4.5 link safe —
+  looking a model up mid-run and coming back leaves the answer trail exactly
+  where it was, because navigating never touched it.
 
 Phases 1 and 2 are strictly ordered. No model attribute may be written into
 `src/data/models.ts` from memory — it must trace to `reference/`.
@@ -875,7 +930,9 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 | D-22 | Attribute **values** are named for what the technician sees, and a value whose name contradicts the reference images is renamed rather than left as a label-only correction. `single_lens_flash_below` became `single_lens_flash_beside` in a data pass: the three models carrying it put the flash beside the lens, not below it. Safe by construction — renaming one value uniformly re-labels a partition without changing it, so no separability result moves. The alternative, merging it into `single_lens_no_housing`, was declined: it drops a value from the matrix and asks whether lens size is a fair thing to put to a technician, which is a bigger question than the name. |
 | D-23 | `camera_bump_size` stays **eliminating** and gains a caveat on its option rows. Phase 4 measured the judgement it asks for at about 2 mm in 30 — close to the limit of what an eye can call against a drawing — but it is the only thing separating the iPhone 13 from the 14 once the coarse tier is exhausted, so removing its power to eliminate would give that pair up entirely. Mitigation is honesty at the point of the tap: the help text states the real magnitude and the rows carry the "Can't tell" escape hatch, which rules nothing out.                                                                                                                                   |
 | D-24 | Reverse lookup is **read-only**. Correcting a model attribute is a change to `reference/models/<id>.md` followed by `npm run transcribe`, never an edit in the app. In-app editing would put a value into the matrix that no source backs, which is the one thing D-11 exists to prevent, and the matrix is a build output under D-14 with nowhere to write back to. §4.6's "review and correct" is the review half in the app and the correction half in the repo.                                                                                                                                                                                                                       |
-| D-25 | The app is packaged for the desktop with **Tauri**, targeting **Windows** first and macOS and Linux where they come free. Tauri wraps the same `dist/` the web build produces and holds no logic of its own — the shell opens a window and nothing else, so the web build stays first-class and the engine stays testable without a UI (§5.5). Electron was not weighed against it on bundle size but on this: Tauri uses the OS webview, so packaging adds a shell rather than a second browser, and "the desktop app" and "the page on the shop network" stay the same program. Building and releasing are separate triggers, so an installer can be produced without publishing one.   |
+| D-25 | Which view is showing lives in the **URL hash**; the identify run lives in React state, and the two never mix. §2 puts this on a phone at a workbench, where the system Back button is the back button — a view held in state makes it leave the app, and one held in the hash steps back through the entry, the list and the flow. The run is deliberately not addressable: it is an answer trail and a tier, and a bookmark of it would be a half-finished diagnosis. That separation is what lets the §4.5 link open a model mid-run and come back to the trail intact. Hand-rolled, not a router: §5.1 asks for a concrete need and three parameterless routes are not one.           |
+| D-26 | An attribute the matrix does not record gets a row **saying so**, never an omitted row. 65 of the 666 rows are absent by design, and an entry listing 16 characteristics for one model and 18 for another reads as a bug rather than as sparse data. The row states the consequence — under §5.4 an absent value eliminates nothing — because that is the whole of what is knowable: 🔴 unverified and ⚪ not applicable both transcribe to absence, so no screen can tell "nobody counted" from "there is nothing to count".                                                                                                                                                             |
+| D-27 | The app is packaged for the desktop with **Tauri**, targeting **Windows** first and macOS and Linux where they come free. Tauri wraps the same `dist/` the web build produces and holds no logic of its own — the shell opens a window and nothing else, so the web build stays first-class and the engine stays testable without a UI (§5.5). Electron was not weighed against it on bundle size but on this: Tauri uses the OS webview, so packaging adds a shell rather than a second browser, and "the desktop app" and "the page on the shop network" stay the same program. Building and releasing are separate triggers, so an installer can be produced without publishing one.   |
 
 D-11 has already paid for itself twice, which is worth recording because both failures
 looked like solid data at the time:
@@ -894,7 +951,7 @@ looked like solid data at the time:
 ## 12. Open questions
 
 - How the built app is served at the shop — copied to each device, or served
-  from one machine on the LAN. **Partly settled by D-25**: on a bench PC it is
+  from one machine on the LAN. **Partly settled by D-27**: on a bench PC it is
   an installer, and the question no longer has to be answered for that case.
   It stays open for the phones and tablets §2 describes, which the desktop
   build does not reach.
@@ -909,11 +966,28 @@ looked like solid data at the time:
   rather than declined, and worth splitting in two because the halves cost very
   different things.
 
-  The **narrowing** half is cheap and already sanctioned: §4.1 step 3 asks for a
+  The **narrowing** half **has shipped** — `CandidateStrip.tsx`, on the question
+  and group screens. It was cheap and already sanctioned: §4.1 step 3 asks for a
   live count, and a row of model names that dims is that count made legible. It
-  needs no new assets and could land any time.
+  needed no new assets. Three things settled in the building, recorded here
+  because they are what the rest of this bullet turns on:
 
-  The **pictures** half is the one to think about, for three reasons:
+  - **It replaces the count sentence rather than joining it.** "12 of 37 models
+    match" and a strip showing twelve lit chips are one fact printed twice, and
+    the strip is the one that also says _which_ twelve. The sentence stays as
+    the strip's accessible summary, in a live region, because thirty-seven names
+    re-read on every answer is noise: the chips are `aria-hidden` and the count
+    §4.1 asks for is announced once, in words.
+  - **The chips are not buttons.** Nothing on the strip is clickable and nothing
+    on it claims which survivor the phone is — the softer tension below decided
+    this, not styling. It is a readout.
+  - **Names are shortened, never invented.** Every name in the matrix opens with
+    "iPhone", so the chips drop it (and "generation" from the two SE names) to
+    buy the width that separates "13 Pro" from "13 Pro Max". A test asserts the
+    37 shortened names stay distinct, since two chips reading alike would show
+    one model out and another in under the same word.
+
+  The **pictures** half remains deferred, for three reasons:
 
   - **It would ship the reference images.** The 37 shots in
     `reference/images/apple/` are Apple's product shots, and the bullet above
@@ -930,13 +1004,14 @@ looked like solid data at the time:
     measured the 13/14 camera housings at 29.5 mm against 30.7 mm, a 7%
     difference on a part that is itself a fifth of the body (§10).
 
-  There is also a softer tension, worth stating because it shapes the design
-  rather than settling it: prompts deliberately describe what is in the
-  technician's hand and never which model it might be (`questions.ts`). A
-  standing wall of model photos invites matching the phone against pictures
-  instead of answering the question, which is the failure mode §1 opens with.
-  That argues for the strip being a _readout_ of narrowing rather than a lookup
-  surface.
+  There is also a softer tension, which the shipped half has now had to answer:
+  prompts deliberately describe what is in the technician's hand and never which
+  model it might be (`questions.ts`). A standing wall of model photos invites
+  matching the phone against pictures instead of answering the question, which
+  is the failure mode §1 opens with. The strip is therefore built as a _readout_
+  of narrowing and not a lookup surface — small chips, no tap targets, no
+  claim about which one it is — and a picture strip would pull hard the other
+  way, because a photograph is a thing to match against in a way a name is not.
 
   _Leaning: revisit after Phase 5, when reverse lookup has settled what a
   per-model visual is and the image question above has an answer._

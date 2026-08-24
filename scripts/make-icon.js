@@ -178,7 +178,7 @@ execFileSync('npx', ['tauri', 'icon', OUT], {
 })
 
 // It also writes Android and iOS sets unconditionally, with no flag to opt out.
-// Nothing here targets mobile (SPEC.md D-25 is desktop), so they are dropped
+// Nothing here targets mobile (SPEC.md D-27 is desktop), so they are dropped
 // rather than committed as thirty files no build reads.
 for (const platform of ['android', 'ios']) {
   rmSync(resolve(ICONS, platform), { recursive: true, force: true })

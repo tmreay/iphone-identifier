@@ -9,10 +9,10 @@
  */
 import type { AttributeId, IPhoneModel } from '../data/types.ts'
 import type { IdentifyStatus } from '../engine/types.ts'
+import { CandidateStrip } from './CandidateStrip.tsx'
 import {
   ambiguityStatement,
   attributeLabel,
-  candidateCount,
   powerOnHint,
   revisitPrompt,
 } from './presenters.ts'
@@ -21,14 +21,15 @@ export function GroupScreen({
   status,
   candidates,
   revisitable,
-  total,
+  all,
   onNarrowFurther,
   onRevisit,
 }: {
   status: IdentifyStatus
   candidates: IPhoneModel[]
   revisitable: AttributeId[]
-  total: number
+  /** Every model in the matrix, for the strip to dim against. */
+  all: IPhoneModel[]
   onNarrowFurther: () => void
   onRevisit: (attribute: AttributeId) => void
 }) {
@@ -40,7 +41,7 @@ export function GroupScreen({
 
   return (
     <section className="screen">
-      <p className="count">{candidateCount(candidates.length, total)}</p>
+      <CandidateStrip all={all} candidates={candidates} />
       <h2 className="prompt">
         {terminal ? 'As far as this goes' : 'Narrowed to a group'}
       </h2>

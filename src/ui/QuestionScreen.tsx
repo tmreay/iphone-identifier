@@ -10,18 +10,20 @@
  */
 import { Diagram } from '../diagrams/index.tsx'
 import type { AttributeValue, IPhoneModel, Question } from '../data/types.ts'
-import { candidateCount, visibleOptions } from './presenters.ts'
+import { CandidateStrip } from './CandidateStrip.tsx'
+import { visibleOptions } from './presenters.ts'
 
 export function QuestionScreen({
   question,
   candidates,
-  total,
+  all,
   onAnswer,
   onSkip,
 }: {
   question: Question
   candidates: IPhoneModel[]
-  total: number
+  /** Every model in the matrix, for the strip to dim against. */
+  all: IPhoneModel[]
   onAnswer: (value: AttributeValue) => void
   onSkip: () => void
 }) {
@@ -29,9 +31,7 @@ export function QuestionScreen({
 
   return (
     <section className="screen">
-      <p className="count" aria-live="polite">
-        {candidateCount(candidates.length, total)}
-      </p>
+      <CandidateStrip all={all} candidates={candidates} />
       <h2 className="prompt">{question.prompt}</h2>
       {question.help && <p className="help">{question.help}</p>}
 
