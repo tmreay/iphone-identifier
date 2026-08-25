@@ -139,6 +139,40 @@ describe('no attribute value is a superset of another', () => {
   })
 })
 
+describe('size classes are the bands the bodies actually form (§6.3, D-27)', () => {
+  it('gives every declared class at least one model of its own', () => {
+    // The regression this guards: the five-band schema had a `large` band —
+    // ~150–156 mm — that no body sat in. It reached the screen anyway, as an
+    // adjacency from `standard`, so a technician could pick a size no phone
+    // was, and picking it narrowed *further* than the truthful `standard` did:
+    // the iPhone 15 Pro dropped out while the 14 Pro and 16 Pro survived, on
+    // nothing but which side of a 3 mm adjacency each had landed.
+    //
+    // A band with no members of its own is that bug. Stated as a rule: every
+    // value the size question offers must be some model's own class.
+    const declared = attributeById('body_size_class')?.values ?? []
+    expect(declared.length).toBeGreaterThan(0)
+    for (const value of declared) {
+      const members = models.filter((model) =>
+        model.attributes.body_size_class?.includes(value),
+      )
+      expect(members.length, `no model is \`${value}\``).toBeGreaterThan(0)
+    }
+  })
+
+  it('carries exactly one class per model, as the 5 mm gaps allow', () => {
+    // §6.3 still permits two adjacent classes, and a future model landing in
+    // one of the gaps would need them. None does today: both band boundaries
+    // sit in about 5 mm of empty space, well outside the 3 mm adjacency rule.
+    // So this asserts the state of the matrix, not the rule — if it fails
+    // because a new model genuinely straddles a boundary, the fix is to record
+    // that here, not to force the model to one class.
+    for (const model of models) {
+      expect(model.attributes.body_size_class, model.id).toHaveLength(1)
+    }
+  })
+})
+
 describe('colour layers agree (§5.4, §6.5)', () => {
   it('matches attributes.colour against colours[].value for every model', () => {
     for (const model of models) {

@@ -73,9 +73,13 @@ export const attributes: AttributeDefinition[] = [
     values: ['bezels_no_cutout', 'notch_wide', 'notch_narrow', 'dynamic_island'],
   },
   {
+    // Three bands, not the five §6.3 first drew (D-27). The old fourth band had
+    // no members of its own — nothing was `large` alone — so it was an option a
+    // technician could pick that matched no phone's own class, and picking it
+    // narrowed further than the truthful answer did.
     id: 'body_size_class',
     tier: 'coarse',
-    values: ['mini', 'compact', 'standard', 'large', 'max'],
+    values: ['small', 'standard', 'large'],
   },
   {
     id: 'sim_tray',

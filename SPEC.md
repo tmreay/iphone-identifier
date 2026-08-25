@@ -265,7 +265,7 @@ settled against that research and are no longer provisional.
 | `rear_camera_count`  | 1 · 2 · 3                                                                                                                                                                                                                                              |
 | `rear_camera_layout` | single_lens_flash_beside · single_lens_in_pill · single_lens_no_housing · dual_horizontal_pill · dual_vertical_pill · dual_vertical_square · dual_diagonal_square · dual_vertical_slim_pill · triple_square · plateau_oval_single · plateau_bar_triple |
 | `front_cutout`       | bezels_no_cutout · notch_wide · notch_narrow · dynamic_island                                                                                                                                                                                          |
-| `body_size_class`    | mini · compact · standard · large · max (§6.3)                                                                                                                                                                                                         |
+| `body_size_class`    | small · standard · large (§6.3)                                                                                                                                                                                                                        |
 | `sim_tray`           | none · left_side · right_side                                                                                                                                                                                                                          |
 | `colour`             | descriptive palette values, per Phase 1 enumeration (§6.5)                                                                                                                                                                                             |
 
@@ -348,30 +348,44 @@ Notes on the less obvious ones:
 ### 6.3 Size classes
 
 Judged by **body size**, not screen diagonal — an iPhone 8 Plus has a small
-screen in a large body. Five bands, by overall body height:
+screen in a large body. Three bands, by overall body height:
 
-| Class      | Approx. body height | Character                               |
-| ---------- | ------------------- | --------------------------------------- |
-| `mini`     | under ~135 mm       | noticeably smaller than everything else |
-| `compact`  | ~135–142 mm         | the 4.7-inch home-button bodies         |
-| `standard` | ~142–150 mm         | the default modern size                 |
-| `large`    | ~150–156 mm         |                                         |
-| `max`      | ~156 mm and up      | Plus and Pro Max bodies                 |
+| Class      | Approx. body height | Character                                     |
+| ---------- | ------------------- | --------------------------------------------- |
+| `small`    | under ~142 mm       | the minis and the 4.7-inch home-button bodies |
+| `standard` | ~142–153 mm         | the default modern size                       |
+| `large`    | ~153 mm and up      | Plus, Max and Pro Max bodies                  |
 
-Generation-to-generation drift means neighbouring classes overlap by a few
-millimetres and a technician cannot reliably tell them apart by eye.
+The bands are placed **in the gaps in the data**, not on round numbers. Sorted by
+height, the 37 bodies fall into three clusters separated by two clear spaces:
+138.4 mm (iPhone 8, SE) to 143.6 mm (iPhone X, XS) is 5.2 mm of nothing, and
+150.9 mm (XR, 11) to 156.2 mm (iPhone Air) is 5.3 mm of nothing. Every band
+boundary sits inside one of those spaces.
 
-A model lists an adjacent class only when a model **actually in that class** sits within
-**3 mm** of it. Proximity to a band boundary alone is not enough: the boundary is an
-abstraction, and it is the neighbouring handset that gets confused. On the 37-model set
-that rule gives eight models two classes — XR, 11, 14 Pro, 15, 16, 16 Pro, 17, 17 Pro, all
-`standard` + `large` — and one class to everything else. The iPhone X at 143.6 mm does
-not overlap into `compact`, because the nearest compact model (iPhone 8, 138.4 mm) is
-5.2 mm away.
+Generation-to-generation drift means bodies within a band differ by millimetres
+and a technician cannot reliably tell those apart by eye. So a model lists an
+adjacent class whenever a model **actually in that class** sits within **3 mm** of
+it. Proximity to a band boundary alone is not enough: the boundary is an
+abstraction, and it is the neighbouring handset that gets confused.
+
+Because both boundaries fall in a 5 mm gap, **on the current 37-model set that
+rule gives every model exactly one class.** The question therefore narrows
+cleanly, and no answer to it can be self-contradictory.
+
+Five bands were tried first — `mini`, `compact`, `standard`, `large`, `max` — and
+the fourth of them had no members of its own: nothing in the matrix was `large`
+alone, because the ~150–156 mm band was empty and only reachable as an
+adjacency from `standard`. That produced an option a technician could pick that
+matched no phone's own class, and picking it narrowed _further_ than the truthful
+`standard` did — the iPhone 15 Pro (146.6 mm) dropped out while the 14 Pro
+(147.5 mm) and 16 Pro (149.6 mm) survived, purely because of which side of a
+3 mm adjacency each landed on. A band no model lives in is not a size a phone
+can be, so the bands were redrawn to the three the bodies actually form (D-27).
 
 Therefore:
 
-- a model may list **two adjacent classes** as consistent values;
+- a model may list **two adjacent classes** as consistent values, though on the
+  current set none needs to;
 - size is a coarse narrowing signal, expected to reduce the candidate set, not
   to resolve it;
 - the UI presents size as silhouette comparisons, not as measurements.
@@ -869,7 +883,7 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 | D-07 | Both US and international body variants are in scope; SIM-tray presence is a real discriminator.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | D-08 | Colour is a normal eliminating question, with rehousing caveats and an escape hatch (§6.4).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 | D-09 | "Can't tell" on every question; the engine routes around unavailable attributes and never eliminates on missing data.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| D-10 | Size is expressed as five body-size classes with permitted overlap, never as measurements.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| D-10 | Size is expressed as body-size classes with permitted overlap, never as measurements. The count was five until D-27 cut it to three.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
 | D-11 | Data verification (Phase 1) happens before any matrix authoring, in its own session, and everything is sourced. No model attribute may be written from memory — it must trace to `reference/`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | D-12 | Colours carry both an Apple marketing name and a plain descriptive palette value. The engine matches on the descriptive value only (§6.5).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | D-13 | Phase 1 reference images are committed to the repo, not kept local. They are never imported into the build.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
@@ -886,6 +900,7 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 | D-24 | Reverse lookup is **read-only**. Correcting a model attribute is a change to `reference/models/<id>.md` followed by `npm run transcribe`, never an edit in the app. In-app editing would put a value into the matrix that no source backs, which is the one thing D-11 exists to prevent, and the matrix is a build output under D-14 with nowhere to write back to. §4.6's "review and correct" is the review half in the app and the correction half in the repo.                                                                                                                                                                                                                       |
 | D-25 | Which view is showing lives in the **URL hash**; the identify run lives in React state, and the two never mix. §2 puts this on a phone at a workbench, where the system Back button is the back button — a view held in state makes it leave the app, and one held in the hash steps back through the entry, the list and the flow. The run is deliberately not addressable: it is an answer trail and a tier, and a bookmark of it would be a half-finished diagnosis. That separation is what lets the §4.5 link open a model mid-run and come back to the trail intact. Hand-rolled, not a router: §5.1 asks for a concrete need and three parameterless routes are not one.           |
 | D-26 | An attribute the matrix does not record gets a row **saying so**, never an omitted row. 65 of the 666 rows are absent by design, and an entry listing 16 characteristics for one model and 18 for another reads as a bug rather than as sparse data. The row states the consequence — under §5.4 an absent value eliminates nothing — because that is the whole of what is knowable: 🔴 unverified and ⚪ not applicable both transcribe to absence, so no screen can tell "nobody counted" from "there is nothing to count".                                                                                                                                                             |
+| D-27 | `body_size_class` has **three** bands — `small` · `standard` · `large` — placed in the gaps between the clusters the 37 bodies actually form, replacing the five of D-10. The fourth of the old five had no members of its own: no model was `large` alone, so the option existed only as an adjacency from `standard`, and picking it narrowed _further_ than the truthful answer did (§6.3). A band no model lives in is not a size a phone can be. The 3 mm adjacency rule is unchanged and still stands for a future model that lands in a gap; it simply has nothing to do on the current set, so every model now carries exactly one class — asserted by test.                      |
 
 D-11 has already paid for itself twice, which is worth recording because both failures
 looked like solid data at the time:
