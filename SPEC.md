@@ -273,7 +273,7 @@ settled against that research and are no longer provisional.
 37 models — and it subsumes `rear_camera_count`.
 
 **Phase 2 checked whether the count question still earns its place. It does, but not as a
-question the engine ever chooses.** Across all 288 concrete devices the layout question
+question the engine ever chooses.** Across all 226 concrete devices the layout question
 always scores higher, so `rear_camera_count` is never asked and removing it changes no
 outcome. It is not redundant, though: the moment the layout is answered "Can't tell" the
 count becomes the top-scoring question on every device, and separability is unchanged —
@@ -504,8 +504,14 @@ which is the two-tier split in D-03 earning its place:
 | iPhone 16 + iPhone 17                 | **nothing — terminal**                            |
 | iPhone 16e + iPhone 17e               | nothing visible — `magsafe` settles it off-screen |
 
-The coarse-tier result is **reproduced exactly** by the Phase 2 engine over all 288
+The coarse-tier result is **reproduced exactly** by the Phase 2 engine over all 226
 concrete devices: the same seven groups, no more and no fewer. It is asserted by test.
+
+The device count is a property of the matrix, not a constant: it is the product of each
+model's recorded values, so it moves whenever a model gains or loses one. D-27 took it from
+288 to 226 by cutting eight models from two size classes to one. The seven groups did not
+move with it — the test derives the count rather than hard-coding it, which is why the
+Phase 2 numbers below still read 288.
 
 **After both tiers, two groups remain.** 35 of 37 models resolve to exactly one:
 
@@ -523,7 +529,7 @@ pair. Deny the engine that one attribute and the group comes back — a test ass
 halves, so the pair's separability cannot quietly regress to resting on colour.
 
 There is no iPhone 17 Plus — the iPhone Air took that slot — so the iPhone 16 Plus has no
-equivalent twin at `max` size.
+equivalent twin at `large` size.
 
 `camera_bump_size`, which closes the 13 vs 14 group, was re-evidenced after an audit found
 its values citing a comparison of the _Pro Max_ bodies rather than the non-Pro pair they
@@ -609,7 +615,7 @@ That is **601 of the 666 rows** — the 31 ⚪ `camera_bump_size` and 34 🔴
 larger candidate group and never a wrong answer.
 
 What Phase 2 changed in this spec, all of it from running the real engine over all 288
-concrete devices rather than from re-reading the research (plus one the transcription surfaced):
+concrete devices the matrix then held rather than from re-reading the research (plus one the transcription surfaced):
 
 - **`(PRODUCT)RED` has no space.** Phase 1 wrote it eleven ways with a space and once
   without. Checked in Phase 2 against the Apple tech-spec pages already cited as the
@@ -650,7 +656,7 @@ not be reached again without starting over. §4.3 and §7 now say the deep tier 
 `unskip` was the obvious alternative and is a trap: `back()` decides the tier by comparing
 it against the last step's, so it flips straight back to deep — stranding the question
 again, now with no skip step left for the screen to offer. Verified over all 288 concrete
-devices that the additive reading changes no outcome and lets no deep question into the
+devices the matrix then held that the additive reading changes no outcome and lets no deep question into the
 main flow.
 
 Five findings across two reviews, all the same shape: a property this spec states that
@@ -673,7 +679,8 @@ under the first reading and not the second: a deep question skipped while on the
 tier was named revisitable and could not be reached, because the coarse tier correctly
 does not offer deep questions (D-03). `revisitableSkips` now asks `unskip` and reads the
 pool it produces, so the offer and the flow that must honour it cannot disagree (D-18).
-No path a technician can take changes — all 288 concrete devices land where they did.
+No path a technician can take changes — all 288 concrete devices then in the matrix land
+where they did.
 
 One thing the transcription surfaced that is worth a later look, not blocking:
 
@@ -726,7 +733,7 @@ Two things Phase 3 deliberately did not build, both belonging to later phases:
 **Phase 4 — diagrams.** Draw the SVG set; wire into questions and reverse
 lookup. _(done)_
 
-**Phase 4 is done.** Thirty-three hand-drawn SVG components across the seven
+**Phase 4 is done.** Thirty-one hand-drawn SVG components across the seven
 questions that declared a `diagram` id, plus the registry binding ids to
 components and the slot in `QuestionScreen`. `questions.ts` still knows nothing
 about React: it names diagrams, `src/diagrams/registry.ts` resolves them, and a

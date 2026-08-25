@@ -16,12 +16,15 @@
  * Five bands were drawn here until D-27, and one of them — `large`, then meaning
  * ~150–156 mm — had no members to take a height from at all, because no model
  * in the matrix was `large` alone. Its outline was the midpoint of an empty
- * band: a drawing of a phone that does not exist. The three bands each hold real
- * bodies, so every height above is read off the matrix.
+ * band: a drawing of a phone that does not exist. Each of the three bands holds
+ * real bodies, so while the midpoints above are computed rather than measured —
+ * 135.0, 147.3 and 159.8 are no phone's height — both ends of every one of them
+ * is a handset in the matrix.
  *
- * Widths follow from the heights: every body in the matrix sits within a
- * percent or so of 2.05 : 1, so one ratio serves all three and the silhouettes
- * stay honest without claiming a precision the question does not want.
+ * Widths follow from the heights: every body in the matrix sits within about 3%
+ * of 2.05 : 1 (the extremes are the iPhone 11 at 1.99 and the 16 Pro Max at
+ * 2.10), so one ratio serves all three and the silhouettes stay honest without
+ * claiming a precision the question does not want.
  *
  * Behind each, the largest body in the matrix is ghosted in. §8 asks for
  * relative scale within a question, and options can be filtered out before the
@@ -34,7 +37,7 @@ import { DiagramSvg, SILHOUETTE_VIEW_BOX } from './primitives.tsx'
 const TALLEST_MM = 163.4
 /** Millimetres per viewBox unit, chosen so the largest body just fits the square. */
 const SCALE = 94 / TALLEST_MM
-/** Height : width, the ratio every body in the matrix sits within ~1% of. */
+/** Height : width, the ratio every body in the matrix sits within ~3% of. */
 const ASPECT = 2.05
 
 function Silhouette({ heightMm }: { heightMm: number }) {

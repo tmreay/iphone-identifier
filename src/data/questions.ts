@@ -186,7 +186,7 @@ export const questions: Question[] = [
     id: 'body_size_class',
     tier: 'coarse',
     prompt: 'Which outline is closest to the size of the body?',
-    help: 'Judge the body, not the screen — an iPhone 8 Plus has a small screen in a large body. Hold the phone against the outlines rather than measuring. Three sizes, not five: the bodies fall into three clusters with about 5 mm of empty space between them, which is a gap an eye can call. Expect this to narrow the field rather than settle it.',
+    help: 'Judge the body, not the screen — an iPhone 8 Plus has a small screen in a large body. Hold the phone against the outlines rather than measuring. The bodies fall into three clusters with about 5 mm of empty space between them, which is a gap an eye can call. Expect this to narrow the field rather than settle it.',
     options: [
       {
         value: 'small',

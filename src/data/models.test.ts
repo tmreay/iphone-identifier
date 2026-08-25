@@ -149,14 +149,24 @@ describe('size classes are the bands the bodies actually form (§6.3, D-27)', ()
     // nothing but which side of a 3 mm adjacency each had landed.
     //
     // A band with no members of its own is that bug. Stated as a rule: every
-    // value the size question offers must be some model's own class.
+    // value the size question offers must be some model's *own* class.
+    //
+    // "Own" is the whole of it, and it is why this counts sole membership
+    // rather than `includes`. Under the old data the empty band was listed by
+    // eight models, every one of them alongside `standard` — so an `includes`
+    // count found eight members for a band nothing was in, and passed. That is
+    // the bug wearing the test's own clothes.
     const declared = attributeById('body_size_class')?.values ?? []
     expect(declared.length).toBeGreaterThan(0)
     for (const value of declared) {
-      const members = models.filter((model) =>
-        model.attributes.body_size_class?.includes(value),
-      )
-      expect(members.length, `no model is \`${value}\``).toBeGreaterThan(0)
+      const members = models.filter((model) => {
+        const classes = model.attributes.body_size_class ?? []
+        return classes.length === 1 && classes[0] === value
+      })
+      expect(
+        members.length,
+        `no model is \`${value}\` and nothing else`,
+      ).toBeGreaterThan(0)
     }
   })
 
