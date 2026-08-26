@@ -97,7 +97,7 @@ body {
  */
 .strip-toggle {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.5rem;
   width: 100%;
   padding: 0.375rem 0;
@@ -116,13 +116,31 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-.strip-more {
+/*
+ * Points down to open, up to close — the direction the list will move, which is
+ * the reading that needs no label. It sits at the end of the row rather than
+ * beside the count, so the tap target spans the width and the eye lands on the
+ * number first.
+ */
+.strip-chevron {
+  margin-left: auto;
   color: var(--accent);
+  transition: transform 200ms ease;
 }
 
-.strip-toggle:hover .strip-more,
-.strip-toggle:focus-visible .strip-more {
-  text-decoration: underline;
+.strip-toggle[aria-expanded='true'] .strip-chevron {
+  transform: rotate(180deg);
+}
+
+.strip-toggle:hover .strip-chevron,
+.strip-toggle:focus-visible .strip-chevron {
+  color: var(--fg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .strip-chevron {
+    transition: none;
+  }
 }
 
 .strip-models {

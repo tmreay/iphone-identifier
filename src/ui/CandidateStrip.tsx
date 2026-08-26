@@ -2,7 +2,7 @@
  * The candidate strip — SPEC.md §4.1 step 3, and the §12 open question it came
  * out of.
  *
- * **Collapsed by default: "12 of 37 candidates".** That line is the live count
+ * **Collapsed by default: "12 of 37 candidates", under a chevron.** That line is the live count
  * §4.1 step 3 asks for, and on most screens it is all a technician wants — the
  * run is narrowing, and by how much. Expanding it shows every model in the
  * matrix in release order, dimming the ones that have gone out, which is the
@@ -59,7 +59,30 @@ export function CandidateStrip({
         <span className="strip-summary">
           {candidateSummary(candidates.length, all.length)}
         </span>
-        <span className="strip-more">{expanded ? 'Hide' : 'Show'}</span>
+        {/*
+          A chevron, pointing down to open and up to close. Decorative and
+          `aria-hidden`: the button's state is carried by `aria-expanded`, which
+          a screen reader reads as "collapsed" or "expanded" without needing a
+          word on screen to say it twice. That leaves the accessible name as the
+          count itself, which is the thing worth hearing.
+        */}
+        <svg
+          className="strip-chevron"
+          viewBox="0 0 16 16"
+          width="14"
+          height="14"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path
+            d="M3.5 6 8 10.5 12.5 6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.75"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
       </button>
 
       {expanded && (
