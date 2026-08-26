@@ -53,7 +53,88 @@ body {
   font-weight: 600;
   letter-spacing: 0.01em;
   color: var(--muted);
-  margin: 0 0 1.5rem;
+  margin: 0 0 0.5rem;
+}
+
+/* --- Breadcrumb (SPEC.md §4.7, D-32) ------------------------------------ */
+
+/*
+ * One line, always, however long a question's name is: a trail that wrapped to
+ * three rows would push the question itself off a phone screen. It scrolls
+ * sideways instead, and `Breadcrumb.tsx` scrolls it to the crumb for where you
+ * are — the end that matters — leaving the start of the trail cut off, which is
+ * itself the sign that there is more to the left.
+ *
+ * The scrollbar is left alone rather than hidden: it is the only other thing
+ * saying so on a pointer device. Padding is not decoration — `overflow-x` makes
+ * this a scroll box in both directions, and a focus ring is drawn outside the
+ * box it belongs to, so without room on both edges a focused crumb's ring is
+ * shaved.
+ */
+.breadcrumb {
+  margin: 0 0 1.25rem;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+
+.breadcrumb-list {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.breadcrumb-separator {
+  color: var(--muted);
+}
+
+/*
+ * A crumb is a real tap target on a bench, where the hand holding the phone is
+ * the one that has been holding a screwdriver — so it is sized by the same
+ * `min-height` every other control in this file carries, rather than by padding
+ * that lands near it. Sized rather than boxed: no border, no fill, so the row
+ * still reads as a path and not as a toolbar.
+ */
+.breadcrumb-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  padding: 0 0.25rem;
+  font: inherit;
+  font-size: inherit;
+  color: var(--accent);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.breadcrumb-link:hover,
+.breadcrumb-link:focus-visible {
+  color: var(--fg);
+}
+
+/* Where you are: stated, not offered. Sized to match a link so the row sits
+   level, whichever crumb happens to be a control. */
+.breadcrumb-current {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  padding: 0 0.25rem;
+  color: var(--muted);
+  font-weight: 600;
 }
 
 /* --- Screens ------------------------------------------------------------ */

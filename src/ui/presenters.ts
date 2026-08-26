@@ -18,8 +18,13 @@ import type {
   QuestionOption,
 } from '../data/types.ts'
 import { liveValues } from '../engine/index.ts'
-import type { IdentifyStatus, Step } from '../engine/types.ts'
-import type { ModelOrigin } from './route.ts'
+import type {
+  IdentifyResult,
+  IdentifyState,
+  IdentifyStatus,
+  Step,
+} from '../engine/types.ts'
+import type { ModelOrigin, Route } from './route.ts'
 
 /**
  * Words that are not words: attribute ids are snake_case, and three of them
@@ -272,4 +277,183 @@ export function candidateStrip(
     short: shortModelName(model.name),
     remaining: remaining.has(model.id),
   }))
+}
+
+/**
+ * Where a crumb goes when it is tapped — SPEC.md §4.7.
+ *
+ * Three destinations, because the app has three places to be and one of them is
+ * a state rather than a view: *restart* is the root crumb, which throws the run
+ * away and starts a fresh identification, and is the only crumb that touches the
+ * run at all. The last crumb is where we already are and carries no target.
+ */
+export type CrumbTarget = 'restart' | 'identify' | 'models'
+
+/** One step of the breadcrumb (§4.7). */
+export interface Crumb {
+  /** Stable across renders of the same trail, for React's list keys. */
+  key: string
+  label: string
+  /** Absent on a crumb that is not a destination: the current one, or a marker. */
+  target?: CrumbTarget
+}
+
+/**
+ * The root, and the only crumb on every trail: a fresh run, always one tap away.
+ *
+ * The only crumb that touches the run, so it is also the only one that can cost
+ * the technician work — which is why it is not always a restart. It offers to
+ * throw a run away only when there is a run to throw; with nothing answered yet
+ * it is the plain way back to the flow, and on the flow itself it is where you
+ * already are. That is the same guard _Start over_ carries (§4.1), and it
+ * matters more here: a crumb sits where a reader expects inert navigation, at a
+ * quarter of that button's size.
+ */
+const rootCrumb = (target?: CrumbTarget): Crumb => ({
+  key: 'root',
+  label: 'New identification',
+  target,
+})
+
+/**
+ * Whether this run has anything in it worth keeping.
+ *
+ * Deliberately the same test _Start over_ is disabled by: entering the deep tier
+ * counts even with nothing answered, because agreeing to _Narrow further_ is a
+ * decision the technician made and starting over discards it.
+ */
+const started = (state: IdentifyState): boolean =>
+  state.steps.length > 0 || state.tier === 'deep'
+
+/** First letter up, for a label dropped after "Question 3: ". */
+const capitalise = (text: string): string =>
+  text.charAt(0).toUpperCase() + text.slice(1)
+
+/**
+ * What the run is doing right now, in one crumb.
+ *
+ * Read off the engine's own status rather than tracked separately, so the
+ * breadcrumb cannot drift from the screen underneath it. The counts are the
+ * same number the strip and the live region carry; naming the question's
+ * attribute is what makes the crumb say *where* rather than merely *how far*.
+ */
+export function flowStageLabel(state: IdentifyState, result: IdentifyResult): string {
+  const step = state.steps.length + 1
+  switch (result.status) {
+    case 'asking':
+      return result.question
+        ? `Question ${step}: ${capitalise(attributeLabel(result.question.id))}`
+        : `Question ${step}`
+    case 'narrow-further':
+      return `${result.candidates.length} candidates left`
+    case 'ambiguous':
+      return `${result.candidates.length} candidates — ambiguous`
+    case 'resolved':
+      // The name, not "Result": the crumb for a finished run is the answer it
+      // finished on, which is also what the screen under it says (§4.5).
+      return result.candidates[0]?.name ?? 'Result'
+    case 'contradictory':
+      return 'No match'
+  }
+}
+
+/**
+ * The run's own crumbs: the tier it is in, if it has been deepened, then where
+ * it stands.
+ *
+ * _Narrow further_ earns a crumb of its own because it is the one step in the
+ * flow the technician chose rather than was asked (§4.3, D-03) — the deep tier
+ * is a place you agreed to go, so the trail should show you are in it. It is
+ * never a link: it names a tier, and the flow has no way to re-enter a tier it
+ * is already in. Only the stage crumb is a destination, and only from a view
+ * that is not already the flow.
+ */
+function flowCrumbs(
+  state: IdentifyState,
+  result: IdentifyResult,
+  showing: boolean,
+): Crumb[] {
+  const stage: Crumb = {
+    key: 'stage',
+    label: flowStageLabel(state, result),
+    target: showing ? undefined : 'identify',
+  }
+  return state.tier === 'deep'
+    ? [{ key: 'tier', label: 'Narrow further' }, stage]
+    : [stage]
+}
+
+/**
+ * The breadcrumb — SPEC.md §4.7.
+ *
+ * Rooted always at a fresh identification, because that is the one thing this
+ * app is for: whatever a technician is looking at, the next phone on the bench
+ * is one tap away, and the root says so.
+ *
+ * **A run that is still standing stays in the trail, whatever view is showing.**
+ * Navigating never touched it (D-25), so the list and the entries reached from
+ * it hang off the run rather than replacing it — and the crumb for it is the way
+ * back that costs nothing. A trail that dropped it would leave the root as the
+ * only step above you, and the root throws the run away.
+ *
+ * **A stage is named only when there provably is one.** `entryBackLabel` already
+ * refuses to promise what is on the other side of the way out, for the reason
+ * that decides it here: the hash survives a reload and the answer trail does not
+ * (D-25), so an entry opened `from: 'identify'` may be sitting above a run that
+ * no longer exists. A fresh run has no stage to name, so the trail names none,
+ * and says the true thing — a fresh identification is what is above you.
+ *
+ * `opened` is the model the route names, or `undefined` when the matrix does not
+ * have it — a stale bookmark, a typo. The app lands that on the list, so the
+ * trail says the list too, rather than inventing a crumb for a model that is not
+ * there.
+ */
+export function breadcrumbTrail(
+  route: Route,
+  state: IdentifyState,
+  result: IdentifyResult,
+  opened?: IPhoneModel,
+): Crumb[] {
+  // On the flow itself the stage is always worth naming — a fresh run is asking
+  // question 1 — and the root is where you already are when there is nothing to
+  // discard.
+  if (route.view === 'identify') {
+    return [
+      rootCrumb(started(state) ? 'restart' : undefined),
+      ...flowCrumbs(state, result, true),
+    ]
+  }
+
+  const root = rootCrumb(started(state) ? 'restart' : 'identify')
+  const run = started(state) ? flowCrumbs(state, result, false) : []
+
+  if (route.view === 'model' && opened) {
+    if (route.from === 'identify') {
+      /*
+        The §4.5 link opens the entry for the model the run just resolved to, and
+        naming it twice in one trail reads as a fault rather than as a path. The
+        stage crumb is renamed rather than dropped: it is a place — the result
+        screen — and that screen already calls itself "Identified", so the word
+        is the app's own. Dropping it instead would leave the root, which throws
+        the run away, as the only crumb anyone can tap, which is the thing D-32
+        exists to prevent.
+      */
+      const isResult =
+        result.status === 'resolved' && result.candidates[0]?.id === opened.id
+      const above = isResult
+        ? run.map((crumb) =>
+            crumb.key === 'stage' ? { ...crumb, label: 'Identified' } : crumb,
+          )
+        : run
+      return [root, ...above, { key: `model-${opened.id}`, label: opened.name }]
+    }
+    return [
+      root,
+      ...run,
+      { key: 'models', label: 'All models', target: 'models' },
+      { key: `model-${opened.id}`, label: opened.name },
+    ]
+  }
+
+  return [root, ...run, { key: 'models', label: 'All models' }]
 }

@@ -59,8 +59,9 @@ src-tauri/       the desktop shell — window config and icons, no logic
 src/data/        attribute definitions, questions, the model matrix
 src/engine/      pure TypeScript identification logic (no React)
 src/diagrams/    hand-drawn SVG illustrating answer options, and the id registry
-src/ui/          screens, and the display text they derive (presenters.ts,
-                 lookup.ts) plus the hash routing between them (route.ts)
+src/ui/          screens, the breadcrumb over them, and the display text they
+                 derive (presenters.ts, lookup.ts) plus the hash routing
+                 between them (route.ts)
 ```
 
 ## Getting it onto a Windows PC
@@ -225,6 +226,14 @@ or a stated terminal ambiguity — showing the product photograph of what it
 concluded — and from the result, from a candidate chip, or from anywhere in the
 flow, opens the reverse-lookup entry listing every characteristic the matrix
 records for a model, drawn with the same diagrams the questions used.
+
+A breadcrumb across the top says where in the identification you are — the
+question being asked, the deep tier once you have entered it, the model a run
+resolved to, and a model entry hanging off whichever of those you opened it from
+(SPEC.md §4.7). Its root is always _New identification_, so the next phone on
+the bench is one tap away from any screen; it offers to discard a run only when
+there is one to discard. Browsing the models mid-run keeps the run in the trail,
+so there is always a way back to it that costs nothing.
 
 The candidate strip above each question reads "12 of 37 candidates" until it is
 opened; expanded it shows all 37 names dimming as they go out, and a surviving
