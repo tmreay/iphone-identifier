@@ -1,5 +1,5 @@
 /**
- * The app — SPEC.md §4.1 to §4.6.
+ * The app — SPEC.md §4.1 to §4.7.
  *
  * Two things live here, and they are deliberately separate.
  *

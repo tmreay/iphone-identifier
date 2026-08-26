@@ -11,6 +11,7 @@
  * with `aria-hidden` — a screen reader reading "chevron" between every crumb
  * would bury the words that matter.
  */
+import { useEffect, useRef } from 'react'
 import type { Crumb, CrumbTarget } from './presenters.ts'
 
 export function Breadcrumb({
@@ -20,8 +21,25 @@ export function Breadcrumb({
   crumbs: Crumb[]
   onNavigate: (target: CrumbTarget) => void
 }) {
+  const row = useRef<HTMLElement>(null)
+  /*
+    A trail wide enough to overflow scrolls, and a scroller opens at its start —
+    which is the end that matters least. "New identification" is the crumb a
+    technician can guess; where they are is the crumb they came to read, so on a
+    narrow phone the row is scrolled to it. Only when it overflows: on a row that
+    fits, `scrollLeft` will not move.
+
+    Keyed on the labels rather than on the array, because the trail is rebuilt on
+    every render and its identity says nothing about whether it changed.
+  */
+  const labels = crumbs.map((crumb) => crumb.label).join('›')
+  useEffect(() => {
+    const element = row.current
+    if (element) element.scrollLeft = element.scrollWidth
+  }, [labels])
+
   return (
-    <nav className="breadcrumb" aria-label="Breadcrumb">
+    <nav className="breadcrumb" aria-label="Breadcrumb" ref={row}>
       <ol className="breadcrumb-list">
         {crumbs.map((crumb, index) => {
           const target = crumb.target

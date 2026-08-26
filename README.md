@@ -228,7 +228,9 @@ A breadcrumb across the top says where in the identification you are — the
 question being asked, the deep tier once you have entered it, the model a run
 resolved to, and a model entry hanging off whichever of those you opened it from
 (SPEC.md §4.7). Its root is always _New identification_, so the next phone on
-the bench is one tap away from any screen.
+the bench is one tap away from any screen; it offers to discard a run only when
+there is one to discard. Browsing the models mid-run keeps the run in the trail,
+so there is always a way back to it that costs nothing.
 
 The candidate strip above each question reads "12 of 37 candidates" until it is
 opened; expanded it shows all 37 names dimming as they go out, and a surviving

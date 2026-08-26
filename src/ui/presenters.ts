@@ -298,8 +298,32 @@ export interface Crumb {
   target?: CrumbTarget
 }
 
-/** The root, and the only crumb on every trail: a fresh run, always one tap away. */
-const ROOT: Crumb = { key: 'root', label: 'New identification', target: 'restart' }
+/**
+ * The root, and the only crumb on every trail: a fresh run, always one tap away.
+ *
+ * The only crumb that touches the run, so it is also the only one that can cost
+ * the technician work — which is why it is not always a restart. It offers to
+ * throw a run away only when there is a run to throw; with nothing answered yet
+ * it is the plain way back to the flow, and on the flow itself it is where you
+ * already are. That is the same guard _Start over_ carries (§4.1), and it
+ * matters more here: a crumb sits where a reader expects inert navigation, at a
+ * quarter of that button's size.
+ */
+const rootCrumb = (target?: CrumbTarget): Crumb => ({
+  key: 'root',
+  label: 'New identification',
+  target,
+})
+
+/**
+ * Whether this run has anything in it worth keeping.
+ *
+ * Deliberately the same test _Start over_ is disabled by: entering the deep tier
+ * counts even with nothing answered, because agreeing to _Narrow further_ is a
+ * decision the technician made and starting over discards it.
+ */
+const started = (state: IdentifyState): boolean =>
+  state.steps.length > 0 || state.tier === 'deep'
 
 /** First letter up, for a label dropped after "Question 3: ". */
 const capitalise = (text: string): string =>
@@ -366,11 +390,18 @@ function flowCrumbs(
  * app is for: whatever a technician is looking at, the next phone on the bench
  * is one tap away, and the root says so.
  *
- * A model entry hangs off wherever it was opened from — the list, or the run
- * that is still exactly where it was (D-25) — which is the same claim the
- * entry's own back button makes, drawn as a path rather than as a single step.
- * That is why the run's stage appears in a trail rendered on the entry: the run
- * did not stop, it is above you.
+ * **A run that is still standing stays in the trail, whatever view is showing.**
+ * Navigating never touched it (D-25), so the list and the entries reached from
+ * it hang off the run rather than replacing it — and the crumb for it is the way
+ * back that costs nothing. A trail that dropped it would leave the root as the
+ * only step above you, and the root throws the run away.
+ *
+ * **A stage is named only when there provably is one.** `entryBackLabel` already
+ * refuses to promise what is on the other side of the way out, for the reason
+ * that decides it here: the hash survives a reload and the answer trail does not
+ * (D-25), so an entry opened `from: 'identify'` may be sitting above a run that
+ * no longer exists. A fresh run has no stage to name, so the trail names none,
+ * and says the true thing — a fresh identification is what is above you.
  *
  * `opened` is the model the route names, or `undefined` when the matrix does not
  * have it — a stale bookmark, a typo. The app lands that on the list, so the
@@ -383,15 +414,40 @@ export function breadcrumbTrail(
   result: IdentifyResult,
   opened?: IPhoneModel,
 ): Crumb[] {
-  if (route.view === 'identify') return [ROOT, ...flowCrumbs(state, result, true)]
-
-  if (route.view === 'model' && opened) {
-    const above =
-      route.from === 'identify'
-        ? flowCrumbs(state, result, false)
-        : [{ key: 'models', label: 'All models', target: 'models' as const }]
-    return [ROOT, ...above, { key: `model-${opened.id}`, label: opened.name }]
+  // On the flow itself the stage is always worth naming — a fresh run is asking
+  // question 1 — and the root is where you already are when there is nothing to
+  // discard.
+  if (route.view === 'identify') {
+    return [
+      rootCrumb(started(state) ? 'restart' : undefined),
+      ...flowCrumbs(state, result, true),
+    ]
   }
 
-  return [ROOT, { key: 'models', label: 'All models' }]
+  const root = rootCrumb(started(state) ? 'restart' : 'identify')
+  const run = started(state) ? flowCrumbs(state, result, false) : []
+
+  if (route.view === 'model' && opened) {
+    if (route.from === 'identify') {
+      /*
+        The §4.5 link opens the entry for the model the run just resolved to, and
+        naming it twice in one trail reads as a fault rather than as a path. The
+        stage crumb is the one that goes, because the entry crumb is where we
+        are; the way back to the run is the entry's own button, which says so in
+        words.
+      */
+      const isResult =
+        result.status === 'resolved' && result.candidates[0]?.id === opened.id
+      const above = isResult ? run.slice(0, -1) : run
+      return [root, ...above, { key: `model-${opened.id}`, label: opened.name }]
+    }
+    return [
+      root,
+      ...run,
+      { key: 'models', label: 'All models', target: 'models' },
+      { key: `model-${opened.id}`, label: opened.name },
+    ]
+  }
+
+  return [root, ...run, { key: 'models', label: 'All models' }]
 }
