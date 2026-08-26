@@ -200,7 +200,7 @@ export const questions: Question[] = [
       },
       {
         value: 'large',
-        label: 'Large — the biggest bodies, Plus and Max',
+        label: 'Large — the biggest bodies: Plus, Max and Air',
         diagram: 'body-size-class-large',
       },
     ],

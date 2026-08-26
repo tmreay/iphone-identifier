@@ -139,7 +139,21 @@ describe('no attribute value is a superset of another', () => {
   })
 })
 
-describe('size classes are the bands the bodies actually form (§6.3, D-27)', () => {
+describe('size classes are definitive (§6.3, D-27, D-28)', () => {
+  it('gives every model exactly one class', () => {
+    // D-28: a phone is one size, and the matrix says which. Not a statement
+    // about the current 37 that a future model may relax — the rule. A model
+    // landing inside one of the gaps between the clusters is a signal to redraw
+    // the bands (§6.3), never to give that model a second class.
+    //
+    // This is the invariant the test below leans on: with one class per model,
+    // "some model's own class" and "some model's class" are the same set, so
+    // the empty-band check cannot be fooled by an adjacency.
+    for (const model of models) {
+      expect(model.attributes.body_size_class, model.id).toHaveLength(1)
+    }
+  })
+
   it('gives every declared class at least one model of its own', () => {
     // The regression this guards: the five-band schema had a `large` band —
     // ~150–156 mm — that no body sat in. It reached the screen anyway, as an
@@ -151,11 +165,13 @@ describe('size classes are the bands the bodies actually form (§6.3, D-27)', ()
     // A band with no members of its own is that bug. Stated as a rule: every
     // value the size question offers must be some model's *own* class.
     //
-    // "Own" is the whole of it, and it is why this counts sole membership
-    // rather than `includes`. Under the old data the empty band was listed by
-    // eight models, every one of them alongside `standard` — so an `includes`
-    // count found eight members for a band nothing was in, and passed. That is
-    // the bug wearing the test's own clothes.
+    // "Own" is why this counts sole membership rather than `includes`. Under
+    // the old data the empty band was listed by eight models, every one of them
+    // alongside `standard` — so an `includes` count found eight members for a
+    // band nothing was in, and passed. That is the bug wearing the test's own
+    // clothes. Sole membership is exact under D-28 rather than a proxy for it,
+    // but it is written this way deliberately: it stays honest even if the
+    // one-class rule above is ever weakened.
     const declared = attributeById('body_size_class')?.values ?? []
     expect(declared.length).toBeGreaterThan(0)
     for (const value of declared) {
@@ -167,18 +183,6 @@ describe('size classes are the bands the bodies actually form (§6.3, D-27)', ()
         members.length,
         `no model is \`${value}\` and nothing else`,
       ).toBeGreaterThan(0)
-    }
-  })
-
-  it('carries exactly one class per model, as the 5 mm gaps allow', () => {
-    // §6.3 still permits two adjacent classes, and a future model landing in
-    // one of the gaps would need them. None does today: both band boundaries
-    // sit in about 5 mm of empty space, well outside the 3 mm adjacency rule.
-    // So this asserts the state of the matrix, not the rule — if it fails
-    // because a new model genuinely straddles a boundary, the fix is to record
-    // that here, not to force the model to one class.
-    for (const model of models) {
-      expect(model.attributes.body_size_class, model.id).toHaveLength(1)
     }
   })
 })

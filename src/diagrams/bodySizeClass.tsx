@@ -16,15 +16,15 @@
  * Five bands were drawn here until D-27, and one of them — `large`, then meaning
  * ~150–156 mm — had no members to take a height from at all, because no model
  * in the matrix was `large` alone. Its outline was the midpoint of an empty
- * band: a drawing of a phone that does not exist. Each of the three bands holds
- * real bodies, so while the midpoints above are computed rather than measured —
- * 135.0, 147.3 and 159.8 are no phone's height — both ends of every one of them
- * is a handset in the matrix.
+ * band: a drawing of a phone that does not exist. The midpoints above are
+ * computed rather than measured — 135.0, 147.3 and 159.8 are no phone's height —
+ * but both ends of every band are handsets in the matrix, which is what the old
+ * `large` had none of.
  *
  * Widths follow from the heights: every body in the matrix sits within about 3%
- * of 2.05 : 1 (the extremes are the iPhone 11 at 1.99 and the 16 Pro Max at
- * 2.10), so one ratio serves all three and the silhouettes stay honest without
- * claiming a precision the question does not want.
+ * of 2.05 : 1 (the extremes are the iPhone 11 and XR at 1.99 and the 16 Pro Max
+ * at 2.10), so one ratio serves all three and the silhouettes stay honest
+ * without claiming a precision the question does not want.
  *
  * Behind each, the largest body in the matrix is ghosted in. §8 asks for
  * relative scale within a question, and options can be filtered out before the
