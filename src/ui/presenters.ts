@@ -19,6 +19,7 @@ import type {
 } from '../data/types.ts'
 import { liveValues } from '../engine/index.ts'
 import type { IdentifyStatus, Step } from '../engine/types.ts'
+import type { ModelOrigin } from './route.ts'
 
 /**
  * Words that are not words: attribute ids are snake_case, and three of them
@@ -150,14 +151,55 @@ export const powerOnHint =
 /**
  * "12 of 37 models match" — the live count §4.1 step 3 asks for.
  *
- * The strip below shows the same count as lit chips, which is the reading a
- * technician glancing at the bench wants. This sentence is what that picture
- * cannot say out loud: it stays as the strip's accessible summary, announced on
- * each change, so the count is never something only sighted use has.
+ * The strip shows the same count — as its own collapsed label, and as lit chips
+ * once opened. This sentence is what those cannot say out loud: it is spoken
+ * from the live region in `App.tsx`, announced on each change, so the narrowing
+ * is never something only sighted use has.
  */
 export function candidateCount(remaining: number, total: number): string {
   if (remaining === 1) return `1 of ${total} models matches`
   return `${remaining} of ${total} models match`
+}
+
+/**
+ * The way out of a model entry, worded for where the entry was opened from.
+ *
+ * Deliberately vague about what is waiting on the other side. An entry reached
+ * from a run may return to a question, to a group, or to a result — all three
+ * hand out `from: 'identify'` — and after a reload it returns to a fresh run,
+ * because the hash survives a reload and the answer trail does not (D-25). The
+ * hash is honest about *where* the button goes and cannot promise *what will be
+ * there*, so the label promises only the former.
+ */
+export function entryBackLabel(from: ModelOrigin): string {
+  return from === 'identify' ? 'Back to identifying' : 'All models'
+}
+
+/**
+ * What the photographs are doing on a group the matrix cannot split (§4.4, §9).
+ *
+ * §12 raised this against showing model pictures at all, and the objection is
+ * sound where it applies: the groups that survive to the end are the pairs §9
+ * records as identical on every attribute here, so their product shots are
+ * identical too. Showing them anyway is still right — they confirm the *kind*
+ * of phone on the bench, which is the check a technician makes before ordering
+ * a part — but the screen has to say which of those two jobs the picture can
+ * do, or it reads as an invitation to squint until one looks righter.
+ */
+export const identicalPhotoNote =
+  'The photographs confirm the shape in your hand; they cannot choose between these. Nothing visible separates them, in the pictures or on the bench.'
+
+/**
+ * "12 of 37 candidates" — the collapsed candidate strip's own label.
+ *
+ * Shorter than `candidateCount` and phrased as a thing rather than a claim,
+ * because it sits on a button: what a technician taps is the count, and what
+ * opens is the list behind it. The sentence form stays where it belongs, in the
+ * live region, where "12 of 37 models match" reads as English rather than as a
+ * label read out of a control.
+ */
+export function candidateSummary(remaining: number, total: number): string {
+  return `${remaining} of ${total} candidates`
 }
 
 /**
@@ -184,8 +226,9 @@ export function visibleOptions(
  * One model's place in the candidate strip.
  *
  * The strip is §4.1 step 3's live count made legible — the row of model names
- * §12 asks for, dimming each as it is eliminated. Names only: the pictures half
- * of that open question costs something quite different, and §12 defers it.
+ * §12 asks for, dimming each as it is eliminated. Names only, still: D-30 put
+ * the photographs where the app has stopped asking, and the strip is the one
+ * surface that is live while it is still asking.
  */
 export interface StripEntry {
   id: ModelId

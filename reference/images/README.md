@@ -1,8 +1,18 @@
 # Reference images
 
-40 files in two sets. Nothing here is imported by the build (D-13); these are the drawing
-source for the Phase 4 SVG diagrams and the visual evidence behind the attribute values in
-`reference/models/`.
+40 files in two sets. These are the drawing source for the Phase 4 SVG diagrams and the
+visual evidence behind the attribute values in `reference/models/`.
+
+Since Phase 6 the `apple/` set is **also shipped in the build** — one shot per model, shown
+where the app has stopped asking (SPEC.md §4.5, D-30, amending D-13). The build imports
+`apple/<model-id>.jpg` and nothing else here: the iFixit shots, the second angles such as
+`iphone-air-rear.jpg`, and the manifests stay out of it. A new model needs its shot dropped
+in under the model's id, or a test fails.
+
+The app is internal to one repair shop and is not distributed beyond it, which is what
+makes shipping Apple's product photography acceptable; the source URL for every file is
+recorded in `manifest.json` and in the model files, so that stays traceable if the answer
+ever changes.
 
 | Set       | Files | What it is                                                                                             |
 | --------- | ----- | ------------------------------------------------------------------------------------------------------ |

@@ -1,6 +1,6 @@
 # iPhone Identifier — Specification
 
-**Status:** draft v1.3 · **Last updated:** 2026-08-25
+**Status:** draft v1.3 · **Last updated:** 2026-08-26
 
 A local web app that walks a repair-shop technician through a short series of
 questions about a phone's _visible_ characteristics until it identifies which
@@ -66,9 +66,13 @@ variants are in scope where they differ physically.
 2. It asks the single most useful **coarse-tier** question for the current
    candidate set (see §7).
 3. The technician picks an answer; candidates inconsistent with it are
-   eliminated. The app shows a live count of remaining candidates — as the
-   candidate strip, a row of all 37 model names that dims each one as it goes
-   out (§12), with the count itself spoken to assistive technology.
+   eliminated. The app shows a live count of remaining candidates as the
+   **candidate strip**, collapsed to "12 of 37 candidates" by default and
+   expandable into a row of all 37 model names that dims each one as it goes out
+   (§12, D-31). The count is spoken to assistive technology on every change.
+   Expanded, each surviving name opens that model's reverse-lookup entry (§4.6);
+   the run is untouched by looking one up, so coming back resumes exactly where
+   it was (D-25).
 4. Repeat until one model remains, or until coarse-tier questions are exhausted.
 5. **One model left** → result screen (§4.5).
    **More than one** → group screen with a _Narrow further_ action (§4.3).
@@ -124,6 +128,13 @@ or white. Phase 1 counted a third, iPhone 16e/17e, because it scored separabilit
 visible characteristics alone — but `magsafe` is a matrix attribute and the engine uses
 it, so that pair does resolve. See §9.
 
+A group of four or fewer is shown as product photographs (§4.5, D-30), and a
+**terminal** one says what the pictures can do: they confirm the shape of the
+phone on the bench, and they cannot choose between models §9 records as visually
+identical, because their photographs are identical too. Saying so is the
+difference between a picture that helps and one that invites squinting until a
+wrong answer looks right.
+
 Where a non-visual tiebreaker exists and the device might power on, the app may
 suggest it (Settings → General → About → Model Name) — always as a hint, never
 as a required step.
@@ -138,17 +149,32 @@ such test is known for 16 vs 17 — both have MagSafe, Camera Control and an Act
 
 **Model name only.** e.g. "iPhone 13 Pro Max". Plus:
 
+- **the model's product photograph** (D-30), so the claim the name makes can be
+  checked against the bench in one look;
 - the answer trail that led there,
 - a _Start over_ action,
 - a link into the reverse-lookup entry for that model, so the tech can confirm
   the phone in hand matches every listed characteristic.
 
-No A-numbers, specs, or repair notes — deliberately out of scope (§3.2).
+No A-numbers, specs, or repair notes — deliberately out of scope (§3.2). The
+photograph is not an exception to that: it is the same claim as the name, in the
+form the eye checks fastest.
+
+Photographs appear only where the app is **showing rather than asking** — this
+screen, any group of four or fewer (§4.3, §4.4), and a reverse-lookup entry.
+That includes a group still offering _Narrow further_: the screen is showing a
+shortlist at that moment, and a shortlist of three is exactly where a picture
+earns its place. Never beside a question, where a real phone in the frame invites matching the bench against a
+picture instead of answering what was asked (§1, §8, D-30).
 
 ### 4.6 Reverse lookup
 
-A browsable list of all 37 models. Selecting one shows every characteristic the
-matrix records for it, with the same SVG diagrams used in the questions. Used
+A browsable list of all 37 models. Selecting one shows the model's product
+photograph and every characteristic the matrix records for it, with the same SVG
+diagrams used in the questions. An entry is reachable from the list, from the
+result screen, and from a surviving chip in the expanded candidate strip; the
+way out names where it was opened from, so an entry opened mid-run returns to
+the run rather than to the list. Used
 for training new technicians, for confirming a result, and as the practical way
 to review and correct the underlying data.
 
@@ -588,9 +614,20 @@ Rules:
 
 Reference screenshots gathered in Phase 1 are the drawing source. They live in
 `reference/images/` and **are committed to the repo** (D-13), so a future
-session can redraw or correct a diagram without repeating the research. They
-are not imported by any module and so never enter the build — the shipped app
-contains SVG only.
+session can redraw or correct a diagram without repeating the research.
+
+The 37 Apple product shots in `reference/images/apple/` are **also shipped**, one
+per model, and shown where the app has stopped asking (§4.5, D-30). That is a
+change to D-13, taken deliberately: the app is copied to benches inside one
+repair shop and goes no further, so the redistribution question §12 raised does
+not arise. Everything else under `reference/` — the iFixit shots, the second
+angles, the manifests — stays out of the build.
+
+**Questions still ask with drawings only.** The two do different jobs and the
+split is the point: a schematic exaggerates the one detail a question turns on
+and stays legible at 120 px, while a photograph shows a whole phone and invites
+the technician to match against it rather than answer (§1). Photographs are for
+showing a conclusion; drawings are for asking.
 
 Keep the repo sane: downscale to roughly 1600 px on the long edge, save as
 WebP or JPEG rather than PNG for photographs, and do not commit anything that
@@ -987,6 +1024,57 @@ re-reading §4.6:
   looking a model up mid-run and coming back leaves the answer trail exactly
   where it was, because navigating never touched it.
 
+**Phase 6 — photographs and a strip that opens.** Ship the reference product
+shots; collapse the candidate strip and make its chips a way into reverse
+lookup. _(done)_
+
+**Phase 6 is done.** It closes the §12 open question that Phases 3 to 5 kept
+deferring, and it closes it in both halves at once because the two turned out to
+be the same question asked from different ends.
+
+The **image licensing** question is answered rather than argued: this app is
+copied to benches inside one repair shop and is not distributed beyond it, so
+the 37 Apple product shots ship in the build (D-30). Nothing about that changes
+`reference/` — the images stay where they are, cited in the model files, and the
+build imports the one shot per model it shows.
+
+What building it changed in this spec, all of it from the screens rather than
+from re-reading §12:
+
+- **§12's objection was to a standing wall, not to pictures.** The three
+  arguments there — that photographs of the 13 and 14 are 7% apart on a part a
+  fifth of the body, that 35 of 37 models resolve alone, that a picture invites
+  matching instead of answering — are all arguments about _when_ a photograph is
+  shown, and none of them survives the answer "once the app has stopped asking".
+  So photographs appear on the result screen, on a group of four or fewer, and
+  on a reverse-lookup entry, and questions still ask with drawings only (§8).
+  The strongest of the three arguments then reappears exactly where §12 said it
+  would — a terminal group whose photographs are identical — and the screen says
+  so in words rather than letting the technician discover it by staring (§4.4).
+
+- **Collapsing the strip is what makes its chips safe to tap.** §12 built the
+  first version as a readout on purpose: nothing clickable, no claim about which
+  survivor it is, because a wall of model names is a lookup surface and a lookup
+  surface competes with the question. Collapsed, it is not a wall — it is a
+  count with a drawer behind it, and opening the drawer is something the
+  technician asks for. That reframing is what lets the chips become links into
+  reverse lookup (D-31) without reopening the tension, because by then the
+  technician has already chosen to go looking.
+
+- **The strip's expansion outlives the question; the run outlives the lookup.**
+  Both are the same rule from D-25 read twice. Expansion is UI state held in
+  `App` rather than in the strip, because the question screen remounts on every
+  answer and watching the list dim is the reason to have opened it. The run is
+  React state that navigating never touches, so a chip tap that opens an entry
+  and a Back that returns leaves the answer trail exactly as it was.
+
+- **An entry now knows where it was opened from**, and says so on the way out.
+  It rides in the hash (`?from=identify`) rather than in React state for the
+  reason D-25 gives: reload the page on an entry and the button still tells the
+  truth about where Back goes. Anything unreadable there means the list, which
+  is the destination that always exists — a bookmark carries a hash but never an
+  answer trail.
+
 Phases 1 and 2 are strictly ordered. No model attribute may be written into
 `src/data/models.ts` from memory — it must trace to `reference/`.
 
@@ -1023,6 +1111,8 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 | D-27 | `body_size_class` has **three** bands — `small` · `standard` · `large` — placed in the gaps between the clusters the 37 bodies actually form, replacing the five of D-10. The fourth of the old five had no members of its own: no model was `large` alone, so the option existed only as an adjacency from `standard`, and picking it narrowed _further_ than the truthful answer did (§6.3). A band no model lives in is not a size a phone can be. Redrawing onto the gaps left the 3 mm adjacency rule with nothing to do, every model carrying exactly one class; D-28 then removed the rule outright and made that the requirement.                                                                                                                                                                                                                                                                            |
 | D-28 | A model has **exactly one** `body_size_class`. D-10 let a model list two adjacent classes, as a hedge against a judgement no eye can make: under the five-band scheme the boundaries fell where handsets were, so a body could sit 2 mm from the line. The hedge caused the failure it existed to prevent — the empty band of D-27 was reachable _only_ as an adjacency, and answering it eliminated a model the truthful answer kept. D-27 moved the boundaries into the 5 mm gaps between the clusters the bodies form, which is what makes a definitive class honest: every model is at least 5.2 mm from the nearest model in another class, so there is no borderline call left to hedge. A future model landing in a gap is a signal to redraw the bands, never to give it two classes; if no redraw separates the clusters, the question has stopped working and that is the thing to face. Asserted by test. |
 | D-29 | The app is packaged for the desktop with **Tauri**, targeting **Windows** first and macOS and Linux where they come free. Tauri wraps the same `dist/` the web build produces and holds no logic of its own — the shell opens a window and nothing else, so the web build stays first-class and the engine stays testable without a UI (§5.5). Electron was not weighed against it on bundle size but on this: Tauri uses the OS webview, so packaging adds a shell rather than a second browser, and "the desktop app" and "the page on the shop network" stay the same program. Building and releasing are separate triggers, so an installer can be produced without publishing one.                                                                                                                                                                                                                              |
+| D-30 | The 37 Apple product shots ship **in the build**, one per model, and are shown on the result screen, on a group of four or fewer, and on a reverse-lookup entry. This amends D-13, which kept every reference image out of the build. The redistribution risk §12 weighed does not arise: the app is internal to one repair shop and is not distributed beyond it. Questions are unaffected — they ask with drawings only (§8), because a schematic exaggerates the detail in question and a photograph invites matching the bench against a picture instead of answering it. Everything else under `reference/` stays out of the build.                                                                                                                                                                                                                                                                             |
+| D-31 | The candidate strip is **collapsed by default** — "12 of 37 candidates" — and expands to the row of all 37 names. Expanded, a surviving chip opens that model's reverse-lookup entry. §12 built the strip as a readout with nothing clickable, on the grounds that a standing wall of models competes with the question in front of the technician; collapsing answers that directly, because the wall is no longer standing and opening it is a deliberate act rather than something the screen does at them. Eliminated chips stay dimmed and stay text: an answer already ruled them out, and a tap target would suggest otherwise. Expansion is held in `App`, so it survives the question screen remounting on each answer.                                                                                                                                                                                     |
 
 D-11 has already paid for itself twice, which is worth recording because both failures
 looked like solid data at the time:
@@ -1045,63 +1135,57 @@ looked like solid data at the time:
   an installer, and the question no longer has to be answered for that case.
   It stays open for the phones and tablets §2 describes, which the desktop
   build does not reach.
-- Where reference images come from, and under what terms. Press images and
-  product shots are the practical source but are not ours to redistribute.
-  Since the repo is internal and the images are drawing references that never
-  ship in the build, this is low risk — but if the repo ever goes public it
-  needs revisiting. _Record the source URL for each image in
-  `reference/models/<id>.md` so this stays traceable._
-- **A candidate strip along the top of the identify flow**, showing all 37
-  models and dimming each as it is eliminated. Raised after Phase 3; deferred
-  rather than declined, and worth splitting in two because the halves cost very
-  different things.
+- ~~Where reference images come from, and under what terms.~~ **Answered.**
+  Press images and product shots are the practical source and are not ours to
+  redistribute, which mattered while it was an open question whether they would
+  ever leave the repo. They now ship in the build (D-30), and the answer that
+  makes that fine is the same one that made committing them fine: this is an
+  internal tool, copied to benches inside one repair shop, not distributed
+  beyond it. _If the repo or the built app ever goes further than that, this is
+  the decision to revisit first — the source URL recorded for each image in
+  `reference/models/<id>.md` and in `reference/images/apple/manifest.json` is
+  what makes that possible._
 
-  The **narrowing** half **has shipped** — `CandidateStrip.tsx`, on the question
-  and group screens. It was cheap and already sanctioned: §4.1 step 3 asks for a
-  live count, and a row of model names that dims is that count made legible. It
-  needed no new assets. Three things settled in the building, recorded here
-  because they are what the rest of this bullet turns on:
+- ~~A candidate strip along the top of the identify flow.~~ **Shipped, both
+  halves** (Phase 6, D-30, D-31). The narrowing half shipped after Phase 3 as a
+  readout of all 37 names dimming as they go out. Phase 6 collapsed it to the
+  count, made expansion the technician's choice, and turned the surviving chips
+  into a way into reverse lookup.
+
+  Three things settled while building the first half, and they are what the
+  second half turned on:
 
   - **It replaces the count sentence rather than joining it.** "12 of 37 models
     match" and a strip showing twelve lit chips are one fact printed twice, and
-    the strip is the one that also says _which_ twelve. The sentence stays as
-    the strip's accessible summary, in a live region, because thirty-seven names
-    re-read on every answer is noise: the chips are `aria-hidden` and the count
-    §4.1 asks for is announced once, in words.
-  - **The chips are not buttons.** Nothing on the strip is clickable and nothing
-    on it claims which survivor the phone is — the softer tension below decided
-    this, not styling. It is a readout.
+    the strip is the one that also says _which_ twelve. The sentence survives as
+    the strip's spoken summary, in a live region, because thirty-seven names
+    re-read on every answer is noise: the count §4.1 asks for is announced once,
+    in words, and the chips carry the picture.
+  - **Nothing on the strip claims which survivor the phone is.** Still true with
+    the chips tappable: a chip opens a description to check the phone against
+    (§4.6), which is the opposite of the app picking for you.
   - **Names are shortened, never invented.** Every name in the matrix opens with
     "iPhone", so the chips drop it (and "generation" from the two SE names) to
     buy the width that separates "13 Pro" from "13 Pro Max". A test asserts the
     37 shortened names stay distinct, since two chips reading alike would show
     one model out and another in under the same word.
 
-  The **pictures** half remains deferred, for three reasons:
+  The **pictures** half was deferred for three reasons, and Phase 6 answered
+  each by moving the picture rather than by overruling the objection:
 
-  - **It would ship the reference images.** The 37 shots in
-    `reference/images/apple/` are Apple's product shots, and the bullet above
-    calls redistribution low risk _because_ D-13 and §8 keep them out of the
-    build. A picture strip reverses that, on every device the app is copied to.
-    That is a decision to take deliberately, not as a side effect of a UI change.
-  - **Nothing planned draws models.** §8 draws one SVG per _answer option_ —
-    layouts, cutouts, size silhouettes. Per-model artwork is 37 drawings the
-    plan does not otherwise call for.
-  - **It is weakest where it is needed most.** 35 of 37 models resolve alone
-    (§9), so on most runs the strip is decoration that empties out. It earns its
-    keep on the group screens — and those are the pairs §9 records as identical
-    on every attribute here. Their pictures would be indistinguishable: Phase 4
-    measured the 13/14 camera housings at 29.5 mm against 30.7 mm, a 7%
-    difference on a part that is itself a fifth of the body (§10).
+  - **It would ship the reference images.** It does, and the licensing bullet
+    above is why that is now a settled cost rather than a side effect.
+  - **Nothing planned draws models.** Nothing needed to: `reference/images/apple/`
+    already holds one clean single-device shot per model, gathered in Phase 1 and
+    re-checked before Phase 4 drew against it.
+  - **It is weakest where it is needed most.** True, and unchanged: the groups
+    that survive to the end are the pairs §9 records as identical, so their
+    photographs are identical too. The screen states that outright (§4.4) rather
+    than leaving a technician to discover it by comparing two pictures of the
+    same thing.
 
-  There is also a softer tension, which the shipped half has now had to answer:
-  prompts deliberately describe what is in the technician's hand and never which
-  model it might be (`questions.ts`). A standing wall of model photos invites
-  matching the phone against pictures instead of answering the question, which
-  is the failure mode §1 opens with. The strip is therefore built as a _readout_
-  of narrowing and not a lookup surface — small chips, no tap targets, no
-  claim about which one it is — and a picture strip would pull hard the other
-  way, because a photograph is a thing to match against in a way a name is not.
-
-  _Leaning: revisit after Phase 5, when reverse lookup has settled what a
-  per-model visual is and the image question above has an answer._
+  The softer tension — that a photograph is a thing to match against in a way a
+  name is not, and §1 opens with a technician matching wrongly — is the reason
+  photographs never appear beside a question, and the reason the strip is a
+  drawer rather than a wall. Both are the same rule: the app asks with drawings
+  and shows with photographs.

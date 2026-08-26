@@ -18,7 +18,7 @@
 import { useMemo, useState } from 'react'
 import { models } from '../data/models.ts'
 import { questions } from '../data/questions.ts'
-import type { AttributeId, AttributeValue } from '../data/types.ts'
+import type { AttributeId, AttributeValue, ModelId } from '../data/types.ts'
 import {
   answer,
   back,
@@ -38,13 +38,28 @@ import { ModelListScreen } from './ModelListScreen.tsx'
 import { QuestionScreen } from './QuestionScreen.tsx'
 import { ResultScreen } from './ResultScreen.tsx'
 import { modelById } from './lookup.ts'
-import { candidateCount } from './presenters.ts'
+import { candidateCount, entryBackLabel } from './presenters.ts'
 import { identifyRoute, useRoute } from './route.ts'
 
 export function App() {
   const [state, setState] = useState<IdentifyState>(startOver)
   const result = useMemo(() => resolve(models, questions, state), [state])
   const [route, navigate] = useRoute()
+  /*
+    Whether the candidate strip is open. It lives here rather than in the strip
+    because the question screen remounts on every question (`key`), and a
+    technician who opened the list means to keep it open across answers —
+    watching it dim is the reason to have opened it. Closed to begin with:
+    §4.1's count is what most runs want, and the list is a drawer (D-31).
+  */
+  const [stripExpanded, setStripExpanded] = useState(false)
+  const toggleStrip = () => setStripExpanded((open) => !open)
+  /*
+    Opening an entry from inside a run. The run is untouched by navigating
+    (D-25), so `from: 'identify'` is what lets the entry offer the way back to
+    it rather than to the model list.
+  */
+  const openFromRun = (id: ModelId) => navigate({ view: 'model', id, from: 'identify' })
 
   const onAnswer = (attribute: AttributeId) => (value: AttributeValue) =>
     setState((current) => answer(current, attribute, value))
@@ -60,6 +75,14 @@ export function App() {
   // lands on the list rather than on an error. The list is where someone
   // looking for a model was going anyway.
   const opened = route.view === 'model' ? modelById(models, route.id) : undefined
+  /*
+    Only when an entry is actually open. A hash naming a model the matrix does
+    not have falls back to the list below, and a list that offered "browse all
+    37 models" as its way out — because the hash said the entry came from a run
+    — would be a dead end with no way back to identifying at all.
+  */
+  const fromRun =
+    opened !== undefined && route.view === 'model' && route.from === 'identify'
 
   if (route.view === 'models' || route.view === 'model') {
     return (
@@ -75,23 +98,42 @@ export function App() {
             key={opened.id}
             model={opened}
             questions={questions}
-            onBackToList={() => navigate({ view: 'models' })}
+            backLabel={entryBackLabel(fromRun ? 'identify' : 'list')}
+            onBack={() =>
+              fromRun ? navigate(identifyRoute) : navigate({ view: 'models' })
+            }
           />
         ) : (
           <ModelListScreen
             models={models}
-            onOpen={(id) => navigate({ view: 'model', id })}
+            onOpen={(id) => navigate({ view: 'model', id, from: 'list' })}
           />
         )}
 
+        {/*
+          The other destination. An entry opened mid-run offers the run above,
+          so this offers the list; anywhere else, this is the way back to
+          identifying. Both are always one tap away, and neither disturbs the
+          run.
+        */}
         <nav className="controls controls-single" aria-label="Flow controls">
-          <button
-            type="button"
-            className="secondary"
-            onClick={() => navigate(identifyRoute)}
-          >
-            Back to identifying
-          </button>
+          {fromRun ? (
+            <button
+              type="button"
+              className="secondary"
+              onClick={() => navigate({ view: 'models' })}
+            >
+              Browse all {models.length} models
+            </button>
+          ) : (
+            <button
+              type="button"
+              className="secondary"
+              onClick={() => navigate(identifyRoute)}
+            >
+              Back to identifying
+            </button>
+          )}
         </nav>
       </main>
     )
@@ -126,6 +168,9 @@ export function App() {
           question={result.question}
           candidates={result.candidates}
           all={models}
+          stripExpanded={stripExpanded}
+          onToggleStrip={toggleStrip}
+          onOpenEntry={openFromRun}
           onAnswer={onAnswer(result.question.id)}
           onSkip={() => {
             const attribute = result.question?.id
@@ -140,16 +185,16 @@ export function App() {
           candidates={result.candidates}
           revisitable={result.revisitable}
           all={models}
+          stripExpanded={stripExpanded}
+          onToggleStrip={toggleStrip}
+          onOpenEntry={openFromRun}
           onNarrowFurther={() => setState(narrowFurther)}
           onRevisit={(attribute) => setState((current) => unskip(current, attribute))}
         />
       )}
 
       {result.status === 'resolved' && result.candidates[0] && (
-        <ResultScreen
-          model={result.candidates[0]}
-          onOpenEntry={(id) => navigate({ view: 'model', id })}
-        />
+        <ResultScreen model={result.candidates[0]} onOpenEntry={openFromRun} />
       )}
 
       {result.status === 'contradictory' && <ContradictionScreen steps={state.steps} />}

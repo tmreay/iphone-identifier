@@ -6,6 +6,12 @@
  * against the pictures it was just asked about, not against a second vocabulary
  * for the same features.
  *
+ * Reached from the browsable list, from the result screen's link, or from a
+ * chip in the candidate strip mid-run (§4.1). The last of those is why leaving
+ * is a prop rather than a fixed destination: an entry opened from a run goes
+ * back to the run, which is still exactly where it was, because navigating
+ * never touched it (D-25).
+ *
  * **Read-only** (D-24). Correcting a value means editing
  * `reference/models/<id>.md` and re-running the transcription, because the
  * matrix is a build output with nowhere to write back to and an in-app edit
@@ -14,6 +20,7 @@
  */
 import { Diagram } from '../diagrams/index.tsx'
 import type { IPhoneModel, Question } from '../data/types.ts'
+import { ModelPhoto } from './ModelPhoto.tsx'
 import type { EntryRow } from './lookup.ts'
 import { boundaryShadeNote, colourRows, entryRows, notRecordedNote } from './lookup.ts'
 import { listPhrase } from './presenters.ts'
@@ -45,11 +52,14 @@ function Rows({ rows }: { rows: EntryRow[] }) {
 export function ModelEntryScreen({
   model,
   questions,
-  onBackToList,
+  backLabel,
+  onBack,
 }: {
   model: IPhoneModel
   questions: Question[]
-  onBackToList: () => void
+  /** Where leaving goes, in words — the list, or the run this was opened from. */
+  backLabel: string
+  onBack: () => void
 }) {
   const rows = entryRows(model, questions)
   const coarse = rows.filter((row) => row.tier === 'coarse')
@@ -62,6 +72,13 @@ export function ModelEntryScreen({
     <section className="screen">
       <p className="count">Released {model.released}</p>
       <h2 className="result-name">{model.name}</h2>
+
+      {/*
+        The product shot, above the characteristics that describe it (D-30). It
+        is the fastest of the checks on this screen — most models are wrong at a
+        glance — and the rows below are what settles the ones that are not.
+      */}
+      <ModelPhoto model={model} />
 
       <h3 className="entry-heading">At a glance</h3>
       <Rows rows={coarse} />
@@ -96,8 +113,8 @@ export function ModelEntryScreen({
         transcription.
       </p>
 
-      <button type="button" className="secondary" onClick={onBackToList}>
-        All models
+      <button type="button" className="secondary" onClick={onBack}>
+        {backLabel}
       </button>
     </section>
   )

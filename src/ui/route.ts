@@ -26,14 +26,30 @@
 import { useCallback, useSyncExternalStore } from 'react'
 import type { ModelId } from '../data/types.ts'
 
+/**
+ * Where a model entry was opened from, and so what leaving it means.
+ *
+ * An entry reached from the browsable list goes back to the list; one reached
+ * from a run — the result screen's link (§4.5), or a chip in the candidate
+ * strip (§4.1) — goes back to the run, which is still exactly where it was
+ * because navigating never touched it. Carrying that in the hash rather than in
+ * React state keeps the promise D-25 makes: reload the page on a model entry
+ * and the button still says the true thing about where you came from.
+ */
+export type ModelOrigin = 'list' | 'identify'
+
 export type Route =
-  { view: 'identify' } | { view: 'models' } | { view: 'model'; id: ModelId }
+  | { view: 'identify' }
+  | { view: 'models' }
+  | { view: 'model'; id: ModelId; from: ModelOrigin }
 
 export const identifyRoute: Route = { view: 'identify' }
 
 const MODELS = '#/models'
 /** `#/models/<id>`. No metacharacters in the prefix, so it needs no escaping. */
-const MODEL_PATTERN = new RegExp(`^${MODELS}/([^/]+)$`)
+const MODEL_PATTERN = new RegExp(`^${MODELS}/([^/?]+)$`)
+/** Marks an entry opened from a run rather than from the list. */
+const FROM_IDENTIFY = 'from=identify'
 
 /**
  * Reads a route out of a location hash.
@@ -46,7 +62,12 @@ const MODEL_PATTERN = new RegExp(`^${MODELS}/([^/]+)$`)
  * the matrix; this function is about shape, not existence.
  */
 export function parseRoute(hash: string): Route {
-  const trimmed = hash.replace(/\/+$/, '')
+  // The origin rides in a query on the hash. Anything else there, or nothing,
+  // means the list — the destination that is always safe, because the list is
+  // reachable from the flow but a half-finished run is not reachable from a
+  // bookmark.
+  const [path = '', query = ''] = hash.split('?')
+  const trimmed = path.replace(/\/+$/, '')
   if (trimmed === MODELS) return { view: 'models' }
 
   const id = MODEL_PATTERN.exec(trimmed)?.[1]
@@ -56,7 +77,11 @@ export function parseRoute(hash: string): Route {
     // in. Decoding a malformed escape throws, and a bad URL should land on the
     // flow like any other unrecognised hash rather than take the app down.
     try {
-      return { view: 'model', id: decodeURIComponent(id) }
+      return {
+        view: 'model',
+        id: decodeURIComponent(id),
+        from: query === FROM_IDENTIFY ? 'identify' : 'list',
+      }
     } catch {
       return identifyRoute
     }
@@ -71,7 +96,9 @@ export function routeHash(route: Route): string {
     case 'models':
       return MODELS
     case 'model':
-      return `${MODELS}/${encodeURIComponent(route.id)}`
+      return `${MODELS}/${encodeURIComponent(route.id)}${
+        route.from === 'identify' ? `?${FROM_IDENTIFY}` : ''
+      }`
     default:
       // Not '' — assigning an empty hash leaves the '#' behind in most browsers
       // and reloads in some. '#/' is the one spelling of "the flow".
