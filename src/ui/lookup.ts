@@ -56,9 +56,9 @@ export interface EntryRow {
   /**
    * Every value the matrix records, or empty where it records none.
    *
-   * More than one is ordinary rather than exceptional: a model may span two
-   * adjacent size classes and may ship in both SIM-tray and eSIM-only bodies
-   * (§5.4).
+   * More than one is ordinary rather than exceptional: a model has many colours
+   * and may ship in both SIM-tray and eSIM-only bodies (§5.4). Size is not one
+   * of them — every model has exactly one `body_size_class` (D-28).
    */
   values: EntryValue[]
 }

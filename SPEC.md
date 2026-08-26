@@ -213,8 +213,9 @@ interface IPhoneModel {
   released: number // year
   /**
    * For each attribute, the set of values consistent with this model.
-   * Multiple values are legitimate: a model has many colours, may span two
-   * adjacent size classes, and may ship in both SIM-tray and eSIM-only bodies.
+   * Multiple values are legitimate: a model has many colours, and may ship in
+   * both SIM-tray and eSIM-only bodies. Size is no longer among them — D-28
+   * gives every model exactly one `body_size_class`.
    * An absent or empty entry means "unknown" and eliminates nothing.
    */
   attributes: Partial<Record<AttributeId, AttributeValue[]>>
@@ -273,9 +274,10 @@ settled against that research and are no longer provisional.
 37 models — and it subsumes `rear_camera_count`.
 
 **Phase 2 checked whether the count question still earns its place. It does, but not as a
-question the engine ever chooses.** Across all 226 concrete devices the layout question
-always scores higher, so `rear_camera_count` is never asked and removing it changes no
-outcome. It is not redundant, though: the moment the layout is answered "Can't tell" the
+question the engine ever chooses.** Across all 226 concrete devices the matrix holds
+today the layout question always scores higher, so `rear_camera_count` is never asked and
+removing it changes no outcome (Phase 2 established this over the 288 it then held). It is
+not redundant, though: the moment the layout is answered "Can't tell" the
 count becomes the top-scoring question on every device, and separability is unchanged —
 the same two terminal groups, the same 35 models resolving alone. It is kept as the
 fallback for §4.2, which is the case it exists for. Both results are asserted by test.
@@ -366,17 +368,25 @@ boundary sits inside one of those spaces.
 handset, not a hedge about the judgement: a phone is one size, and the matrix
 says which.
 
-Five bands were tried first — `mini`, `compact`, `standard`, `large`, `max` — cut
-through the middle of those clusters rather than through the gaps. That put
-handsets a couple of millimetres either side of a boundary, which no eye can
-call, so models carried a second **adjacent** class whenever a model actually in
-that class sat within 3 mm. The hedge then produced the bug it was meant to
-prevent. The fourth band had no members of its own — nothing was `large` alone,
-because the ~150–156 mm band was empty and reachable only as an adjacency from
-`standard`. A technician could pick a size no phone was, and picking it narrowed
-_further_ than the truthful `standard` did: the iPhone 15 Pro (146.6 mm) dropped
-out while the 14 Pro (147.5 mm) and 16 Pro (149.6 mm) survived, on nothing but
-which side of a 3 mm adjacency each had landed.
+Five bands were tried first — `mini`, `compact`, `standard`, `large`, `max` — and
+two of their four boundaries were badly placed. The ~135 mm and ~142 mm lines sat
+in gaps, as they still do; the ~142 mm one is kept unchanged as today's
+`small`/`standard` boundary. But **~150 mm fell in the middle of the densest run
+of bodies in the whole set** — 149.6, 149.6, 150.0 and 150.9 mm all sit within
+0.9 mm of it, the iPhone 17 Pro exactly on it — and ~156 mm sat 0.2 mm below the
+iPhone Air. That put handsets a millimetre or two either side of a line, which no
+eye can call, so models carried a second **adjacent** class whenever a model
+actually in that class sat within 3 mm.
+
+The hedge then produced the bug it was meant to prevent. **No model recorded
+`large` as its own class**: every one of the eight that listed it listed
+`standard` too. So `large` was not an alternative to `standard`, it was a strict
+subset of it — answering it could only ever eliminate models that answering
+`standard` kept, which is the shape D-16 forbids elsewhere in the schema. A
+technician picking it narrowed _further_ than the truthful `standard` did: the
+iPhone 15 Pro (146.6 mm) dropped out while the 14 Pro (147.5 mm) and 16 Pro
+(149.6 mm) survived, on nothing but which side of a 3 mm adjacency each had
+landed.
 
 Redrawing the bands onto the gaps (D-27) removed the need for the hedge, and
 D-28 removed the hedge. The two go together: dual membership was only ever
@@ -393,8 +403,18 @@ phone with no second class to catch it. No body sits near one in the sense that
 matters. The boundary itself is an abstraction — the iPhone X and XS come within
 1.6 mm of the ~142 mm line — but what a technician confuses is a _handset_, and
 the nearest handset on the far side of that line is 5.2 mm away. Every model is
-at least 5.2 mm from the nearest model in another class. The gaps buy the safety
-the adjacency rule only pretended to.
+at least 5.2 mm from the nearest model in another class, and against the three
+silhouettes §8 draws, every one of the 37 is nearest its own — by 4.9 mm in the
+closest case.
+
+Two things make the sacrifice smaller than it sounds. On the current set it is
+**nil**: with the bands redrawn onto the gaps, the 3 mm adjacency rule would give
+every model one class anyway, so D-28 removes a mechanism that has nothing left
+to do rather than one that was working. And the technician who genuinely cannot
+call it is not forced to guess — "Can't tell" is on every question (D-09) and
+eliminates nothing, which is a better escape than a second class, because it
+narrows honestly instead of narrowing wrongly. The gaps and that escape together
+buy the safety the adjacency rule only pretended to.
 
 Therefore:
 
@@ -582,8 +602,7 @@ images in `reference/images/`. Explicit goals:
 _(done)_ — 37 model files, 40 images, and the value sets in §6.1/§6.2 above, which were
 written from that research. What it changed in this spec: the taxonomy gaps are filled,
 §6.3 gained the 3 mm adjacency rule (since removed by D-28), §9 replaced guesswork with
-the measured separability
-result, and scope went from 36 models to 37 (D-01).
+the measured separability result, and scope went from 36 models to 37 (D-01).
 
 **Phase 1 is done.** All 37 models researched and written up; dimensions and size classes
 evidence-based; SIM-tray position and `magsafe` verified for every model from Apple's own

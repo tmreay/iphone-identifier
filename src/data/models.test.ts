@@ -155,12 +155,12 @@ describe('size classes are definitive (§6.3, D-27, D-28)', () => {
   })
 
   it('gives every declared class at least one model of its own', () => {
-    // The regression this guards: the five-band schema had a `large` band —
-    // ~150–156 mm — that no body sat in. It reached the screen anyway, as an
-    // adjacency from `standard`, so a technician could pick a size no phone
-    // was, and picking it narrowed *further* than the truthful `standard` did:
-    // the iPhone 15 Pro dropped out while the 14 Pro and 16 Pro survived, on
-    // nothing but which side of a 3 mm adjacency each had landed.
+    // The regression this guards: under the five-band schema no model recorded
+    // `large` as its own class — all eight that listed it listed `standard`
+    // too. So `large` was not an alternative to `standard` but a strict subset
+    // of it, and a technician picking it narrowed *further* than the truthful
+    // answer did: the iPhone 15 Pro dropped out while the 14 Pro and 16 Pro
+    // survived, on nothing but which side of a 3 mm adjacency each had landed.
     //
     // A band with no members of its own is that bug. Stated as a rule: every
     // value the size question offers must be some model's *own* class.

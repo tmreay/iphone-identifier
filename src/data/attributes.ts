@@ -78,8 +78,8 @@ export const attributes: AttributeDefinition[] = [
     // was `large` alone — so it was an option a technician could pick that
     // matched no phone's own class, and picking it narrowed further than the
     // truthful answer did. It was reachable only because a model could carry a
-    // second, adjacent class; D-28 removed that, the redrawn bands having put
-    // 5 mm of empty space where the borderline judgements used to be.
+    // second, adjacent class; D-28 removed that, the redrawn bands having moved
+    // every boundary off the bodies and into 5 mm of empty space.
     id: 'body_size_class',
     tier: 'coarse',
     values: ['small', 'standard', 'large'],

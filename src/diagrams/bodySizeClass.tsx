@@ -18,8 +18,8 @@
  * in the matrix was `large` alone. Its outline was the midpoint of an empty
  * band: a drawing of a phone that does not exist. The midpoints above are
  * computed rather than measured — 135.0, 147.3 and 159.8 are no phone's height —
- * but both ends of every band are handsets in the matrix, which is what the old
- * `large` had none of.
+ * but the extreme members they average are real handsets, which is what the old
+ * `large` band had none of it could call its own.
  *
  * Widths follow from the heights: every body in the matrix sits within about 3%
  * of 2.05 : 1 (the extremes are the iPhone 11 and XR at 1.99 and the 16 Pro Max
