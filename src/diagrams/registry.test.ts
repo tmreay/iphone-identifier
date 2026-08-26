@@ -28,8 +28,8 @@ describe('the diagram registry', () => {
     expect(orphans).toEqual([])
   })
 
-  it('covers all 33 declared ids', () => {
-    expect(declared).toHaveLength(33)
-    expect(Object.keys(diagrams)).toHaveLength(33)
+  it('covers all 31 declared ids', () => {
+    expect(declared).toHaveLength(31)
+    expect(Object.keys(diagrams)).toHaveLength(31)
   })
 })
