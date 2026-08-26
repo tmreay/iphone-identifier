@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "The app draws a window over a static bundle and does nothing else - no filesystem, no shell, no network. This grants the core defaults and no plugin permissions.",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}
