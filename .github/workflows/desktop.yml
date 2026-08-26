@@ -63,9 +63,14 @@ jobs:
           # Windows is the target that matters (SPEC.md §2); the rest are
           # welcome but never the reason a run exists, so they are the ones
           # dropped when a run does not need the full set.
+          #
+          # Both macOS entries run on macos-latest, which is Apple silicon; the
+          # Intel one cross-compiles to x86_64 with the target rustup installs
+          # a few steps down. It used to run natively on macos-13, until GitHub
+          # retired that image and the job simply queued forever.
           windows='{"name":"windows","os":"windows-latest","target":"x86_64-pc-windows-msvc"}'
           all="$windows"',{"name":"macos-arm","os":"macos-latest","target":"aarch64-apple-darwin"}'
-          all="$all"',{"name":"macos-intel","os":"macos-13","target":"x86_64-apple-darwin"}'
+          all="$all"',{"name":"macos-intel","os":"macos-latest","target":"x86_64-apple-darwin"}'
           all="$all"',{"name":"linux","os":"ubuntu-22.04","target":"x86_64-unknown-linux-gnu"}'
 
           release=false
@@ -167,6 +172,7 @@ jobs:
       # Runs `npm run build` first via tauri.conf.json's beforeBuildCommand, so
       # the bundle it packages is the same one the web build produces.
       - name: Build the bundles
+        id: bundles
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -179,7 +185,7 @@ jobs:
           releaseBody: |
             Desktop builds of the iPhone Identifier (SPEC.md §5.1).
 
-            Windows: `.exe` is the NSIS installer, `.msi` the Windows Installer package.
+            Windows: `.exe` is the portable app - run it, nothing to install. `.msi` installs it per-machine, for scripted or group-policy deployment.
             macOS: `.dmg`, one per architecture - `aarch64` for Apple silicon, `x64` for Intel.
             Linux: `.AppImage` runs anywhere, `.deb` for Debian and Ubuntu.
 
@@ -199,7 +205,7 @@ jobs:
       # the only label available, and "portable" versus "installer" is the one
       # distinction someone downloading these needs to make.
       - name: Stage the Windows downloads
-        if: ${{ needs.plan.outputs.release != 'true' && runner.os == 'Windows' }}
+        if: runner.os == 'Windows'
         shell: bash
         run: |
           set -euo pipefail
@@ -224,6 +230,60 @@ jobs:
             "iPhone Identifier_${version}_x64_installer.msi" \
             "$(du -h "downloads/iPhone Identifier_${version}_x64_installer.msi" | cut -f1)" \
             >> "$GITHUB_STEP_SUMMARY"
+
+      # The bundlers produce installers, and the portable binary is not one, so
+      # nothing attaches it to a release -- yet it is the file a bench PC
+      # actually wants (README, "Getting it onto a Windows PC"). Upload it to
+      # the release tauri-action just created, alongside the MSI it published.
+      #
+      # tauri-action hands back the upload URL, which is the only handle that
+      # works here: a draft release has no tag yet, so `gh release upload` has
+      # nothing to look it up by. GitHub replaces spaces in an asset name with
+      # dots, so the name is written with dots to match the bundles beside it.
+      - name: Attach the portable app to the release
+        if: ${{ needs.plan.outputs.release == 'true' && runner.os == 'Windows' }}
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPLOAD_URL: ${{ steps.bundles.outputs.releaseUploadUrl }}
+        run: |
+          set -euo pipefail
+
+          version=$(node -p "require('./package.json').version")
+          asset="iPhone.Identifier_${version}_x64_portable.exe"
+          file="downloads/iPhone Identifier_${version}_x64_portable.exe"
+
+          api="https://api.github.com/repos/${{ github.repository }}"
+
+          # A re-run publishes into the draft the first run opened, and the
+          # upload endpoint rejects a name already on the release rather than
+          # replacing it. tauri-action clears its own bundles this way; this
+          # one is ours to clear.
+          existing=$(curl -sS "$api/releases/${{ steps.bundles.outputs.releaseId }}/assets" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            | ASSET="$asset" node -p \
+              "JSON.parse(require('fs').readFileSync(0,'utf8')).filter(a => a.name === process.env.ASSET).map(a => a.id).join('')")
+
+          if [ -n "$existing" ]; then
+            curl -sS -X DELETE "$api/releases/assets/$existing" \
+              -H "Authorization: Bearer $GITHUB_TOKEN"
+          fi
+
+          # The upload URL is a URI template ending in {?name,label}.
+          upload="${UPLOAD_URL%%\{*}?name=$asset"
+
+          code=$(curl -sS -o response.json -w '%{http_code}' -X POST "$upload" \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Content-Type: application/octet-stream" \
+            --data-binary "@$file")
+
+          if [ "$code" != 201 ]; then
+            echo "::error::Uploading $asset failed with HTTP $code"
+            cat response.json
+            exit 1
+          fi
+
+          echo "Attached $asset ($(du -h "$file" | cut -f1))" >> "$GITHUB_STEP_SUMMARY"
 
       # The build-without-release path. Each file is uploaded on its own with
       # `archive: false`, so the Actions page offers it as the file itself
