@@ -5,7 +5,7 @@
  * scope (§3.2), and putting them here would make this screen the thing people
  * check rather than the phone in their hand.
  *
- * It does now carry the model's **product photograph** (D-27). That is not a
+ * It does now carry the model's **product photograph** (D-30). That is not a
  * spec creeping in: it is the same claim the name makes, in the form a
  * technician can check against the bench in one look. The picture is safe here
  * in a way it would not be beside a question, because the app has stopped

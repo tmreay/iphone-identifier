@@ -4,7 +4,7 @@
  * Shown where the app has stopped asking and is showing what it concluded: the
  * result screen, and a group small enough to compare side by side. Never beside
  * a question, where a photograph would invite matching the phone against a
- * picture instead of answering what was asked (§1, D-27).
+ * picture instead of answering what was asked (§1, D-30).
  *
  * `alt` overrides the default reading for a caller that already names the model
  * beside the picture — inside the group screen's cards, where the name is part

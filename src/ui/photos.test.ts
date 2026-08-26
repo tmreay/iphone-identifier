@@ -31,7 +31,7 @@ describe('photosByName', () => {
 
 describe('photoFor', () => {
   it('has a photograph for every model in the matrix', () => {
-    // The whole point of shipping the images (D-27) is that a technician who
+    // The whole point of shipping the images (D-30) is that a technician who
     // reaches a result sees the phone. A model whose file was never downloaded
     // should fail here rather than show a blank frame at the bench.
     const missing = models.filter((model) => photoFor(model.id) === undefined)

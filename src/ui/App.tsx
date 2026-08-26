@@ -50,7 +50,7 @@ export function App() {
     because the question screen remounts on every question (`key`), and a
     technician who opened the list means to keep it open across answers —
     watching it dim is the reason to have opened it. Closed to begin with:
-    §4.1's count is what most runs want, and the list is a drawer (D-28).
+    §4.1's count is what most runs want, and the list is a drawer (D-31).
   */
   const [stripExpanded, setStripExpanded] = useState(false)
   const toggleStrip = () => setStripExpanded((open) => !open)

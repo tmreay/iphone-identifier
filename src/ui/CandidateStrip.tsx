@@ -16,7 +16,7 @@
  * instead of answering the question in front of you — the failure mode §1 opens
  * with. Collapsing is what answers that: the wall is not standing, it is a
  * drawer, and opening it is a thing the technician asked for rather than a
- * thing the screen does at them (D-28).
+ * thing the screen does at them (D-31).
  *
  * **Accessibility.** The chips are announced normally when expanded — thirty
  * seven names are worth reading to someone who just asked for the list — and

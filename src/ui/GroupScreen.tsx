@@ -8,7 +8,7 @@
  * screen can offer.
  *
  * A group small enough to compare — four or fewer — is listed as product
- * photographs rather than as names (D-27). This is the screen where a picture
+ * photographs rather than as names (D-30). This is the screen where a picture
  * earns its place: the app has run out of questions, and what is left is a
  * technician holding a phone against a shortlist. Each card opens that model's
  * entry (§4.6), because the next thing after "it is one of these two" is

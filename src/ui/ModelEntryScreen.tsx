@@ -74,7 +74,7 @@ export function ModelEntryScreen({
       <h2 className="result-name">{model.name}</h2>
 
       {/*
-        The product shot, above the characteristics that describe it (D-27). It
+        The product shot, above the characteristics that describe it (D-30). It
         is the fastest of the checks on this screen — most models are wrong at a
         glance — and the rows below are what settles the ones that are not.
       */}

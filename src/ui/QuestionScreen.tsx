@@ -3,7 +3,7 @@
  *
  * One question, its options, and "Can't tell" on every one of them (D-09).
  *
- * The options carry **drawings, never photographs** (§8, D-27). A schematic
+ * The options carry **drawings, never photographs** (§8, D-30). A schematic
  * exaggerates the one detail the question turns on and stays legible at 120 px;
  * a product shot does neither, and a wall of real phones beside a question
  * invites matching the bench against pictures instead of answering what was

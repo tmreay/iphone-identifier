@@ -226,7 +226,7 @@ export function visibleOptions(
  * One model's place in the candidate strip.
  *
  * The strip is §4.1 step 3's live count made legible — the row of model names
- * §12 asks for, dimming each as it is eliminated. Names only, still: D-27 put
+ * §12 asks for, dimming each as it is eliminated. Names only, still: D-30 put
  * the photographs where the app has stopped asking, and the strip is the one
  * surface that is live while it is still asking.
  */

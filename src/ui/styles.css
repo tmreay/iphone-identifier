@@ -83,7 +83,7 @@ body {
   border: 0;
 }
 
-/* --- Candidate strip (SPEC.md §4.1 step 3, §12, D-28) ------------------- */
+/* --- Candidate strip (SPEC.md §4.1 step 3, §12, D-31) ------------------- */
 
 .strip {
   margin: 0 0 1.25rem;
@@ -212,7 +212,7 @@ button.strip-model:focus-visible {
   }
 }
 
-/* --- Product photographs (SPEC.md §4.5, D-27) --------------------------- */
+/* --- Product photographs (SPEC.md §4.5, D-30) --------------------------- */
 
 /*
  * Apple's product shots are tall portraits on white. Capped by height rather
@@ -330,7 +330,7 @@ button.strip-model:focus-visible {
 }
 
 /*
- * Photographs once the group is small enough to compare them (D-27). Two across
+ * Photographs once the group is small enough to compare them (D-30). Two across
  * on a phone, which is the shape of the groups that actually survive to here
  * (§9), and each one opens that model's entry.
  */

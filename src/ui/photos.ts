@@ -2,7 +2,7 @@
  * Product photographs — SPEC.md §4.5, §8, §12.
  *
  * The reference shots in `reference/images/apple/` are now part of the build
- * (D-27). Phases 1 to 5 kept them out of it under D-13, because redistributing
+ * (D-30). Phases 1 to 5 kept them out of it under D-13, because redistributing
  * Apple's product photography is a thing to decide deliberately rather than to
  * do as a side effect of a UI change. The decision has been taken: this app is
  * copied to benches inside one repair shop and goes no further, so the images

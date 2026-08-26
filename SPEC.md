@@ -69,7 +69,7 @@ variants are in scope where they differ physically.
    eliminated. The app shows a live count of remaining candidates as the
    **candidate strip**, collapsed to "12 of 37 candidates" by default and
    expandable into a row of all 37 model names that dims each one as it goes out
-   (§12, D-28). The count is spoken to assistive technology on every change.
+   (§12, D-31). The count is spoken to assistive technology on every change.
    Expanded, each surviving name opens that model's reverse-lookup entry (§4.6);
    the run is untouched by looking one up, so coming back resumes exactly where
    it was (D-25).
@@ -128,7 +128,7 @@ or white. Phase 1 counted a third, iPhone 16e/17e, because it scored separabilit
 visible characteristics alone — but `magsafe` is a matrix attribute and the engine uses
 it, so that pair does resolve. See §9.
 
-A group of four or fewer is shown as product photographs (§4.5, D-27), and a
+A group of four or fewer is shown as product photographs (§4.5, D-30), and a
 **terminal** one says what the pictures can do: they confirm the shape of the
 phone on the bench, and they cannot choose between models §9 records as visually
 identical, because their photographs are identical too. Saying so is the
@@ -149,7 +149,7 @@ such test is known for 16 vs 17 — both have MagSafe, Camera Control and an Act
 
 **Model name only.** e.g. "iPhone 13 Pro Max". Plus:
 
-- **the model's product photograph** (D-27), so the claim the name makes can be
+- **the model's product photograph** (D-30), so the claim the name makes can be
   checked against the bench in one look;
 - the answer trail that led there,
 - a _Start over_ action,
@@ -165,7 +165,7 @@ screen, any group of four or fewer (§4.3, §4.4), and a reverse-lookup entry.
 That includes a group still offering _Narrow further_: the screen is showing a
 shortlist at that moment, and a shortlist of three is exactly where a picture
 earns its place. Never beside a question, where a real phone in the frame invites matching the bench against a
-picture instead of answering what was asked (§1, §8, D-27).
+picture instead of answering what was asked (§1, §8, D-30).
 
 ### 4.6 Reverse lookup
 
@@ -570,7 +570,7 @@ Reference screenshots gathered in Phase 1 are the drawing source. They live in
 session can redraw or correct a diagram without repeating the research.
 
 The 37 Apple product shots in `reference/images/apple/` are **also shipped**, one
-per model, and shown where the app has stopped asking (§4.5, D-27). That is a
+per model, and shown where the app has stopped asking (§4.5, D-30). That is a
 change to D-13, taken deliberately: the app is copied to benches inside one
 repair shop and goes no further, so the redistribution question §12 raised does
 not arise. Everything else under `reference/` — the iFixit shots, the second
@@ -977,7 +977,7 @@ be the same question asked from different ends.
 
 The **image licensing** question is answered rather than argued: this app is
 copied to benches inside one repair shop and is not distributed beyond it, so
-the 37 Apple product shots ship in the build (D-27). Nothing about that changes
+the 37 Apple product shots ship in the build (D-30). Nothing about that changes
 `reference/` — the images stay where they are, cited in the model files, and the
 build imports the one shot per model it shows.
 
@@ -1001,7 +1001,7 @@ from re-reading §12:
   surface competes with the question. Collapsed, it is not a wall — it is a
   count with a drawer behind it, and opening the drawer is something the
   technician asks for. That reframing is what lets the chips become links into
-  reverse lookup (D-28) without reopening the tension, because by then the
+  reverse lookup (D-31) without reopening the tension, because by then the
   technician has already chosen to go looking.
 
 - **The strip's expansion outlives the question; the run outlives the lookup.**
@@ -1037,7 +1037,7 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 | D-10 | Size is expressed as five body-size classes with permitted overlap, never as measurements.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
 | D-11 | Data verification (Phase 1) happens before any matrix authoring, in its own session, and everything is sourced. No model attribute may be written from memory — it must trace to `reference/`.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
 | D-12 | Colours carry both an Apple marketing name and a plain descriptive palette value. The engine matches on the descriptive value only (§6.5).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| D-13 | Phase 1 reference images are committed to the repo, not kept local. They are never imported into the build. **Amended by D-27**: the 37 Apple product shots in `reference/images/apple/` now ship, one per model; everything else under `reference/` still does not.                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| D-13 | Phase 1 reference images are committed to the repo, not kept local. They are never imported into the build. **Amended by D-30**: the 37 Apple product shots in `reference/images/apple/` now ship, one per model; everything else under `reference/` still does not.                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
 | D-14 | `src/data/models.ts` is generated from `reference/models/` by `npm run transcribe`, not hand-written, and CI fails if the two drift. D-11 becomes a build rule rather than a discipline.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 | D-15 | The engine may use any recorded attribute to separate models, including ones that need an accessory rather than an eye (`magsafe`). Terminal ambiguity means the _matrix_ cannot separate them, not that sight cannot.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
 | D-16 | No attribute may carry a catch-all value covering models that a specific value also covers. §5.4 matches values as mutually exclusive, so a catch-all is a rival to the specific values, not a weaker form of them: a truthful specific answer eliminates every model filed under the generic one. A model that cannot be pinned to a specific value is recorded **absent**. Enforced by test across the whole schema.                                                                                                                                                                                                                                                                                                           |
@@ -1051,9 +1051,9 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 | D-24 | Reverse lookup is **read-only**. Correcting a model attribute is a change to `reference/models/<id>.md` followed by `npm run transcribe`, never an edit in the app. In-app editing would put a value into the matrix that no source backs, which is the one thing D-11 exists to prevent, and the matrix is a build output under D-14 with nowhere to write back to. §4.6's "review and correct" is the review half in the app and the correction half in the repo.                                                                                                                                                                                                                                                              |
 | D-25 | Which view is showing lives in the **URL hash**; the identify run lives in React state, and the two never mix. §2 puts this on a phone at a workbench, where the system Back button is the back button — a view held in state makes it leave the app, and one held in the hash steps back through the entry, the list and the flow. The run is deliberately not addressable: it is an answer trail and a tier, and a bookmark of it would be a half-finished diagnosis. That separation is what lets the §4.5 link open a model mid-run and come back to the trail intact. Hand-rolled, not a router: §5.1 asks for a concrete need and three parameterless routes are not one.                                                  |
 | D-26 | An attribute the matrix does not record gets a row **saying so**, never an omitted row. 65 of the 666 rows are absent by design, and an entry listing 16 characteristics for one model and 18 for another reads as a bug rather than as sparse data. The row states the consequence — under §5.4 an absent value eliminates nothing — because that is the whole of what is knowable: 🔴 unverified and ⚪ not applicable both transcribe to absence, so no screen can tell "nobody counted" from "there is nothing to count".                                                                                                                                                                                                    |
-| D-27 | The 37 Apple product shots ship **in the build**, one per model, and are shown on the result screen, on a group of four or fewer, and on a reverse-lookup entry. This amends D-13, which kept every reference image out of the build. The redistribution risk §12 weighed does not arise: the app is internal to one repair shop and is not distributed beyond it. Questions are unaffected — they ask with drawings only (§8), because a schematic exaggerates the detail in question and a photograph invites matching the bench against a picture instead of answering it. Everything else under `reference/` stays out of the build.                                                                                         |
-| D-28 | The candidate strip is **collapsed by default** — "12 of 37 candidates" — and expands to the row of all 37 names. Expanded, a surviving chip opens that model's reverse-lookup entry. §12 built the strip as a readout with nothing clickable, on the grounds that a standing wall of models competes with the question in front of the technician; collapsing answers that directly, because the wall is no longer standing and opening it is a deliberate act rather than something the screen does at them. Eliminated chips stay dimmed and stay text: an answer already ruled them out, and a tap target would suggest otherwise. Expansion is held in `App`, so it survives the question screen remounting on each answer. |
 | D-29 | The app is packaged for the desktop with **Tauri**, targeting **Windows** first and macOS and Linux where they come free. Tauri wraps the same `dist/` the web build produces and holds no logic of its own — the shell opens a window and nothing else, so the web build stays first-class and the engine stays testable without a UI (§5.5). Electron was not weighed against it on bundle size but on this: Tauri uses the OS webview, so packaging adds a shell rather than a second browser, and "the desktop app" and "the page on the shop network" stay the same program. Building and releasing are separate triggers, so an installer can be produced without publishing one.                                          |
+| D-30 | The 37 Apple product shots ship **in the build**, one per model, and are shown on the result screen, on a group of four or fewer, and on a reverse-lookup entry. This amends D-13, which kept every reference image out of the build. The redistribution risk §12 weighed does not arise: the app is internal to one repair shop and is not distributed beyond it. Questions are unaffected — they ask with drawings only (§8), because a schematic exaggerates the detail in question and a photograph invites matching the bench against a picture instead of answering it. Everything else under `reference/` stays out of the build.                                                                                         |
+| D-31 | The candidate strip is **collapsed by default** — "12 of 37 candidates" — and expands to the row of all 37 names. Expanded, a surviving chip opens that model's reverse-lookup entry. §12 built the strip as a readout with nothing clickable, on the grounds that a standing wall of models competes with the question in front of the technician; collapsing answers that directly, because the wall is no longer standing and opening it is a deliberate act rather than something the screen does at them. Eliminated chips stay dimmed and stay text: an answer already ruled them out, and a tap target would suggest otherwise. Expansion is held in `App`, so it survives the question screen remounting on each answer. |
 
 D-11 has already paid for itself twice, which is worth recording because both failures
 looked like solid data at the time:
@@ -1079,7 +1079,7 @@ looked like solid data at the time:
 - ~~Where reference images come from, and under what terms.~~ **Answered.**
   Press images and product shots are the practical source and are not ours to
   redistribute, which mattered while it was an open question whether they would
-  ever leave the repo. They now ship in the build (D-27), and the answer that
+  ever leave the repo. They now ship in the build (D-30), and the answer that
   makes that fine is the same one that made committing them fine: this is an
   internal tool, copied to benches inside one repair shop, not distributed
   beyond it. _If the repo or the built app ever goes further than that, this is
@@ -1088,7 +1088,7 @@ looked like solid data at the time:
   what makes that possible._
 
 - ~~A candidate strip along the top of the identify flow.~~ **Shipped, both
-  halves** (Phase 6, D-27, D-28). The narrowing half shipped after Phase 3 as a
+  halves** (Phase 6, D-30, D-31). The narrowing half shipped after Phase 3 as a
   readout of all 37 names dimming as they go out. Phase 6 collapsed it to the
   count, made expansion the technician's choice, and turned the surviving chips
   into a way into reverse lookup.

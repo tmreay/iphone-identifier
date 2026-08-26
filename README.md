@@ -199,7 +199,7 @@ never show a real phone — a photograph beside a question invites matching the
 bench against a picture instead of answering what was asked.
 
 Once the app has stopped asking, the picture is the point. The 37 Apple product
-shots in `reference/images/apple/` ship in the build (SPEC.md D-27) and appear
+shots in `reference/images/apple/` ship in the build (SPEC.md D-30) and appear
 on the result screen, on a group of four or fewer candidates, and on every
 reverse-lookup entry. They are internal to this shop and are not redistributed;
 nothing else under `reference/` is imported by the build.

@@ -4,7 +4,7 @@
 visual evidence behind the attribute values in `reference/models/`.
 
 Since Phase 6 the `apple/` set is **also shipped in the build** — one shot per model, shown
-where the app has stopped asking (SPEC.md §4.5, D-27, amending D-13). The build imports
+where the app has stopped asking (SPEC.md §4.5, D-30, amending D-13). The build imports
 `apple/<model-id>.jpg` and nothing else here: the iFixit shots, the second angles such as
 `iphone-air-rear.jpg`, and the manifests stay out of it. A new model needs its shot dropped
 in under the model's id, or a test fails.
