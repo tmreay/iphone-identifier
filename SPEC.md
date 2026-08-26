@@ -1154,7 +1154,6 @@ looked like solid data at the time:
 
   Three things settled while building the first half, and they are what the
   second half turned on:
-
   - **It replaces the count sentence rather than joining it.** "12 of 37 models
     match" and a strip showing twelve lit chips are one fact printed twice, and
     the strip is the one that also says _which_ twelve. The sentence survives as
@@ -1172,7 +1171,6 @@ looked like solid data at the time:
 
   The **pictures** half was deferred for three reasons, and Phase 6 answered
   each by moving the picture rather than by overruling the objection:
-
   - **It would ship the reference images.** It does, and the licensing bullet
     above is why that is now a settled cost rather than a side effect.
   - **Nothing planned draws models.** Nothing needed to: `reference/images/apple/`
