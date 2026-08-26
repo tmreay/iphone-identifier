@@ -178,6 +178,27 @@ the run rather than to the list. Used
 for training new technicians, for confirming a result, and as the practical way
 to review and correct the underlying data.
 
+### 4.7 Breadcrumb
+
+A breadcrumb sits at the top of every screen, saying where in the identification
+the app currently is. It is a path, not a menu: each crumb names a place the app
+passed through to get here, and the last one is where it is now.
+
+- The root is always **New identification** — the next phone on the bench is one
+  tap away from anywhere, and taking it clears the run and returns to the flow.
+  It is the only crumb that touches the run (D-32).
+- The run's own crumb names its stage, read off the engine's status: the
+  question being asked and what it asks about ("Question 3: Rear camera
+  layout"), the count still standing at the _Narrow further_ step, a terminal
+  group, the model a run resolved to, or a contradiction.
+- Once the deep tier has been entered, **Narrow further** appears as a step of
+  its own before the stage, because it is the one move the technician chose
+  rather than was asked (§4.3). It names a tier, so it is never a link.
+- Reverse lookup hangs off the root as **All models**, and a model entry hangs
+  off wherever it was opened from: the list, or the run's own stage, which is
+  still exactly where it was (§4.5, D-25). Tapping that stage returns to the run
+  — the same promise the entry's back button makes, drawn as a path.
+
 ## 5. Architecture
 
 ### 5.1 Stack
@@ -1113,6 +1134,7 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 | D-29 | The app is packaged for the desktop with **Tauri**, targeting **Windows** first and macOS and Linux where they come free. Tauri wraps the same `dist/` the web build produces and holds no logic of its own — the shell opens a window and nothing else, so the web build stays first-class and the engine stays testable without a UI (§5.5). Electron was not weighed against it on bundle size but on this: Tauri uses the OS webview, so packaging adds a shell rather than a second browser, and "the desktop app" and "the page on the shop network" stay the same program. Building and releasing are separate triggers, so an installer can be produced without publishing one.                                                                                                                                                                                                                              |
 | D-30 | The 37 Apple product shots ship **in the build**, one per model, and are shown on the result screen, on a group of four or fewer, and on a reverse-lookup entry. This amends D-13, which kept every reference image out of the build. The redistribution risk §12 weighed does not arise: the app is internal to one repair shop and is not distributed beyond it. Questions are unaffected — they ask with drawings only (§8), because a schematic exaggerates the detail in question and a photograph invites matching the bench against a picture instead of answering it. Everything else under `reference/` stays out of the build.                                                                                                                                                                                                                                                                             |
 | D-31 | The candidate strip is **collapsed by default** — "12 of 37 candidates" — and expands to the row of all 37 names. Expanded, a surviving chip opens that model's reverse-lookup entry. §12 built the strip as a readout with nothing clickable, on the grounds that a standing wall of models competes with the question in front of the technician; collapsing answers that directly, because the wall is no longer standing and opening it is a deliberate act rather than something the screen does at them. Eliminated chips stay dimmed and stay text: an answer already ruled them out, and a tap target would suggest otherwise. Expansion is held in `App`, so it survives the question screen remounting on each answer.                                                                                                                                                                                     |
+| D-32 | Every screen carries a **breadcrumb** (§4.7) rooted at a fresh identification. It is derived from the route and the run together — never tracked separately — so it cannot drift from the screen under it, and only its root crumb changes the run: the rest are moves between views, which under D-25 leave a run alone. The root is a restart rather than a view because this app has no home screen; the thing you come back to is the next phone, not a page.                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 
 D-11 has already paid for itself twice, which is worth recording because both failures
 looked like solid data at the time:

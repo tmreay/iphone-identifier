@@ -10,14 +10,17 @@ import { attributes } from '../data/attributes.ts'
 import { models } from '../data/models.ts'
 import { questions } from '../data/questions.ts'
 import type { IPhoneModel } from '../data/types.ts'
-import type { Step } from '../engine/types.ts'
+import { answer, narrowFurther, resolve, skip, startOver } from '../engine/index.ts'
+import type { IdentifyResult, IdentifyState, Step } from '../engine/types.ts'
 import {
   ambiguityStatement,
   attributeLabel,
+  breadcrumbTrail,
   candidateCount,
   candidateSummary,
   candidateStrip,
   entryBackLabel,
+  flowStageLabel,
   listPhrase,
   revisitPrompt,
   shortModelName,
@@ -312,5 +315,143 @@ describe('candidateStrip', () => {
     const strip = candidateStrip(models, candidates)
     const lit = strip.filter((entry) => entry.remaining).length
     expect(candidateCount(candidates.length, models.length)).toContain(`${lit} of 37`)
+  })
+})
+
+describe('breadcrumbTrail', () => {
+  const run = (state: IdentifyState): IdentifyResult =>
+    resolve(models, questions, state)
+  const labels = (crumbs: { label: string }[]) => crumbs.map((crumb) => crumb.label)
+  const fresh = startOver()
+
+  it('roots every trail at a fresh identification', () => {
+    // The one crumb that is on every screen, and the one that always leads
+    // somewhere: the next phone on the bench.
+    const trails = [
+      breadcrumbTrail({ view: 'identify' }, fresh, run(fresh)),
+      breadcrumbTrail({ view: 'models' }, fresh, run(fresh)),
+      breadcrumbTrail(
+        { view: 'model', id: 'iphone-13', from: 'list' },
+        fresh,
+        run(fresh),
+        modelNamed('iPhone 13'),
+      ),
+    ]
+    for (const crumbs of trails) {
+      expect(crumbs[0]).toEqual({
+        key: 'root',
+        label: 'New identification',
+        target: 'restart',
+      })
+    }
+  })
+
+  it('names the question the flow is on', () => {
+    const crumbs = breadcrumbTrail({ view: 'identify' }, fresh, run(fresh))
+    expect(crumbs).toHaveLength(2)
+    expect(crumbs[1]?.label).toMatch(/^Question 1: /)
+    // Where you are is stated, not offered — no target on the last crumb.
+    expect(crumbs[1]?.target).toBeUndefined()
+  })
+
+  it('counts the question by the steps taken, skips included', () => {
+    const state: IdentifyState = {
+      steps: [
+        { attribute: 'port', value: 'usb_c', tier: 'coarse' },
+        { attribute: 'lidar', value: null, tier: 'coarse' },
+      ],
+      tier: 'coarse',
+    }
+    expect(flowStageLabel(state, run(state))).toMatch(/^Question 3: /)
+  })
+
+  it('shows the deep tier as a step of its own, and never as a link', () => {
+    const deep = narrowFurther(fresh)
+    const crumbs = breadcrumbTrail({ view: 'identify' }, deep, run(deep))
+    expect(labels(crumbs)[1]).toBe('Narrow further')
+    expect(crumbs[1]?.target).toBeUndefined()
+    expect(crumbs).toHaveLength(3)
+  })
+
+  it('ends a resolved run on the model it resolved to', () => {
+    // Answered as the phone in hand actually is, which is how a run reaches one
+    // model — the crumb then says the same thing the result screen does.
+    let state = startOver()
+    const target = modelNamed('iPhone 13 Pro Max')
+    for (let guard = 0; guard < questions.length * 2; guard += 1) {
+      const step = run(state)
+      if (step.status !== 'asking' || !step.question) break
+      const values = target.attributes[step.question.id]
+      const value = values?.[0]
+      state =
+        value === undefined
+          ? skip(state, step.question.id)
+          : answer(state, step.question.id, value)
+    }
+    const result = run(state)
+    expect(result.status).toBe('resolved')
+    expect(flowStageLabel(state, result)).toBe('iPhone 13 Pro Max')
+    expect(labels(breadcrumbTrail({ view: 'identify' }, state, result))).toEqual([
+      'New identification',
+      'iPhone 13 Pro Max',
+    ])
+  })
+
+  it('hangs the list, then an entry opened from it, under the root', () => {
+    expect(labels(breadcrumbTrail({ view: 'models' }, fresh, run(fresh)))).toEqual([
+      'New identification',
+      'All models',
+    ])
+
+    const crumbs = breadcrumbTrail(
+      { view: 'model', id: 'iphone-13-pro-max', from: 'list' },
+      fresh,
+      run(fresh),
+      modelNamed('iPhone 13 Pro Max'),
+    )
+    expect(labels(crumbs)).toEqual([
+      'New identification',
+      'All models',
+      'iPhone 13 Pro Max',
+    ])
+    expect(crumbs[1]?.target).toBe('models')
+  })
+
+  it('hangs an entry opened mid-run under the run, which is still there', () => {
+    // D-25: looking a model up never touched the run, so the trail says the run
+    // is above you — and the crumb for it goes back to exactly where it was.
+    const crumbs = breadcrumbTrail(
+      { view: 'model', id: 'iphone-13', from: 'identify' },
+      fresh,
+      run(fresh),
+      modelNamed('iPhone 13'),
+    )
+    expect(crumbs).toHaveLength(3)
+    expect(crumbs[1]?.label).toMatch(/^Question 1: /)
+    expect(crumbs[1]?.target).toBe('identify')
+    expect(crumbs[2]?.label).toBe('iPhone 13')
+    expect(crumbs[2]?.target).toBeUndefined()
+  })
+
+  it('says the list for a model the matrix does not have', () => {
+    // A stale bookmark lands on the list (App.tsx), so the trail has to say the
+    // list too rather than name a model that is not there.
+    const crumbs = breadcrumbTrail(
+      { view: 'model', id: 'iphone-99', from: 'identify' },
+      fresh,
+      run(fresh),
+      undefined,
+    )
+    expect(labels(crumbs)).toEqual(['New identification', 'All models'])
+  })
+
+  it('gives every crumb a key of its own', () => {
+    const crumbs = breadcrumbTrail(
+      { view: 'model', id: 'iphone-13', from: 'identify' },
+      narrowFurther(fresh),
+      run(narrowFurther(fresh)),
+      modelNamed('iPhone 13'),
+    )
+    expect(new Set(crumbs.map((crumb) => crumb.key)).size).toBe(crumbs.length)
   })
 })

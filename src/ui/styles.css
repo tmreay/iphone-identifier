@@ -53,7 +53,77 @@ body {
   font-weight: 600;
   letter-spacing: 0.01em;
   color: var(--muted);
+  margin: 0 0 0.5rem;
+}
+
+/* --- Breadcrumb (SPEC.md §4.7, D-32) ------------------------------------ */
+
+/*
+ * One line, always, however long a question's name is: a trail that wrapped to
+ * three rows would push the question itself off a phone screen. It scrolls
+ * sideways instead, ending at the crumb for where you are — which is the end
+ * that matters, so the row is laid out to keep it in view.
+ */
+.breadcrumb {
   margin: 0 0 1.5rem;
+  padding: 0 0 0.5rem;
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.breadcrumb::-webkit-scrollbar {
+  display: none;
+}
+
+.breadcrumb-list {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.breadcrumb-separator {
+  color: var(--muted);
+}
+
+/*
+ * A crumb is a real tap target on a bench, where the hand holding the phone is
+ * the one that has been holding a screwdriver. Padded vertically rather than
+ * boxed, so the row still reads as a path and not as a toolbar.
+ */
+.breadcrumb-link {
+  padding: 0.375rem 0.125rem;
+  font: inherit;
+  font-size: inherit;
+  color: var(--accent);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.breadcrumb-link:hover,
+.breadcrumb-link:focus-visible {
+  color: var(--fg);
+}
+
+/* Where you are: stated, not offered. */
+.breadcrumb-current {
+  padding: 0.375rem 0.125rem;
+  color: var(--muted);
+  font-weight: 600;
 }
 
 /* --- Screens ------------------------------------------------------------ */

@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+- **A breadcrumb on every screen**, saying where in the identification the app
+  is: the question being asked and what it asks about, the deep tier once
+  _Narrow further_ has been taken, the model a run resolved to. A model entry
+  hangs off wherever it was opened from — the browsable list, or the run, which
+  is still exactly where it was. The root is always a fresh identification, so
+  the next phone on the bench is one tap away from anywhere (SPEC.md §4.7,
+  D-32).
+
 ## v1.0.0 — 2026-08-26
 
 The first release. Everything the specification asks for is built: identify,

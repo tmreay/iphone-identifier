@@ -31,6 +31,7 @@ import {
 } from '../engine/index.ts'
 import type { IdentifyState } from '../engine/types.ts'
 import { AnswerTrail } from './AnswerTrail.tsx'
+import { Breadcrumb } from './Breadcrumb.tsx'
 import { ContradictionScreen } from './ContradictionScreen.tsx'
 import { GroupScreen } from './GroupScreen.tsx'
 import { ModelEntryScreen } from './ModelEntryScreen.tsx'
@@ -38,7 +39,8 @@ import { ModelListScreen } from './ModelListScreen.tsx'
 import { QuestionScreen } from './QuestionScreen.tsx'
 import { ResultScreen } from './ResultScreen.tsx'
 import { modelById } from './lookup.ts'
-import { candidateCount, entryBackLabel } from './presenters.ts'
+import type { CrumbTarget } from './presenters.ts'
+import { breadcrumbTrail, candidateCount, entryBackLabel } from './presenters.ts'
 import { identifyRoute, useRoute } from './route.ts'
 
 export function App() {
@@ -84,11 +86,33 @@ export function App() {
   const fromRun =
     opened !== undefined && route.view === 'model' && route.from === 'identify'
 
+  /*
+    Where the app is, drawn as a path (§4.7). Built from the route and the run
+    together, because those are the two things "where am I" is made of: an entry
+    opened mid-run hangs off the run's own stage, which is still standing
+    because navigating never touched it (D-25).
+  */
+  const crumbs = breadcrumbTrail(route, state, result, opened)
+  /*
+    The root crumb is the only one that touches the run: a fresh identification
+    is a cleared trail *and* the flow on screen, whichever view the tap came
+    from. The other two are moves between views and leave the run alone.
+  */
+  const onCrumb = (target: CrumbTarget) => {
+    if (target === 'models') {
+      navigate({ view: 'models' })
+      return
+    }
+    if (target === 'restart') setState(startOver)
+    navigate(identifyRoute)
+  }
+
   if (route.view === 'models' || route.view === 'model') {
     return (
       <main className="app">
         <header className="app-header">
           <h1>iPhone Identifier</h1>
+          <Breadcrumb crumbs={crumbs} onNavigate={onCrumb} />
         </header>
 
         {opened ? (
@@ -143,6 +167,7 @@ export function App() {
     <main className="app">
       <header className="app-header">
         <h1>iPhone Identifier</h1>
+        <Breadcrumb crumbs={crumbs} onNavigate={onCrumb} />
       </header>
 
       {/*
