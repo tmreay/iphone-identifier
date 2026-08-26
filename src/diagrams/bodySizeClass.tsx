@@ -1,53 +1,59 @@
 /**
- * `body_size_class` — five silhouettes, SPEC.md §6.3.
+ * `body_size_class` — three silhouettes, SPEC.md §6.3.
  *
  * This is the one question whose diagrams have to be right *relative to each
- * other*: the technician holds the phone against them, and §6.3 warns that
- * neighbouring classes overlap by a few millimetres. So the heights are not
- * invented. Each is a real body height in millimetres, scaled by one constant:
+ * other*: the technician holds the phone against them. So the heights are not
+ * invented. §6.3 draws each band across a cluster of real bodies, and each
+ * silhouette is the **midpoint of its band's extreme members** — one rule for
+ * all three, so no class is drawn by a different standard than its neighbours:
  *
- * | Class      | Height | Taken from                                    |
- * | ---------- | ------ | --------------------------------------------- |
- * | `mini`     | 131.5  | iPhone 12 mini / 13 mini                      |
- * | `compact`  | 138.4  | iPhone 8, SE (2nd/3rd gen)                    |
- * | `standard` | 146.7  | iPhone 12, 13, 14                             |
- * | `large`    | 152.0  | midpoint of the §6.3 band — see below         |
- * | `max`      | 160.8  | iPhone 12 Pro Max, 13 Pro Max, 14 Plus        |
+ * | Class      | Height | Midpoint of                                     |
+ * | ---------- | ------ | ----------------------------------------------- |
+ * | `small`    | 135.0  | 131.5 (12/13 mini) … 138.4 (8, SE 2nd/3rd)      |
+ * | `standard` | 147.3  | 143.6 (X, XS) … 150.9 (XR, 11)                  |
+ * | `large`    | 159.8  | 156.2 (Air) … 163.4 (17 Pro Max)                |
  *
- * `large` is the one figure not read off a handset, because no model in the
- * matrix is `large` alone — §6.3 gives all eight of them `standard` *and*
- * `large`. Its band is 150–156 mm, so the midpoint is what the class means.
+ * Five bands were drawn here until D-27, and one of them — `large`, then meaning
+ * ~150–156 mm — had no members to take a height from at all, because no model
+ * in the matrix was `large` alone. Its outline was the midpoint of an empty
+ * band: a drawing of a phone that does not exist. The midpoints above are
+ * computed rather than measured — 135.0, 147.3 and 159.8 are no phone's height —
+ * but the extreme members they average are real handsets, which is what the old
+ * `large` band had none of it could call its own.
  *
- * Widths follow from the heights: every body in the matrix sits within a
- * percent or so of 2.05 : 1, so one ratio serves all five and the silhouettes
- * stay honest without claiming a precision the question does not want.
+ * Widths follow from the heights: every body in the matrix sits within about 3%
+ * of 2.05 : 1 (the extremes are the iPhone 11 and XR at 1.99 and the 16 Pro Max
+ * at 2.10), so one ratio serves all three and the silhouettes stay honest
+ * without claiming a precision the question does not want.
  *
- * Behind each, the `max` outline is ghosted in. §8 asks for relative scale
- * within a question, and options can be filtered out before the screen renders
- * (`visibleOptions`) — the ghost means a lone silhouette still says how big it
- * is, rather than filling its box like all the others.
+ * Behind each, the largest body in the matrix is ghosted in. §8 asks for
+ * relative scale within a question, and options can be filtered out before the
+ * screen renders (`visibleOptions`) — the ghost means a lone silhouette still
+ * says how big it is, rather than filling its box like all the others.
  */
 import { DiagramSvg, SILHOUETTE_VIEW_BOX } from './primitives.tsx'
 
+/** The tallest body in the matrix (iPhone 17 Pro Max), drawn as the ghost. */
+const TALLEST_MM = 163.4
 /** Millimetres per viewBox unit, chosen so the largest body just fits the square. */
-const SCALE = 94 / 160.8
-/** Height : width, the ratio every body in the matrix sits within ~1% of. */
+const SCALE = 94 / TALLEST_MM
+/** Height : width, the ratio every body in the matrix sits within ~3% of. */
 const ASPECT = 2.05
 
 function Silhouette({ heightMm }: { heightMm: number }) {
   const height = heightMm * SCALE
   const width = height / ASPECT
-  const maxHeight = 160.8 * SCALE
-  const maxWidth = maxHeight / ASPECT
+  const ghostHeight = TALLEST_MM * SCALE
+  const ghostWidth = ghostHeight / ASPECT
 
   return (
     <DiagramSvg viewBox={SILHOUETTE_VIEW_BOX}>
       <rect
-        x={(100 - maxWidth) / 2}
-        y={(100 - maxHeight) / 2}
-        width={maxWidth}
-        height={maxHeight}
-        rx={maxWidth * 0.16}
+        x={(100 - ghostWidth) / 2}
+        y={(100 - ghostHeight) / 2}
+        width={ghostWidth}
+        height={ghostHeight}
+        rx={ghostWidth * 0.16}
         className="dg-ghost"
         fill="none"
         strokeWidth={1.8}
@@ -67,22 +73,14 @@ function Silhouette({ heightMm }: { heightMm: number }) {
   )
 }
 
-export function BodySizeClassMini() {
-  return <Silhouette heightMm={131.5} />
-}
-
-export function BodySizeClassCompact() {
-  return <Silhouette heightMm={138.4} />
+export function BodySizeClassSmall() {
+  return <Silhouette heightMm={135} />
 }
 
 export function BodySizeClassStandard() {
-  return <Silhouette heightMm={146.7} />
+  return <Silhouette heightMm={147.3} />
 }
 
 export function BodySizeClassLarge() {
-  return <Silhouette heightMm={152} />
-}
-
-export function BodySizeClassMax() {
-  return <Silhouette heightMm={160.8} />
+  return <Silhouette heightMm={159.8} />
 }

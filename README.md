@@ -102,7 +102,7 @@ Neither is signed, so SmartScreen asks once — _More info_ → _Run anyway_.
 ## Desktop builds
 
 The app installs as a desktop application via [Tauri](https://tauri.app)
-(SPEC.md §5.5, D-27). **Windows is the target that matters**; macOS and Linux
+(SPEC.md §5.5, D-29). **Windows is the target that matters**; macOS and Linux
 bundles are built alongside and are welcome, but are not what the shop runs.
 
 Tauri wraps the **same `dist/` the web build produces**. `src-tauri/` contains

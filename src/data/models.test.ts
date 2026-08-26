@@ -139,6 +139,54 @@ describe('no attribute value is a superset of another', () => {
   })
 })
 
+describe('size classes are definitive (§6.3, D-27, D-28)', () => {
+  it('gives every model exactly one class', () => {
+    // D-28: a phone is one size, and the matrix says which. Not a statement
+    // about the current 37 that a future model may relax — the rule. A model
+    // landing inside one of the gaps between the clusters is a signal to redraw
+    // the bands (§6.3), never to give that model a second class.
+    //
+    // This is the invariant the test below leans on: with one class per model,
+    // "some model's own class" and "some model's class" are the same set, so
+    // the empty-band check cannot be fooled by an adjacency.
+    for (const model of models) {
+      expect(model.attributes.body_size_class, model.id).toHaveLength(1)
+    }
+  })
+
+  it('gives every declared class at least one model of its own', () => {
+    // The regression this guards: under the five-band schema no model recorded
+    // `large` as its own class — all eight that listed it listed `standard`
+    // too. So `large` was not an alternative to `standard` but a strict subset
+    // of it, and a technician picking it narrowed *further* than the truthful
+    // answer did: the iPhone 15 Pro dropped out while the 14 Pro and 16 Pro
+    // survived, on nothing but which side of a 3 mm adjacency each had landed.
+    //
+    // A band with no members of its own is that bug. Stated as a rule: every
+    // value the size question offers must be some model's *own* class.
+    //
+    // "Own" is why this counts sole membership rather than `includes`. Under
+    // the old data the empty band was listed by eight models, every one of them
+    // alongside `standard` — so an `includes` count found eight members for a
+    // band nothing was in, and passed. That is the bug wearing the test's own
+    // clothes. Sole membership is exact under D-28 rather than a proxy for it,
+    // but it is written this way deliberately: it stays honest even if the
+    // one-class rule above is ever weakened.
+    const declared = attributeById('body_size_class')?.values ?? []
+    expect(declared.length).toBeGreaterThan(0)
+    for (const value of declared) {
+      const members = models.filter((model) => {
+        const classes = model.attributes.body_size_class ?? []
+        return classes.length === 1 && classes[0] === value
+      })
+      expect(
+        members.length,
+        `no model is \`${value}\` and nothing else`,
+      ).toBeGreaterThan(0)
+    }
+  })
+})
+
 describe('colour layers agree (§5.4, §6.5)', () => {
   it('matches attributes.colour against colours[].value for every model', () => {
     for (const model of models) {

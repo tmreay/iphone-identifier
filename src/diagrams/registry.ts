@@ -13,10 +13,8 @@
 import type { ComponentType } from 'react'
 
 import {
-  BodySizeClassCompact,
   BodySizeClassLarge,
-  BodySizeClassMax,
-  BodySizeClassMini,
+  BodySizeClassSmall,
   BodySizeClassStandard,
 } from './bodySizeClass.tsx'
 import {
@@ -75,11 +73,9 @@ export const diagrams: Record<string, ComponentType> = {
   'front-cutout-notch-narrow': FrontCutoutNotchNarrow,
   'front-cutout-dynamic-island': FrontCutoutDynamicIsland,
 
-  'body-size-class-mini': BodySizeClassMini,
-  'body-size-class-compact': BodySizeClassCompact,
+  'body-size-class-small': BodySizeClassSmall,
   'body-size-class-standard': BodySizeClassStandard,
   'body-size-class-large': BodySizeClassLarge,
-  'body-size-class-max': BodySizeClassMax,
 
   'rear-wordmark-iphone-text-present': RearWordmarkIphoneTextPresent,
   'rear-wordmark-logo-only-centred': RearWordmarkLogoOnlyCentred,
