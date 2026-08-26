@@ -1,6 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { models } from '../data/models.ts'
-import { PHOTO_LIMIT, photoAlt, photoFor, photosByName, showsPhotos } from './photos.ts'
+import {
+  PHOTO_LIMIT,
+  photoAlt,
+  photoFor,
+  photoNames,
+  photosByName,
+  showsPhotos,
+} from './photos.ts'
 
 describe('photosByName', () => {
   it('keys each file by its base name', () => {
@@ -11,16 +18,14 @@ describe('photosByName', () => {
     ).toEqual({ 'iphone-13-pro': '/assets/iphone-13-pro.jpg' })
   })
 
-  it('keeps extra angles under their own name rather than a model id', () => {
-    // `iphone-air-rear.jpg` is a second shot of the Air, not a model. It has to
-    // land somewhere harmless: keying it as `iphone-air` would silently replace
-    // the front-and-back shot every screen actually shows.
-    const byName = photosByName({
-      '../../reference/images/apple/iphone-air.jpg': '/front.jpg',
-      '../../reference/images/apple/iphone-air-rear.jpg': '/rear.jpg',
-    })
-    expect(byName['iphone-air']).toBe('/front.jpg')
-    expect(byName['iphone-air-rear']).toBe('/rear.jpg')
+  it('keys by name whatever the extension is', () => {
+    // §8 allows WebP as well as JPEG, so a format swap in the reference set must
+    // not silently key a model's photo under a name nothing looks up.
+    expect(
+      photosByName({
+        '../../reference/images/apple/iphone-air.webp': '/air.webp',
+      }),
+    ).toEqual({ 'iphone-air': '/air.webp' })
   })
 })
 
@@ -31,6 +36,16 @@ describe('photoFor', () => {
     // should fail here rather than show a blank frame at the bench.
     const missing = models.filter((model) => photoFor(model.id) === undefined)
     expect(missing.map((model) => model.id)).toEqual([])
+  })
+
+  it('ships a photograph for every model and none for anything else', () => {
+    // Both directions. A model with no photo leaves a blank where the picture
+    // should be; a photo with no model — a second angle, an id left behind by a
+    // rename — ships as weight nothing renders. The glob excludes the rear
+    // shots the set carries today, and this is what keeps that true.
+    expect([...photoNames()].sort()).toEqual(
+      [...models.map((model) => model.id)].sort(),
+    )
   })
 
   it('is undefined for an id the set has no file for', () => {

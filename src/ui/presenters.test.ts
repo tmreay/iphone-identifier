@@ -17,6 +17,7 @@ import {
   candidateCount,
   candidateSummary,
   candidateStrip,
+  entryBackLabel,
   listPhrase,
   revisitPrompt,
   shortModelName,
@@ -229,6 +230,22 @@ describe('visibleOptions', () => {
     const wordmark = questionNamed('rear_wordmark')
     const blank = models.map((model) => ({ ...model, attributes: {} }))
     expect(visibleOptions(wordmark, blank)).toEqual(wordmark.options)
+  })
+})
+
+describe('entryBackLabel', () => {
+  it('names where the button goes, not what will be there', () => {
+    expect(entryBackLabel('list')).toBe('All models')
+    expect(entryBackLabel('identify')).toBe('Back to identifying')
+  })
+
+  it('promises nothing about the screen it returns to', () => {
+    // All three of the question, group and result screens hand out
+    // `from: 'identify'`, and a reload returns to a fresh run, so a label
+    // naming any one of them would be wrong two thirds of the time.
+    for (const wrong of ['question', 'group', 'result']) {
+      expect(entryBackLabel('identify')).not.toContain(wrong)
+    }
   })
 })
 

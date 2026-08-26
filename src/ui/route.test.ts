@@ -47,6 +47,17 @@ describe('parseRoute', () => {
     }
   })
 
+  it('reads the first query it is given and ignores what follows', () => {
+    // A second '?' is not a shape any link in the app produces, so this pins
+    // what a hand-edited hash does rather than a contract: the first query
+    // decides, and the tail is ignored like any other unrecognised text.
+    expect(parseRoute('#/models/iphone-13?from=identify?x')).toEqual({
+      view: 'model',
+      id: 'iphone-13',
+      from: 'identify',
+    })
+  })
+
   it('lands on the flow for anything it does not recognise', () => {
     for (const hash of [
       '',
@@ -69,6 +80,13 @@ describe('parseRoute', () => {
       view: 'model',
       id: 'iphone-13',
       from: 'list',
+    })
+    // Both at once: a browser that appends the slash to a link that already
+    // carries the origin must not lose the origin to it.
+    expect(parseRoute('#/models/iphone-13/?from=identify')).toEqual({
+      view: 'model',
+      id: 'iphone-13',
+      from: 'identify',
     })
   })
 

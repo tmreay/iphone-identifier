@@ -69,7 +69,8 @@ body {
   color: var(--muted);
 }
 
-/* Off-screen but spoken: the strip's live count (CandidateStrip.tsx). */
+/* Off-screen but spoken: the live count in App.tsx, and the full model names
+   behind the strip's shortened chips. */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -143,6 +144,12 @@ body {
   }
 }
 
+/* Author `display: flex` would otherwise beat the UA's `[hidden]` rule, and a
+   collapsed strip would render its chips anyway. */
+.strip-models[hidden] {
+  display: none;
+}
+
 .strip-models {
   list-style: none;
   margin: 0.625rem 0 0;
@@ -193,8 +200,10 @@ button.strip-model:focus-visible {
 .strip-model-out {
   background: transparent;
   border-color: transparent;
-  color: var(--muted);
-  opacity: 0.45;
+  /* Dimmed, not unreadable. The eliminated half of an opened strip is read more
+     than it was when the strip was a glanced-at readout, and muted text at 12px
+     under a heavy opacity does not clear AA. Opacity alone carries "gone out". */
+  opacity: 0.6;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -215,6 +224,10 @@ button.strip-model:focus-visible {
   display: block;
   width: 100%;
   max-width: 14rem;
+  /* Reserved before the file decodes, so a screen never reflows under a
+     technician mid-read. The shots are portraits at roughly this ratio. */
+  aspect-ratio: 3 / 4;
+  object-fit: contain;
   margin: 0 auto 1.25rem;
   background: #ffffff;
   border: 1px solid var(--border);

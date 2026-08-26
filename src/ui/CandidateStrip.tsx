@@ -20,7 +20,7 @@
  *
  * **Accessibility.** The chips are announced normally when expanded — thirty
  * seven names are worth reading to someone who just asked for the list — and
- * are simply not in the tree when collapsed, which is what stops them being
+ * are out of the tree when collapsed (`hidden`), which is what stops them being
  * re-read on every answer. The count itself is spoken from a live region in
  * `App.tsx` rather than from here: this component sits inside a screen that
  * remounts on every question, and a region inserted with its text already in
@@ -85,45 +85,52 @@ export function CandidateStrip({
         </svg>
       </button>
 
-      {expanded && (
-        <ul className="strip-models" id={LIST_ID}>
-          {entries.map((entry) =>
-            entry.remaining ? (
-              <li key={entry.id}>
-                {/*
+      {/*
+        Always mounted, `hidden` when closed, so `aria-controls` above always
+        names an element that exists. `hidden` also takes the chips out of the
+        accessibility tree entirely, which is the same thing the old
+        conditional achieved and the reason thirty-seven names are not re-read
+        on every answer.
+      */}
+      <ul className="strip-models" id={LIST_ID} hidden={!expanded}>
+        {entries.map((entry) =>
+          entry.remaining ? (
+            <li key={entry.id}>
+              {/*
                   Still in the running, so still worth looking up: the entry is
                   where a technician checks a candidate against the phone in
                   hand (§4.6). It never claims this is the model — tapping one
                   opens a description, and the run is untouched by it.
                 */}
-                <button
-                  type="button"
-                  className="strip-model"
-                  onClick={() => onOpen(entry.id)}
-                >
-                  {entry.short}
-                  <span className="visually-hidden">
-                    {' '}
-                    — {entry.name}, open its entry
-                  </span>
-                </button>
-              </li>
-            ) : (
-              /*
+              <button
+                type="button"
+                className="strip-model"
+                title={entry.name}
+                onClick={() => onOpen(entry.id)}
+              >
+                {entry.short}
+                <span className="visually-hidden"> — {entry.name}, open its entry</span>
+              </button>
+            </li>
+          ) : (
+            /*
                 Eliminated: dimmed, still readable, still in place. Which models
                 went out and when is what the count cannot say, and a chip that
                 vanished would take the shape of the strip with it. Not a
                 button, because an answer already ruled this one out and a tap
                 target would suggest otherwise.
               */
-              <li key={entry.id} className="strip-model strip-model-out">
-                {entry.short}
-                <span className="visually-hidden"> — {entry.name}, ruled out</span>
-              </li>
-            ),
-          )}
-        </ul>
-      )}
+            <li
+              key={entry.id}
+              className="strip-model strip-model-out"
+              title={entry.name}
+            >
+              {entry.short}
+              <span className="visually-hidden"> — {entry.name}, ruled out</span>
+            </li>
+          ),
+        )}
+      </ul>
     </div>
   )
 }

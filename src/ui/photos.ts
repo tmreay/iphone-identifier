@@ -34,7 +34,7 @@ const assets: Record<string, string> = import.meta.glob(
   // One shot per model, so the extra angles the reference set carries — today
   // `iphone-air-rear.jpg` — stay out of the build rather than shipping as
   // weight nothing renders.
-  ['../../reference/images/apple/*.jpg', '!**/*-rear.jpg'],
+  ['../../reference/images/apple/*.{jpg,webp}', '!**/*-rear.*'],
   { eager: true, query: '?url', import: 'default' },
 )
 
@@ -49,10 +49,12 @@ const assets: Record<string, string> = import.meta.glob(
 export function photosByName(sources: Record<string, string>): Record<string, string> {
   const byName: Record<string, string> = {}
   for (const [file, url] of Object.entries(sources)) {
+    // Any extension: §8 allows WebP as well as JPEG, and a format swap in the
+    // reference set should not need this file edited to keep working.
     const name = file
       .split('/')
       .pop()
-      ?.replace(/\.jpg$/, '')
+      ?.replace(/\.[^.]+$/, '')
     if (name) byName[name] = url
   }
   return byName
@@ -63,11 +65,10 @@ const byName = photosByName(assets)
 /**
  * The photograph for a model, or `undefined`.
  *
- * Undefined is a real case rather than a defect: the set carries extra shots
- * that are not one-per-model — `iphone-air-rear.jpg` is a second angle, not a
- * model — and a future model lands in `models.ts` the moment its reference file
- * does, which may be before anyone has downloaded its picture. Callers render
- * the name alone rather than a broken frame.
+ * Undefined is a real case rather than a defect: a model lands in `models.ts`
+ * the moment its reference file does, which may be before anyone has downloaded
+ * its picture. Callers render the name alone rather than a broken frame, and a
+ * test fails so it does not stay that way.
  */
 export function photoFor(id: ModelId): string | undefined {
   return byName[id]
@@ -81,6 +82,18 @@ export function photoFor(id: ModelId): string | undefined {
  * cannot see it loses nothing but the shape, and the entry behind every one of
  * these photos describes that shape in words (§4.6).
  */
+/**
+ * Every name the built set carries, for the test that pins it to the matrix.
+ *
+ * The pinning goes both ways on purpose. A model with no photo shows a blank
+ * where the picture should be; a photo with no model ships as weight nothing
+ * renders — the second angles are excluded by the glob above, and this is what
+ * proves the exclusion still holds after someone adds a file.
+ */
+export function photoNames(): string[] {
+  return Object.keys(byName)
+}
+
 export function photoAlt(model: IPhoneModel): string {
   return `${model.name}, back and front`
 }

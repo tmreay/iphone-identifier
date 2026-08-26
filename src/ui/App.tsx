@@ -38,7 +38,7 @@ import { ModelListScreen } from './ModelListScreen.tsx'
 import { QuestionScreen } from './QuestionScreen.tsx'
 import { ResultScreen } from './ResultScreen.tsx'
 import { modelById } from './lookup.ts'
-import { candidateCount } from './presenters.ts'
+import { candidateCount, entryBackLabel } from './presenters.ts'
 import { identifyRoute, useRoute } from './route.ts'
 
 export function App() {
@@ -75,7 +75,14 @@ export function App() {
   // lands on the list rather than on an error. The list is where someone
   // looking for a model was going anyway.
   const opened = route.view === 'model' ? modelById(models, route.id) : undefined
-  const fromRun = route.view === 'model' && route.from === 'identify'
+  /*
+    Only when an entry is actually open. A hash naming a model the matrix does
+    not have falls back to the list below, and a list that offered "browse all
+    37 models" as its way out — because the hash said the entry came from a run
+    — would be a dead end with no way back to identifying at all.
+  */
+  const fromRun =
+    opened !== undefined && route.view === 'model' && route.from === 'identify'
 
   if (route.view === 'models' || route.view === 'model') {
     return (
@@ -91,7 +98,7 @@ export function App() {
             key={opened.id}
             model={opened}
             questions={questions}
-            backLabel={fromRun ? 'Back to the question' : 'All models'}
+            backLabel={entryBackLabel(fromRun ? 'identify' : 'list')}
             onBack={() =>
               fromRun ? navigate(identifyRoute) : navigate({ view: 'models' })
             }

@@ -77,7 +77,8 @@ export function GroupScreen({
               className="candidate"
               onClick={() => onOpenEntry(model.id)}
             >
-              {photos && <ModelPhoto model={model} />}
+              {/* The card names the model below, so the picture is decorative here. */}
+              {photos && <ModelPhoto model={model} alt="" />}
               <span className="candidate-name">{model.name}</span>
             </button>
           </li>
