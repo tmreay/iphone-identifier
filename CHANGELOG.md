@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## v1.1.0 — 2026-08-26
 
 - **A breadcrumb on every screen**, saying where in the identification the app
   is: the question being asked and what it asks about, the deep tier once
