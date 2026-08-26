@@ -1,6 +1,6 @@
 # iPhone Identifier — Specification
 
-**Status:** draft v1.2 · **Last updated:** 2026-08-22
+**Status:** draft v1.3 · **Last updated:** 2026-08-25
 
 A local web app that walks a repair-shop technician through a short series of
 questions about a phone's _visible_ characteristics until it identifies which
@@ -24,7 +24,8 @@ screen, battery, or back glass.
 - **Conditions:** the device under test is frequently non-functional. The app
   must never assume the phone powers on, that Settings can be read, or that any
   part is original.
-- **Distribution:** internal only. Not a public product.
+- **Distribution:** internal only. Not a public product. Shipped both as the
+  static bundle and as an installable desktop app, **Windows first** (§5.5).
 
 ## 3. Scope
 
@@ -159,6 +160,8 @@ to review and correct the underlying data.
 - No backend, no runtime data fetching, no analytics.
 - No UI component library unless a concrete need appears; plain CSS.
 - **Vitest** for engine unit tests.
+- **Tauri** wraps that same bundle as a desktop app (§5.5). It is packaging, not
+  a second target: no Rust logic, no Tauri API calls from the frontend.
 
 ### 5.2 Layers
 
@@ -182,6 +185,8 @@ reference/            Phase 1 research output — sourced facts and images.
   images/
 scripts/
   transcribe.js       reference/models/ -> src/data/models.ts (D-14)
+  make-icon.js        draws the app icon, then derives the platform set (§5.5)
+src-tauri/            the desktop shell (§5.5). Window config and icons; no logic.
 src/
   data/
     types.ts          the shared data model (§5.4)
@@ -249,6 +254,78 @@ interface Question {
 only if `M.attributes[a]` is present and non-empty and does not contain `v`.
 Missing data never eliminates — an incomplete matrix degrades to a larger
 candidate group, never to a wrong answer.
+
+### 5.5 Desktop packaging
+
+The app **must be installable as a desktop application via Tauri**, and
+**Windows is the platform that matters** — that is what the shop runs. macOS and
+Linux bundles are appreciated and are built alongside, but they are never the
+reason a build exists, and a break on one of them is not a break on the
+release (D-27).
+
+Tauri wraps the **same `dist/` the web build produces**. That is the whole
+design constraint, and everything else follows from it:
+
+- **`src-tauri/` holds no application logic.** One Rust file, and its only
+  statement opens a window. There are no Tauri commands and the frontend makes
+  no Tauri API calls, so the bundle cannot come to depend on being in a window.
+  §5.2 keeps the engine pure so the matrix can be tested without a UI; a desktop
+  shell that reached into Rust would put logic somewhere no Vitest run can see.
+- **The web build stays first-class.** §2 has technicians on phones and tablets
+  on the shop network, and the desktop app does not replace that. Both are
+  produced from one `npm run build`, so they cannot drift.
+- **Offline is unchanged.** The bundle already has no runtime network
+  dependency (§3.2), and the shell adds none: the capability file grants the
+  core defaults and no plugin permissions — no filesystem, no shell, no HTTP.
+
+**Windows ships two files, and the primary one installs nothing.** Tauri
+compiles the frontend into the binary, so `iphone-identifier.exe` is by itself
+the whole program — about 3 MB, runs from any directory with nothing beside it.
+Published as `iPhone Identifier_<version>_x64_portable.exe`, that is what goes on
+a bench PC: copy and double-click. It buys the simplest possible deployment at
+the cost of the things installation provides — no Start Menu entry, no
+uninstaller, and updating is replacing a file.
+
+"Portable" describes the app, not the machine: WebView2 keeps a profile for it
+under `%LOCALAPPDATA%\<identifier>\`, a few megabytes, shared by every copy of
+the binary on that PC. That is where a half-finished identification survives a
+restart. Pinning it beside the executable is possible — the WebView2 loader
+reads `WEBVIEW2_USER_DATA_FOLDER` — but it would mean the shell doing something
+other than opening a window, which §5.5 otherwise forbids, so it is left alone
+until something actually needs it.
+
+The `.msi` alongside it is for the other case: registering the app on a machine
+properly, deployable by script or group policy without anyone at the keyboard.
+It installs per-machine and so wants administrator rights, which is precisely
+the trade that makes it deployable.
+
+An NSIS `-setup.exe` was built and dropped. It sat between the two — a
+double-click installer, but still an install — and offering three Windows files
+where two cover the cases only invites picking the wrong one.
+
+Two known and accepted frictions, neither worth engineering around at this
+scale. Nothing is **signed**, so SmartScreen asks once before the first run;
+signing would mean buying a certificate and holding it as a CI secret. And the
+**WebView2 runtime** is the one part the build does not carry — Windows 10 1803+
+and Windows 11 ship it, so only a machine old enough to lack it needs it
+fetched, rather than embedding ~130 MB into every copy. Running the app never
+touches the network either way.
+
+Bundles are built by `.github/workflows/desktop.yml`. **Building and releasing
+are separate**: a `v*` tag builds every platform and opens a draft release,
+while a manual run builds the installers and leaves them as workflow artifacts.
+A tag whose name disagrees with `package.json` fails the run rather than
+shipping an app that misreports its own version.
+
+It does not run on pull requests. A Rust compile costs minutes on three runners
+where the existing checks cost seconds, and it builds a window around a bundle
+those checks already cover, so the shell is verified on demand rather than on
+every change.
+
+The app icon is **generated, not committed as an opaque binary** — `npm run
+icon` draws it from shapes in the app's own palette and derives the platform
+set. It is a schematic phone rear with a diagonal dual-camera housing, and like
+the diagrams it carries no manufacturer's mark (D-20, §8).
 
 ## 6. Attribute taxonomy
 
@@ -886,6 +963,7 @@ Phases 1 and 2 are strictly ordered. No model attribute may be written into
 | D-24 | Reverse lookup is **read-only**. Correcting a model attribute is a change to `reference/models/<id>.md` followed by `npm run transcribe`, never an edit in the app. In-app editing would put a value into the matrix that no source backs, which is the one thing D-11 exists to prevent, and the matrix is a build output under D-14 with nowhere to write back to. §4.6's "review and correct" is the review half in the app and the correction half in the repo.                                                                                                                                                                                                                       |
 | D-25 | Which view is showing lives in the **URL hash**; the identify run lives in React state, and the two never mix. §2 puts this on a phone at a workbench, where the system Back button is the back button — a view held in state makes it leave the app, and one held in the hash steps back through the entry, the list and the flow. The run is deliberately not addressable: it is an answer trail and a tier, and a bookmark of it would be a half-finished diagnosis. That separation is what lets the §4.5 link open a model mid-run and come back to the trail intact. Hand-rolled, not a router: §5.1 asks for a concrete need and three parameterless routes are not one.           |
 | D-26 | An attribute the matrix does not record gets a row **saying so**, never an omitted row. 65 of the 666 rows are absent by design, and an entry listing 16 characteristics for one model and 18 for another reads as a bug rather than as sparse data. The row states the consequence — under §5.4 an absent value eliminates nothing — because that is the whole of what is knowable: 🔴 unverified and ⚪ not applicable both transcribe to absence, so no screen can tell "nobody counted" from "there is nothing to count".                                                                                                                                                             |
+| D-27 | The app is packaged for the desktop with **Tauri**, targeting **Windows** first and macOS and Linux where they come free. Tauri wraps the same `dist/` the web build produces and holds no logic of its own — the shell opens a window and nothing else, so the web build stays first-class and the engine stays testable without a UI (§5.5). Electron was not weighed against it on bundle size but on this: Tauri uses the OS webview, so packaging adds a shell rather than a second browser, and "the desktop app" and "the page on the shop network" stay the same program. Building and releasing are separate triggers, so an installer can be produced without publishing one.   |
 
 D-11 has already paid for itself twice, which is worth recording because both failures
 looked like solid data at the time:
@@ -904,7 +982,10 @@ looked like solid data at the time:
 ## 12. Open questions
 
 - How the built app is served at the shop — copied to each device, or served
-  from one machine on the LAN.
+  from one machine on the LAN. **Partly settled by D-27**: on a bench PC it is
+  an installer, and the question no longer has to be answered for that case.
+  It stays open for the phones and tablets §2 describes, which the desktop
+  build does not reach.
 - Where reference images come from, and under what terms. Press images and
   product shots are the practical source but are not ours to redistribute.
   Since the repo is internal and the images are drawing references that never

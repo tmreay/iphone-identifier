@@ -1,0 +1,5 @@
+# Rust build output
+/target/
+
+# Written by tauri-build from tauri.conf.json and capabilities/
+/gen/schemas/

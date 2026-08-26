@@ -10,6 +10,10 @@ Full requirements, data model, and roadmap: **[SPEC.md](SPEC.md)**.
 
 Node 20.19+ (developed on 22.20.0).
 
+Building the **desktop app** additionally needs a Rust toolchain and your
+platform's C toolchain — see [Desktop builds](#desktop-builds). Nothing else in
+this repo needs Rust, and neither does the web build.
+
 ## Getting started
 
 ```bash
@@ -25,19 +29,22 @@ tablet on the same network.
 
 ## Scripts
 
-| Command              | Purpose                                                       |
-| -------------------- | ------------------------------------------------------------- |
-| `npm run dev`        | Dev server with hot reload                                    |
-| `npm run build`      | Type-check and build to `dist/`                               |
-| `npm run preview`    | Serve the production build locally                            |
-| `npm test`           | Run the Vitest suite once                                     |
-| `npm run test:watch` | Vitest in watch mode                                          |
-| `npm run typecheck`  | Type-check without emitting                                   |
-| `npm run lint`       | ESLint                                                        |
-| `npm run lint:fix`   | ESLint, fixing what it can                                    |
-| `npm run format`     | Prettier, writing in place                                    |
-| `npm run transcribe` | Regenerate `src/data/models.ts` from `reference/`             |
-| `npm run ci`         | Everything CI runs: format, lint, types, transcription, tests |
+| Command                 | Purpose                                                       |
+| ----------------------- | ------------------------------------------------------------- |
+| `npm run dev`           | Dev server with hot reload                                    |
+| `npm run build`         | Type-check and build to `dist/`                               |
+| `npm run preview`       | Serve the production build locally                            |
+| `npm run desktop`       | Run the app in a desktop window, with hot reload              |
+| `npm run desktop:build` | Build the desktop app and installer for the current platform  |
+| `npm run icon`          | Redraw the app icon and derive the platform set               |
+| `npm test`              | Run the Vitest suite once                                     |
+| `npm run test:watch`    | Vitest in watch mode                                          |
+| `npm run typecheck`     | Type-check without emitting                                   |
+| `npm run lint`          | ESLint                                                        |
+| `npm run lint:fix`      | ESLint, fixing what it can                                    |
+| `npm run format`        | Prettier, writing in place                                    |
+| `npm run transcribe`    | Regenerate `src/data/models.ts` from `reference/`             |
+| `npm run ci`            | Everything CI runs: format, lint, types, transcription, tests |
 
 The build uses relative asset paths, so `dist/` can be copied to a device and
 opened directly. The app has no backend and no runtime network dependency.
@@ -47,13 +54,133 @@ opened directly. The app has no backend and no runtime network dependency.
 ```
 SPEC.md          the specification — read this first
 reference/       Phase 1 research output: sourced model facts and images
-scripts/         build tooling — the reference/ -> src/data/ transcription
+scripts/         build tooling — the transcription, and the icon generator
+src-tauri/       the desktop shell — window config and icons, no logic
 src/data/        attribute definitions, questions, the model matrix
 src/engine/      pure TypeScript identification logic (no React)
 src/diagrams/    hand-drawn SVG illustrating answer options, and the id registry
 src/ui/          screens, and the display text they derive (presenters.ts,
                  lookup.ts) plus the hash routing between them (route.ts)
 ```
+
+## Getting it onto a Windows PC
+
+Two files, for two different jobs:
+
+| File                                            | What to do with it                                         |
+| ----------------------------------------------- | ---------------------------------------------------------- |
+| `iPhone Identifier_<version>_x64_portable.exe`  | Copy it to the bench PC and run it. No install.            |
+| `iPhone Identifier_<version>_x64_installer.msi` | For deploying across machines, via script or group policy. |
+
+**The portable one is the app.** Tauri compiles the frontend into the binary, so
+that single ~3 MB file is the whole program — put it on a USB stick, a shared
+folder, or the desktop, and double-click. Nothing is installed, so there is no
+Start Menu entry and no uninstaller, and updating means replacing the file.
+
+It is not quite zero-footprint: the WebView2 runtime keeps a profile for the app
+under `%LOCALAPPDATA%\info.thomasreay.iphone-identifier\` (a few MB), which is
+why a half-finished identification is still there next time you open it. Delete
+that folder as well if you want the machine genuinely clean.
+
+**The MSI installs it properly**, and is the one to reach for when a machine
+should have the app registered like any other software. It installs per-machine,
+so it needs administrator rights — which is the trade for it being deployable
+without anyone sitting at the keyboard.
+
+Where to get them:
+
+- **From a release** — the draft release a `v*` tag opens carries them.
+- **From a build** — run the [Desktop workflow](.github/workflows/desktop.yml)
+  by hand. Each file is its own artifact, named after itself, and downloads as
+  that file rather than a zip.
+- **From this machine** — `npm run desktop:build`. The portable binary is
+  `src-tauri/target/release/iphone-identifier.exe`; the MSI is under
+  `src-tauri/target/release/bundle/msi/`.
+
+Neither is signed, so SmartScreen asks once — _More info_ → _Run anyway_.
+
+## Desktop builds
+
+The app installs as a desktop application via [Tauri](https://tauri.app)
+(SPEC.md §5.5, D-27). **Windows is the target that matters**; macOS and Linux
+bundles are built alongside and are welcome, but are not what the shop runs.
+
+Tauri wraps the **same `dist/` the web build produces**. `src-tauri/` contains
+no application logic — one Rust file whose only statement opens a window, and no
+Tauri API calls from the frontend — so the web build stays first-class and the
+engine stays testable without a UI.
+
+To build locally you need a Rust toolchain plus your platform's C toolchain:
+
+- **Windows** — [Rust](https://rustup.rs) and the Visual Studio Build Tools with
+  the "Desktop development with C++" workload. Rust on Windows links through
+  MSVC, so `cargo` alone is not enough.
+- **macOS** — Rust and the Xcode command line tools (`xcode-select --install`).
+- **Linux** — Rust plus `libwebkit2gtk-4.1-dev`, `librsvg2-dev`, `libxdo-dev`,
+  `libayatana-appindicator3-dev`, `patchelf` and `build-essential`. The
+  [desktop workflow](.github/workflows/desktop.yml) lists the full set.
+
+Then:
+
+```bash
+npm run desktop:build
+```
+
+On Windows that writes the portable binary to
+`src-tauri/target/release/iphone-identifier.exe` and the MSI under
+`src-tauri/target/release/bundle/msi/`; other platforms get their bundles under
+`bundle/`. `npm run desktop` runs the app in a window against the Vite dev
+server, with hot reload.
+
+The one thing neither Windows file carries is the **WebView2 runtime**, which
+Windows 10 1803+ and Windows 11 ship. The MSI fetches it when it is missing
+rather than embedding ~130 MB in every copy; the portable exe cannot fetch
+anything, so it simply needs a machine that already has it — every current
+Windows does. Running the app never touches the network either way.
+
+## Releases are separate from builds
+
+[`.github/workflows/desktop.yml`](.github/workflows/desktop.yml) builds the
+bundles. Two ways in:
+
+| Trigger         | Builds                   | Publishes                  |
+| --------------- | ------------------------ | -------------------------- |
+| Push a `v*` tag | Windows, macOS, Linux    | A **draft** GitHub release |
+| Run it by hand  | Windows, or all if asked | Only if you tick `release` |
+
+A manual run that does not publish leaves the installers as downloadable
+workflow artifacts, so you can get a build without cutting a release.
+
+**One artifact per file, each downloading as that file.** Actions normally zips
+an artifact, so a single bundle would mean downloading an archive and unpacking
+it to reach the `.exe`. These are uploaded with `archive: false` instead, which
+takes one file per upload and names the artifact after it — so the run page
+lists `iPhone Identifier_<version>_x64_portable.exe` and clicking it gives you
+exactly that.
+
+That naming is also why the Windows files are renamed before upload: `name:` is
+ignored in this mode, so the filename is the only place a label can live, and
+`_portable` versus `_installer` is the distinction that matters.
+
+The trade is that `gh run download` cannot fetch these: it assumes every
+artifact is a zip and fails with "not a valid zip file". Download them from the
+run page in a browser, which is where a technician would get them anyway.
+
+It deliberately does **not** run on pull requests. A Rust compile costs minutes
+on three runners where `npm run ci` costs seconds, and the shell it builds is a
+window around a bundle CI already checks. Run it by hand when the shell itself
+changes.
+
+Tags carry the version: pushing `v0.2.0` requires `package.json` to say
+`0.2.0`, and the run fails otherwise rather than shipping an app that
+misreports itself. Releases are drafts, so nothing goes out without a look.
+
+## The icon is drawn, not sourced
+
+`npm run icon` runs `scripts/make-icon.js`, which draws the icon from shapes in
+the app's own palette and then derives the per-platform set. It is a schematic
+phone rear with a diagonal dual-camera housing — the same idiom as the diagrams,
+and like them it carries no manufacturer's mark (SPEC.md D-20).
 
 ## The matrix is generated
 

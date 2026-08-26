@@ -1,0 +1,27 @@
+[package]
+name = "iphone-identifier"
+version = "0.1.0"
+description = "Identify an iPhone model from its visible characteristics"
+edition = "2021"
+rust-version = "1.77.2"
+publish = false
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+
+[features]
+# Set by `tauri build`. Serves the frontend from the embedded bundle rather than
+# from the dev server.
+custom-protocol = ["tauri/custom-protocol"]
+
+# A desktop shell around a static bundle is not hot code, and the installers are
+# copied around by hand -- optimise for a small binary over compile time.
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
