@@ -32,7 +32,7 @@ export interface IPhoneModel {
   /**
    * For each attribute, the set of values consistent with this model.
    * Multiple values are legitimate: a model has many colours, and may ship in
-   * both SIM-tray and eSIM-only bodies. Size is no longer among them — D-31
+   * both SIM-tray and eSIM-only bodies. Size is no longer among them — D-28
    * gives every model exactly one `body_size_class`.
    * An absent or empty entry means "unknown" and eliminates nothing.
    */

@@ -139,9 +139,9 @@ describe('no attribute value is a superset of another', () => {
   })
 })
 
-describe('size classes are definitive (§6.3, D-30, D-31)', () => {
+describe('size classes are definitive (§6.3, D-27, D-28)', () => {
   it('gives every model exactly one class', () => {
-    // D-31: a phone is one size, and the matrix says which. Not a statement
+    // D-28: a phone is one size, and the matrix says which. Not a statement
     // about the current 37 that a future model may relax — the rule. A model
     // landing inside one of the gaps between the clusters is a signal to redraw
     // the bands (§6.3), never to give that model a second class.
@@ -169,7 +169,7 @@ describe('size classes are definitive (§6.3, D-30, D-31)', () => {
     // the old data the empty band was listed by eight models, every one of them
     // alongside `standard` — so an `includes` count found eight members for a
     // band nothing was in, and passed. That is the bug wearing the test's own
-    // clothes. Sole membership is exact under D-31 rather than a proxy for it,
+    // clothes. Sole membership is exact under D-28 rather than a proxy for it,
     // but it is written this way deliberately: it stays honest even if the
     // one-class rule above is ever weakened.
     const declared = attributeById('body_size_class')?.values ?? []
