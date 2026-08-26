@@ -58,7 +58,7 @@ export interface EntryRow {
    *
    * More than one is ordinary rather than exceptional: a model has many colours
    * and may ship in both SIM-tray and eSIM-only bodies (§5.4). Size is not one
-   * of them — every model has exactly one `body_size_class` (D-28).
+   * of them — every model has exactly one `body_size_class` (D-31).
    */
   values: EntryValue[]
 }

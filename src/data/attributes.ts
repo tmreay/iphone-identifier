@@ -73,12 +73,12 @@ export const attributes: AttributeDefinition[] = [
     values: ['bezels_no_cutout', 'notch_wide', 'notch_narrow', 'dynamic_island'],
   },
   {
-    // Three bands, not the five §6.3 first drew (D-27), and exactly one of them
-    // per model (D-28). The old fourth band had no members of its own — nothing
+    // Three bands, not the five §6.3 first drew (D-30), and exactly one of them
+    // per model (D-31). The old fourth band had no members of its own — nothing
     // was `large` alone — so it was an option a technician could pick that
     // matched no phone's own class, and picking it narrowed further than the
     // truthful answer did. It was reachable only because a model could carry a
-    // second, adjacent class; D-28 removed that, the redrawn bands having moved
+    // second, adjacent class; D-31 removed that, the redrawn bands having moved
     // every boundary off the bodies and into 5 mm of empty space.
     id: 'body_size_class',
     tier: 'coarse',

@@ -13,7 +13,7 @@
  * | `standard` | 147.3  | 143.6 (X, XS) … 150.9 (XR, 11)                  |
  * | `large`    | 159.8  | 156.2 (Air) … 163.4 (17 Pro Max)                |
  *
- * Five bands were drawn here until D-27, and one of them — `large`, then meaning
+ * Five bands were drawn here until D-30, and one of them — `large`, then meaning
  * ~150–156 mm — had no members to take a height from at all, because no model
  * in the matrix was `large` alone. Its outline was the midpoint of an empty
  * band: a drawing of a phone that does not exist. The midpoints above are
