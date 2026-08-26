@@ -89,7 +89,10 @@ without anyone sitting at the keyboard.
 
 Where to get them:
 
-- **From a release** — the draft release a `v*` tag opens carries them.
+- **From a release** — the draft release a `v*` tag opens carries them, as does
+  a manual run of the workflow with _Publish the bundles as a draft GitHub
+  release_ ticked. GitHub writes spaces in an asset name as dots, so on a
+  release the two files read `iPhone.Identifier_<version>_x64_...`.
 - **From a build** — run the [Desktop workflow](.github/workflows/desktop.yml)
   by hand. Each file is its own artifact, named after itself, and downloads as
   that file rather than a zip.
