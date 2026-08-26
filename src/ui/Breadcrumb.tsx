@@ -11,7 +11,7 @@
  * with `aria-hidden` — a screen reader reading "chevron" between every crumb
  * would bury the words that matter.
  */
-import { useEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import type { Crumb, CrumbTarget } from './presenters.ts'
 
 export function Breadcrumb({
@@ -27,19 +27,26 @@ export function Breadcrumb({
     which is the end that matters least. "New identification" is the crumb a
     technician can guess; where they are is the crumb they came to read, so on a
     narrow phone the row is scrolled to it. Only when it overflows: on a row that
-    fits, `scrollLeft` will not move.
+    fits, `scrollLeft` will not move. Before paint rather than after: an effect
+    that ran afterwards would commit the row at its start and then jump, and the
+    flick would land on exactly the narrow screen the scrolling is for.
 
     Keyed on the labels rather than on the array, because the trail is rebuilt on
     every render and its identity says nothing about whether it changed.
   */
   const labels = crumbs.map((crumb) => crumb.label).join('›')
-  useEffect(() => {
+  useLayoutEffect(() => {
     const element = row.current
     if (element) element.scrollLeft = element.scrollWidth
   }, [labels])
 
   return (
-    <nav className="breadcrumb" aria-label="Breadcrumb" ref={row}>
+    /*
+      Focusable because it scrolls. Every crumb can be a plain span — a fresh run
+      on the flow has nothing to restart and nowhere else to be — and a scrolling
+      box with no focusable child is one a keyboard cannot reach into at all.
+    */
+    <nav className="breadcrumb" aria-label="Breadcrumb" ref={row} tabIndex={0}>
       <ol className="breadcrumb-list">
         {crumbs.map((crumb, index) => {
           const target = crumb.target

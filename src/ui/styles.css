@@ -66,13 +66,14 @@ body {
  * itself the sign that there is more to the left.
  *
  * The scrollbar is left alone rather than hidden: it is the only other thing
- * saying so on a pointer device. Top padding is not decoration — `overflow-x`
- * makes this a scroll box in both directions, and without it a focused crumb's
- * ring is clipped at the top edge.
+ * saying so on a pointer device. Padding is not decoration — `overflow-x` makes
+ * this a scroll box in both directions, and a focus ring is drawn outside the
+ * box it belongs to, so without room on both edges a focused crumb's ring is
+ * shaved.
  */
 .breadcrumb {
   margin: 0 0 1.25rem;
-  padding: 0.125rem 0 0.25rem;
+  padding: 0.25rem 0;
   border-bottom: 1px solid var(--border);
   overflow-x: auto;
 }
@@ -100,13 +101,16 @@ body {
 
 /*
  * A crumb is a real tap target on a bench, where the hand holding the phone is
- * the one that has been holding a screwdriver: 0.75rem of padding on 0.8125rem
- * text clears 44px, the floor every other control in this file is sized to.
- * Padded rather than boxed, so the row still reads as a path and not as a
- * toolbar.
+ * the one that has been holding a screwdriver — so it is sized by the same
+ * `min-height` every other control in this file carries, rather than by padding
+ * that lands near it. Sized rather than boxed: no border, no fill, so the row
+ * still reads as a path and not as a toolbar.
  */
 .breadcrumb-link {
-  padding: 0.75rem 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  padding: 0 0.25rem;
   font: inherit;
   font-size: inherit;
   color: var(--accent);
@@ -122,10 +126,13 @@ body {
   color: var(--fg);
 }
 
-/* Where you are: stated, not offered. Padded to match a link so the row sits
+/* Where you are: stated, not offered. Sized to match a link so the row sits
    level, whichever crumb happens to be a control. */
 .breadcrumb-current {
-  padding: 0.75rem 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  padding: 0 0.25rem;
   color: var(--muted);
   font-weight: 600;
 }

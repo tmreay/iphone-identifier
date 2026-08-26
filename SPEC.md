@@ -187,14 +187,18 @@ passed through to get here, and the last one is where it is now.
 - The root is always **New identification** — the next phone on the bench is one
   tap away from anywhere. It is the only crumb that touches the run, so it is the
   only one that can cost the technician work, and it offers to discard a run only
-  when there is one to discard: with nothing answered it is the plain way back to
-  the flow, and on the flow itself it is where you already are. That is the guard
-  _Start over_ carries (§4.1), and it matters more on a crumb, which sits where a
-  reader expects inert navigation (D-32).
+  when there is one to discard — anything answered, or _Narrow further_ taken,
+  which is a decision too. With neither, it is the plain way back to the flow,
+  and on the flow itself it is where you already are. That is the guard _Start
+  over_ carries (§4.1), and it matters more on a crumb, which sits where a reader
+  expects inert navigation (D-32).
 - The run's own crumb names its stage, read off the engine's status: the
   question being asked and what it asks about ("Question 3: Rear camera
-  layout"), the count still standing at the _Narrow further_ step, a terminal
-  group, the model a run resolved to, or a contradiction.
+  layout"), the count still standing at the _Narrow further_ step, the count on a
+  group nothing left to ask can split, the model a run resolved to, or a
+  contradiction. The group crumb says how many are left and that they are
+  ambiguous, never that they are terminal: whether anything could still separate
+  them is §4.4's claim to make, and it is not always the same answer (D-19).
 - Once the deep tier has been entered, **Narrow further** appears as a step of
   its own before the stage, because it is the one move the technician chose
   rather than was asked (§4.3). It names a tier, so it is never a link.
@@ -211,11 +215,18 @@ passed through to get here, and the last one is where it is now.
 - Reverse lookup hangs off the root as **All models**, and a model entry hangs
   off wherever it was opened from: the list, or the run's own stage. Tapping that
   stage returns to the run — the same promise the entry's back button makes,
-  drawn as a path. The entry for the model a run just resolved to names it once,
-  not twice.
-- The row never wraps: it scrolls sideways and is held at the crumb for where you
-  are, because on a phone that is the end worth seeing. Each crumb is a
-  bench-sized tap target, like every other control (§2).
+  drawn as a path. Reading the entry for the model a run just resolved to, the
+  stage crumb is **Identified**, the word that screen already uses: the name
+  appears once, and the way back to the run is still there. It is renamed rather
+  than dropped, because a trail whose only tappable crumb discards the run is
+  what the rule above exists to prevent.
+- The row never wraps: it scrolls sideways, and each time the trail changes it is
+  moved to the crumb for where you are, because on a phone that is the end worth
+  seeing. A technician who then scrolls it back is left alone until the trail
+  changes again. Each crumb is a bench-sized tap target, on the same
+  `min-height` as every other control (§2), and the row itself takes keyboard
+  focus so it can be scrolled without a pointer — every crumb on it may be plain
+  text.
 
 ## 5. Architecture
 

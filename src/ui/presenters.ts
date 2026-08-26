@@ -432,13 +432,19 @@ export function breadcrumbTrail(
       /*
         The §4.5 link opens the entry for the model the run just resolved to, and
         naming it twice in one trail reads as a fault rather than as a path. The
-        stage crumb is the one that goes, because the entry crumb is where we
-        are; the way back to the run is the entry's own button, which says so in
-        words.
+        stage crumb is renamed rather than dropped: it is a place — the result
+        screen — and that screen already calls itself "Identified", so the word
+        is the app's own. Dropping it instead would leave the root, which throws
+        the run away, as the only crumb anyone can tap, which is the thing D-32
+        exists to prevent.
       */
       const isResult =
         result.status === 'resolved' && result.candidates[0]?.id === opened.id
-      const above = isResult ? run.slice(0, -1) : run
+      const above = isResult
+        ? run.map((crumb) =>
+            crumb.key === 'stage' ? { ...crumb, label: 'Identified' } : crumb,
+          )
+        : run
       return [root, ...above, { key: `model-${opened.id}`, label: opened.name }]
     }
     return [

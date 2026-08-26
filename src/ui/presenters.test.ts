@@ -12,6 +12,7 @@ import { questions } from '../data/questions.ts'
 import type { IPhoneModel } from '../data/types.ts'
 import { answer, narrowFurther, resolve, skip, startOver } from '../engine/index.ts'
 import type { IdentifyResult, IdentifyState, Step } from '../engine/types.ts'
+import type { Route } from './route.ts'
 import {
   ambiguityStatement,
   attributeLabel,
@@ -323,6 +324,9 @@ describe('breadcrumbTrail', () => {
     resolve(models, questions, state)
   const labels = (crumbs: { label: string }[]) => crumbs.map((crumb) => crumb.label)
   const fresh = startOver()
+  /** The model name behind an id used in these trails. */
+  const shortNamed = (id: string): string =>
+    id === 'iphone-13-pro-max' ? 'iPhone 13 Pro Max' : 'iPhone 13'
   const answered: IdentifyState = {
     steps: [{ attribute: 'port', value: 'usb_c', tier: 'coarse' }],
     tier: 'coarse',
@@ -523,7 +527,9 @@ describe('breadcrumbTrail', () => {
 
   it('names the model once when the run resolved to the entry being read', () => {
     // The §4.5 link opens the entry for the model just identified, and a trail
-    // saying that name twice reads as a fault rather than as a path.
+    // saying that name twice reads as a fault rather than as a path. The stage
+    // is renamed, never dropped: it is the way back that costs nothing, and the
+    // root is not.
     const state = resolvedRun('iPhone 13 Pro Max')
     const crumbs = breadcrumbTrail(
       { view: 'model', id: 'iphone-13-pro-max', from: 'identify' },
@@ -531,7 +537,12 @@ describe('breadcrumbTrail', () => {
       run(state),
       modelNamed('iPhone 13 Pro Max'),
     )
-    expect(labels(crumbs)).toEqual(['New identification', 'iPhone 13 Pro Max'])
+    expect(labels(crumbs)).toEqual([
+      'New identification',
+      'Identified',
+      'iPhone 13 Pro Max',
+    ])
+    expect(crumbs[1]?.target).toBe('identify')
 
     // A different model looked up from a resolved run still hangs off the run.
     const other = breadcrumbTrail(
@@ -575,6 +586,42 @@ describe('breadcrumbTrail', () => {
       undefined,
     )
     expect(labels(crumbs)).toEqual(['New identification', 'All models'])
+  })
+
+  it('never leaves the discarding root as the only crumb that can be tapped', () => {
+    /*
+      The promise D-32 makes. Wherever the app is, a technician with a run going
+      has somewhere to tap that does not throw it away — otherwise the one
+      reachable control on the trail costs them their answers.
+    */
+    const deepResolved = narrowFurther(resolvedRun('iPhone 13 Pro Max'))
+    const states = [answered, narrowFurther(answered), deepResolved]
+    const routes: Route[] = [
+      { view: 'identify' },
+      { view: 'models' },
+      { view: 'model', id: 'iphone-13-pro-max', from: 'identify' },
+      { view: 'model', id: 'iphone-13-pro-max', from: 'list' },
+      { view: 'model', id: 'iphone-13', from: 'identify' },
+    ]
+    for (const state of states) {
+      for (const route of routes) {
+        const opened =
+          route.view === 'model' ? modelNamed(shortNamed(route.id)) : undefined
+        const crumbs = breadcrumbTrail(route, state, run(state), opened)
+        const tappable = crumbs.filter((crumb) => crumb.target !== undefined)
+        const safe = tappable.filter((crumb) => crumb.target !== 'restart')
+        const where = `${route.view}/${'from' in route ? route.from : ''}`
+        // On the flow itself, staying put is the safe option; everywhere else
+        // there has to be a crumb leading back that keeps the run.
+        if (route.view !== 'identify') {
+          expect(safe.length, where).toBeGreaterThan(0)
+        }
+        expect(
+          tappable.every((crumb) => crumb.label.length > 0),
+          where,
+        ).toBe(true)
+      }
+    }
   })
 
   it('gives every crumb a key of its own', () => {
