@@ -82,7 +82,7 @@ body {
   border: 0;
 }
 
-/* --- Candidate strip (SPEC.md §4.1 step 3, §12) ------------------------- */
+/* --- Candidate strip (SPEC.md §4.1 step 3, §12, D-28) ------------------- */
 
 .strip {
   margin: 0 0 1.25rem;
@@ -90,9 +90,44 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
+/*
+ * The collapsed strip: the count, and the offer to open it. Sized as a real tap
+ * target — it is a control now, not a caption — but kept quiet, because it sits
+ * above the question and the question is the thing to read.
+ */
+.strip-toggle {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.375rem 0;
+  background: none;
+  border: 0;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.strip-summary {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.strip-more {
+  color: var(--accent);
+}
+
+.strip-toggle:hover .strip-more,
+.strip-toggle:focus-visible .strip-more {
+  text-decoration: underline;
+}
+
 .strip-models {
   list-style: none;
-  margin: 0;
+  margin: 0.625rem 0 0;
   padding: 0;
   display: flex;
   flex-wrap: wrap;
@@ -100,19 +135,36 @@ body {
 }
 
 /*
- * Deliberately not a button and deliberately small. §12: the strip is a readout
- * of narrowing, not a wall of models to match the phone against.
+ * Small on purpose. §12: the strip is a readout of narrowing, not a wall of
+ * models to match the phone against — expanding it is the technician's choice,
+ * and it should still read as a margin note rather than as the screen.
  */
 .strip-model {
+  display: inline-block;
   padding: 0.1875rem 0.4375rem;
   border: 1px solid var(--border);
   border-radius: 0.25rem;
   background: var(--surface);
+  color: inherit;
+  font: inherit;
   font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
   line-height: 1.25;
   white-space: nowrap;
-  transition: opacity 200ms ease, color 200ms ease;
+  transition:
+    opacity 200ms ease,
+    color 200ms ease;
+}
+
+/* A survivor opens its entry; an eliminated chip is text and stays text. */
+button.strip-model {
+  cursor: pointer;
+}
+
+button.strip-model:hover,
+button.strip-model:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 /*
@@ -131,6 +183,24 @@ body {
   .strip-model {
     transition: none;
   }
+}
+
+/* --- Product photographs (SPEC.md §4.5, D-27) --------------------------- */
+
+/*
+ * Apple's product shots are tall portraits on white. Capped by height rather
+ * than width so a row of them lines up on the bodies rather than on the edges
+ * of frames that are not quite the same shape, and given a light surface so the
+ * white background does not float in dark mode.
+ */
+.photo {
+  display: block;
+  width: 100%;
+  max-width: 14rem;
+  margin: 0 auto 1.25rem;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
 }
 
 .prompt {
@@ -228,12 +298,56 @@ body {
   gap: 0.375rem;
 }
 
+/*
+ * Photographs once the group is small enough to compare them (D-27). Two across
+ * on a phone, which is the shape of the groups that actually survive to here
+ * (§9), and each one opens that model's entry.
+ */
+.candidates-photos {
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  gap: 0.75rem;
+}
+
 .candidate {
+  display: block;
+  width: 100%;
   padding: 0.625rem 0.875rem;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 0.5rem;
+  color: inherit;
+  font: inherit;
   font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.candidate:hover,
+.candidate:focus-visible {
+  border-color: var(--accent);
+}
+
+.candidates-photos .candidate {
+  text-align: center;
+}
+
+/*
+ * Inside a card the frame is the card, so the photo drops its own. The fixed
+ * ratio is what makes a row of them comparable: the shots are not all cropped
+ * alike, and unboxed they would set each card to a different height, which
+ * reads as a difference between the phones rather than between the pictures.
+ */
+.candidates-photos .photo {
+  max-width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+  border: 0;
+  border-radius: 0.25rem;
+}
+
+.candidate-name {
+  display: block;
 }
 
 .result-name {

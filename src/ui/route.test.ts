@@ -18,7 +18,33 @@ describe('parseRoute', () => {
     expect(parseRoute('#/models/iphone-13-pro-max')).toEqual({
       view: 'model',
       id: 'iphone-13-pro-max',
+      from: 'list',
     })
+  })
+
+  it('reads where a model entry was opened from', () => {
+    expect(parseRoute('#/models/iphone-13?from=identify')).toEqual({
+      view: 'model',
+      id: 'iphone-13',
+      from: 'identify',
+    })
+  })
+
+  it('falls back to the list for an origin it does not recognise', () => {
+    // The origin decides where a button goes, so an unreadable one has to mean
+    // the destination that is always reachable rather than a run that may not
+    // exist — a bookmark carries the hash but never the answer trail.
+    for (const hash of [
+      '#/models/iphone-13?',
+      '#/models/iphone-13?from=elsewhere',
+      '#/models/iphone-13?from=identify&extra=1',
+    ]) {
+      expect(parseRoute(hash), hash).toEqual({
+        view: 'model',
+        id: 'iphone-13',
+        from: 'list',
+      })
+    }
   })
 
   it('lands on the flow for anything it does not recognise', () => {
@@ -42,6 +68,7 @@ describe('parseRoute', () => {
     expect(parseRoute('#/models/iphone-13/')).toEqual({
       view: 'model',
       id: 'iphone-13',
+      from: 'list',
     })
   })
 
@@ -51,6 +78,7 @@ describe('parseRoute', () => {
     expect(parseRoute('#/models/iphone-99')).toEqual({
       view: 'model',
       id: 'iphone-99',
+      from: 'list',
     })
   })
 })
@@ -58,8 +86,10 @@ describe('parseRoute', () => {
 describe('routeHash', () => {
   it('round-trips every model in the set', () => {
     for (const model of models) {
-      const route = { view: 'model', id: model.id } as const
-      expect(parseRoute(routeHash(route)), model.id).toEqual(route)
+      for (const from of ['list', 'identify'] as const) {
+        const route = { view: 'model', id: model.id, from } as const
+        expect(parseRoute(routeHash(route)), model.id).toEqual(route)
+      }
     }
   })
 

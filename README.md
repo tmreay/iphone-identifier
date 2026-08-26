@@ -62,12 +62,20 @@ src/ui/          screens, and the display text they derive (presenters.ts,
 to a cited source (SPEC.md D-11). Edit the reference file, then regenerate —
 CI fails if the two drift apart.
 
-## The diagrams are drawn, not photographed
+## Questions ask with drawings; results show photographs
 
 Every answer option that describes a shape, layout or position carries a
 hand-drawn SVG (SPEC.md §8): schematic, two colours, and drawn from the product
-shots committed under `reference/images/`. Those photographs are the drawing
-source and are never imported by the build, so the shipped app contains SVG only.
+shots committed under `reference/images/`. A schematic exaggerates the one
+detail the question turns on and stays legible at 120 px, which is why questions
+never show a real phone — a photograph beside a question invites matching the
+bench against a picture instead of answering what was asked.
+
+Once the app has stopped asking, the picture is the point. The 37 Apple product
+shots in `reference/images/apple/` ship in the build (SPEC.md D-27) and appear
+on the result screen, on a group of four or fewer candidates, and on every
+reverse-lookup entry. They are internal to this shop and are not redistributed;
+nothing else under `reference/` is imported by the build.
 
 `questions.ts` names each diagram by a stable id and knows nothing about React;
 `src/diagrams/registry.ts` binds ids to components, and a test asserts the two
@@ -76,15 +84,23 @@ declares, fails CI.
 
 ## Status
 
-**All five phases are complete**: scaffolding, sourced data collection, the
-matrix plus the identification engine, the identify UI, the diagrams, and
-reverse lookup. See SPEC.md §10.
+**All six phases are complete**: scaffolding, sourced data collection, the
+matrix plus the identification engine, the identify UI, the diagrams, reverse
+lookup, and product photographs with an expandable candidate strip. See
+SPEC.md §10.
 
 The app runs end to end. It asks questions, illustrated where a picture is what
 the technician needs, narrows the candidate set, and reaches a model, a group,
-or a stated terminal ambiguity — and from the result, or from anywhere in the
+or a stated terminal ambiguity — showing the product photograph of what it
+concluded — and from the result, from a candidate chip, or from anywhere in the
 flow, opens the reverse-lookup entry listing every characteristic the matrix
 records for a model, drawn with the same diagrams the questions used.
+
+The candidate strip above each question reads "12 of 37 candidates" until it is
+opened; expanded it shows all 37 names dimming as they go out, and a surviving
+name opens that model's entry. Looking a model up mid-run never disturbs the
+run: the view lives in the URL hash and the answer trail does not (SPEC.md
+D-25), so the way back lands exactly where you left.
 
 Reverse lookup is read-only by decision (SPEC.md D-24). Correcting a value means
 editing `reference/models/<id>.md` and re-running `npm run transcribe`; each

@@ -161,6 +161,33 @@ export function candidateCount(remaining: number, total: number): string {
 }
 
 /**
+ * What the photographs are doing on a group the matrix cannot split (§4.4, §9).
+ *
+ * §12 raised this against showing model pictures at all, and the objection is
+ * sound where it applies: the groups that survive to the end are the pairs §9
+ * records as identical on every attribute here, so their product shots are
+ * identical too. Showing them anyway is still right — they confirm the *kind*
+ * of phone on the bench, which is the check a technician makes before ordering
+ * a part — but the screen has to say which of those two jobs the picture can
+ * do, or it reads as an invitation to squint until one looks righter.
+ */
+export const identicalPhotoNote =
+  'The photographs confirm the shape in your hand; they cannot choose between these. Nothing visible separates them, in the pictures or on the bench.'
+
+/**
+ * "12 of 37 candidates" — the collapsed candidate strip's own label.
+ *
+ * Shorter than `candidateCount` and phrased as a thing rather than a claim,
+ * because it sits on a button: what a technician taps is the count, and what
+ * opens is the list behind it. The sentence form stays where it belongs, in the
+ * live region, where "12 of 37 models match" reads as English rather than as a
+ * label read out of a control.
+ */
+export function candidateSummary(remaining: number, total: number): string {
+  return `${remaining} of ${total} candidates`
+}
+
+/**
  * The options worth showing for `question` against the current candidates.
  *
  * Hides values nothing still in the running can take, so the technician is

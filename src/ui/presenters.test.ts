@@ -15,6 +15,7 @@ import {
   ambiguityStatement,
   attributeLabel,
   candidateCount,
+  candidateSummary,
   candidateStrip,
   listPhrase,
   revisitPrompt,
@@ -228,6 +229,20 @@ describe('visibleOptions', () => {
     const wordmark = questionNamed('rear_wordmark')
     const blank = models.map((model) => ({ ...model, attributes: {} }))
     expect(visibleOptions(wordmark, blank)).toEqual(wordmark.options)
+  })
+})
+
+describe('candidateSummary', () => {
+  it('labels the strip with the count it hides', () => {
+    expect(candidateSummary(12, 37)).toBe('12 of 37 candidates')
+    expect(candidateSummary(37, 37)).toBe('37 of 37 candidates')
+  })
+
+  it('says the same number the spoken sentence says', () => {
+    // Two readings of one fact, one on a button and one in a live region. They
+    // are allowed to differ in wording and never in number.
+    expect(candidateSummary(1, 37)).toContain('1 of 37')
+    expect(candidateCount(1, 37)).toContain('1 of 37')
   })
 })
 
